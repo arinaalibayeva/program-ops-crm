@@ -109,7 +109,7 @@ export default function ImportPage() {
       />
 
       {result !== undefined && (
-        <div className="mb-6 flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+        <div className="mb-6 flex items-center gap-2 rounded-lg border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800 dark:text-emerald-300">
           <CheckCircle2 className="size-4" />
           Imported {result} participant{result === 1 ? "" : "s"}.{" "}
           <Link href="/admin/participants" className="font-medium underline">
@@ -201,7 +201,7 @@ export default function ImportPage() {
                   </TableHeader>
                   <TableBody>
                     {checked.map((row, i) => (
-                      <TableRow key={i} className={row.error ? "bg-red-50/60" : undefined}>
+                      <TableRow key={i} className={row.error ? "bg-red-50/60 dark:bg-red-500/10" : undefined}>
                         <TableCell className="pl-4 text-muted-foreground tabular-nums">
                           {i + 2}
                         </TableCell>
@@ -210,11 +210,11 @@ export default function ImportPage() {
                         <TableCell>{row.values.team || "—"}</TableCell>
                         <TableCell className="pr-4 text-xs">
                           {row.error ? (
-                            <span className="flex items-center gap-1 text-red-700">
+                            <span className="flex items-center gap-1 text-red-700 dark:text-red-400">
                               <XCircle className="size-3.5" /> {row.error}
                             </span>
                           ) : (
-                            <span className="flex items-center gap-1 text-emerald-700">
+                            <span className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400">
                               <CheckCircle2 className="size-3.5" /> {row.warning ?? "Ready"}
                             </span>
                           )}
