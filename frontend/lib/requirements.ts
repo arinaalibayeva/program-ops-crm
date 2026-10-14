@@ -77,7 +77,7 @@ function evaluateAttendanceMin(
   ).length;
   const missed = past.length - attended;
   const stillNeeded = minCount - attended;
-  const label = `${category}s`;
+  const label = category.endsWith("s") ? category : `${category}s`;
 
   let status: Status;
   let reason: string;
