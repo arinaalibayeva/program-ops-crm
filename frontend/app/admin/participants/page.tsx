@@ -24,13 +24,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { FieldInput } from "@/components/field-input";
 import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { currentTeamId } from "@/lib/requirements";
+import { activeFields, formatFieldValue, validateFields } from "@/lib/fields";
 import { cn } from "@/lib/utils";
-import type { Status } from "@/lib/types";
+import type { FieldValue, Status } from "@/lib/types";
 
 const FILTERS: { value: "all" | Status | "attention"; label: string }[] = [
   { value: "all", label: "All" },
@@ -48,6 +50,14 @@ export default function ParticipantsPage() {
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["value"]>("all");
   const [teamFilter, setTeamFilter] = useState("all");
   const [showWithdrawn, setShowWithdrawn] = useState(false);
+  // Filters for pick-one / pick-several columns, keyed by field id.
+  const [fieldFilters, setFieldFilters] = useState<Record<string, string>>({});
+
+  const columns = useMemo(() => activeFields(data).filter((f) => f.showInList), [data]);
+  const filterable = useMemo(
+    () => columns.filter((f) => f.type === "select" || f.type === "multi_select"),
+    [columns],
+  );
 
   const rows = useMemo(() => {
     return data.enrollments
@@ -58,12 +68,19 @@ export default function ParticipantsPage() {
         const status = participantStatuses.get(e.id);
         return { enrollment: e, person, teamId, status };
       })
-      .filter(({ person, teamId, status }) => {
+      .filter(({ enrollment, person, teamId, status }) => {
         const q = query.trim().toLowerCase();
-        if (q && !person.name.toLowerCase().includes(q) && !person.email.includes(q)) {
+        if (q && !person.name.toLowerCase().includes(q) && !person.email.toLowerCase().includes(q)) {
           return false;
         }
         if (teamFilter !== "all" && teamId !== teamFilter) return false;
+        // Only filter on fields still shown, so hiding a column clears its filter.
+        for (const f of filterable) {
+          const wanted = fieldFilters[f.id];
+          if (!wanted) continue;
+          const v = enrollment.fields?.[f.id];
+          if (Array.isArray(v) ? !v.includes(wanted) : v !== wanted) return false;
+        }
         if (filter === "all") return true;
         const s = status?.status;
         if (filter === "attention") return s === "missing" || s === "at_risk";
@@ -71,7 +88,17 @@ export default function ParticipantsPage() {
         return s === filter;
       })
       .sort((a, b) => a.person.name.localeCompare(b.person.name));
-  }, [data, personFor, participantStatuses, query, filter, teamFilter, showWithdrawn]);
+  }, [
+    data,
+    personFor,
+    participantStatuses,
+    query,
+    filter,
+    teamFilter,
+    filterable,
+    fieldFilters,
+    showWithdrawn,
+  ]);
 
   const participantReqs = data.requirements.filter((r) => r.scope === "participant");
 
@@ -125,6 +152,20 @@ export default function ParticipantsPage() {
             </option>
           ))}
         </NativeSelect>
+        {filterable.map((f) => (
+          <NativeSelect
+            key={f.id}
+            value={fieldFilters[f.id] ?? ""}
+            onChange={(e) => setFieldFilters({ ...fieldFilters, [f.id]: e.target.value })}
+          >
+            <option value="">Any {f.label.toLowerCase()}</option>
+            {f.options?.map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
+          </NativeSelect>
+        ))}
         <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
           <input
             type="checkbox"
@@ -141,6 +182,9 @@ export default function ParticipantsPage() {
             <TableRow>
               <TableHead className="pl-4">Name</TableHead>
               <TableHead>Team</TableHead>
+              {columns.map((f) => (
+                <TableHead key={f.id}>{f.label}</TableHead>
+              ))}
               {participantReqs.map((r) => (
                 <TableHead key={r.id}>{r.name}</TableHead>
               ))}
@@ -159,6 +203,11 @@ export default function ParticipantsPage() {
                   <div className="text-xs text-muted-foreground">{person.email}</div>
                 </TableCell>
                 <TableCell>{teamId ? teamById.get(teamId)?.name : "—"}</TableCell>
+                {columns.map((f) => (
+                  <TableCell key={f.id} className="max-w-48 truncate">
+                    {formatFieldValue(f, enrollment.fields?.[f.id])}
+                  </TableCell>
+                ))}
                 {participantReqs.map((r) => {
                   const result = status?.results.find((x) => x.requirementId === r.id);
                   return (
@@ -179,7 +228,7 @@ export default function ParticipantsPage() {
             {rows.length === 0 && (
               <TableRow>
                 <TableCell
-                  colSpan={3 + participantReqs.length}
+                  colSpan={3 + columns.length + participantReqs.length}
                   className="py-8 text-center text-muted-foreground"
                 >
                   No participants match these filters.
@@ -198,8 +247,9 @@ function AddParticipantDialog() {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [team, setTeam] = useState("");
+  const [values, setValues] = useState<Record<string, FieldValue>>({});
   const [error, setError] = useState("");
+  const fields = activeFields(data);
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -207,7 +257,14 @@ function AddParticipantDialog() {
       setError("Enter a name and a valid email.");
       return;
     }
-    const added = addParticipants([{ name: name.trim(), email: email.trim(), team }]);
+    const fieldError = validateFields(fields, values);
+    if (fieldError) {
+      setError(fieldError);
+      return;
+    }
+    const added = addParticipants([
+      { name: name.trim(), email: email.trim(), fields: values },
+    ]);
     if (added === 0) {
       setError("This person is already in the cohort.");
       return;
@@ -215,7 +272,7 @@ function AddParticipantDialog() {
     setOpen(false);
     setName("");
     setEmail("");
-    setTeam("");
+    setValues({});
     setError("");
   }
 
@@ -225,7 +282,7 @@ function AddParticipantDialog() {
         <Plus />
         Add participant
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
         <form onSubmit={submit} className="space-y-4">
           <DialogHeader>
             <DialogTitle>Add participant</DialogTitle>
@@ -236,24 +293,30 @@ function AddParticipantDialog() {
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="name@example.com"
+            />
           </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="team">Team</Label>
-            <NativeSelect
-              id="team"
-              value={team}
-              onChange={(e) => setTeam(e.target.value)}
-              className="w-full"
-            >
-              <option value="">No team yet</option>
-              {data.teams.map((t) => (
-                <option key={t.id} value={t.name}>
-                  {t.name}
-                </option>
-              ))}
-            </NativeSelect>
-          </div>
+          {fields.map((f) => (
+            <div key={f.id} className="space-y-1.5">
+              <Label htmlFor={`add-${f.id}`}>
+                {f.label}
+                {!f.required && (
+                  <span className="font-normal text-muted-foreground">(optional)</span>
+                )}
+              </Label>
+              <FieldInput
+                id={`add-${f.id}`}
+                field={f}
+                value={values[f.id]}
+                onChange={(v) => setValues({ ...values, [f.id]: v })}
+              />
+            </div>
+          ))}
           {error && <p className="text-sm text-destructive">{error}</p>}
           <DialogFooter>
             <Button type="submit">Add</Button>
