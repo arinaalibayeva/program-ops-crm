@@ -28,9 +28,9 @@ import {
 } from "@/lib/types";
 
 const COUNT_STYLES: { status: Status[]; label: string; className: string; bar: string }[] = [
-  { status: ["met", "on_track"], label: "on track", className: "text-emerald-700", bar: "bg-emerald-500" },
-  { status: ["at_risk"], label: "at risk", className: "text-amber-700", bar: "bg-amber-500" },
-  { status: ["missing"], label: "missing", className: "text-red-700", bar: "bg-red-500" },
+  { status: ["met", "on_track"], label: "on track", className: "text-emerald-700 dark:text-emerald-400", bar: "bg-emerald-500" },
+  { status: ["at_risk"], label: "at risk", className: "text-amber-700 dark:text-amber-400", bar: "bg-amber-500" },
+  { status: ["missing"], label: "missing", className: "text-red-700 dark:text-red-400", bar: "bg-red-500" },
 ];
 
 export default function RequirementsPage() {

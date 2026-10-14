@@ -228,7 +228,7 @@ function StatCard({
       <CardContent>
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           {label}
-          <Icon className={`size-4 ${tone === "warn" ? "text-amber-600" : ""}`} />
+          <Icon className={`size-4 ${tone === "warn" ? "text-amber-600 dark:text-amber-400" : ""}`} />
         </div>
         <div className="mt-2 text-3xl font-semibold tabular-nums">{value}</div>
         <div className="mt-1 text-xs text-muted-foreground">{sub}</div>

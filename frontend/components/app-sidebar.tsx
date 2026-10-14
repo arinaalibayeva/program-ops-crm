@@ -7,6 +7,7 @@ import {
   ClipboardCheck,
   LayoutDashboard,
   RotateCcw,
+  SlidersHorizontal,
   Upload,
   Users,
   UsersRound,
@@ -21,6 +22,7 @@ const NAV = [
   { href: "/admin/teams", label: "Teams", icon: UsersRound },
   { href: "/admin/events", label: "Events", icon: CalendarDays },
   { href: "/admin/requirements", label: "Requirements", icon: ClipboardCheck },
+  { href: "/admin/fields", label: "Participant fields", icon: SlidersHorizontal },
   { href: "/admin/import", label: "Import", icon: Upload },
 ];
 

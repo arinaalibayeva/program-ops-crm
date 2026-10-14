@@ -1,27 +1,19 @@
+import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Status } from "@/lib/types";
 
-const STYLES: Record<Status, { label: string; className: string; dot: string }> = {
-  met: {
-    label: "Done",
-    className: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
-    dot: "bg-emerald-500",
-  },
-  on_track: {
-    label: "On track",
-    className: "bg-emerald-50 text-emerald-700 ring-emerald-600/20",
-    dot: "bg-emerald-500",
-  },
-  at_risk: {
-    label: "At risk",
-    className: "bg-amber-50 text-amber-800 ring-amber-600/25",
-    dot: "bg-amber-500",
-  },
-  missing: {
-    label: "Missing",
-    className: "bg-red-50 text-red-700 ring-red-600/20",
-    dot: "bg-red-500",
-  },
+// Color only means "look here": statuses that are fine stay muted, and
+// problems get a small colored dot next to the word.
+const DOT: Partial<Record<Status, string>> = {
+  at_risk: "bg-amber-500 dark:bg-amber-400",
+  missing: "bg-red-500 dark:bg-red-400",
+};
+
+const LABEL: Record<Status, string> = {
+  met: "Done",
+  on_track: "On track",
+  at_risk: "At risk",
+  missing: "Missing",
 };
 
 export function StatusBadge({
@@ -34,17 +26,19 @@ export function StatusBadge({
   overall?: boolean;
   className?: string;
 }) {
-  const style = STYLES[overall && status === "met" ? "on_track" : status];
+  const shown = overall && status === "met" ? "on_track" : status;
+  const dot = DOT[shown];
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset whitespace-nowrap",
-        style.className,
+        "inline-flex items-center gap-1.5 text-xs whitespace-nowrap",
+        dot ? "font-medium text-foreground" : "text-muted-foreground",
         className,
       )}
     >
-      <span className={cn("size-1.5 rounded-full", style.dot)} />
-      {style.label}
+      {dot && <span className={cn("size-1.5 rounded-full", dot)} />}
+      {shown === "met" && <Check className="size-3.5" />}
+      {LABEL[shown]}
     </span>
   );
 }
