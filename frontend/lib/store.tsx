@@ -12,21 +12,26 @@ import {
   useState,
 } from "react";
 import { buildMockCohort } from "./mock-data";
+import { applyDraft, type ParticipantDraft } from "./participant-draft";
 import { participantStatus, teamStatus } from "./requirements";
 import type {
   CohortData,
   EventCategory,
+  FieldDefinition,
+  FieldValue,
   ProgramEvent,
   Requirement,
   SubjectStatus,
 } from "./types";
 
-const STORAGE_KEY = "program-ops-crm:cohort:v1";
+// Bump the version when CohortData changes shape so old saved data is ignored.
+const STORAGE_KEY = "program-ops-crm:cohort:v5";
 
 export interface NewParticipant {
   name: string;
   email: string;
   team?: string;
+  fields?: Record<string, FieldValue>;
 }
 
 interface CohortContextValue {
@@ -35,7 +40,7 @@ interface CohortContextValue {
   teamStatuses: Map<string, SubjectStatus>;
   toggleAttendance: (eventId: string, enrollmentId: string) => void;
   toggleCompletion: (requirementId: string, subjectId: string) => void;
-  moveToTeam: (enrollmentId: string, teamId: string) => void;
+  updateParticipant: (enrollmentId: string, draft: ParticipantDraft) => void;
   addParticipants: (rows: NewParticipant[]) => number;
   addEvent: (event: {
     title: string;
@@ -45,6 +50,10 @@ interface CohortContextValue {
   }) => void;
   addRequirement: (req: Omit<Requirement, "id">) => void;
   deleteRequirement: (id: string) => void;
+  addField: (field: Omit<FieldDefinition, "id">) => void;
+  updateField: (id: string, patch: Partial<Omit<FieldDefinition, "id">>) => void;
+  moveField: (id: string, toIndex: number) => void;
+  deleteField: (id: string) => void;
   reset: () => void;
 }
 
@@ -124,20 +133,12 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  const moveToTeam = useCallback((enrollmentId: string, teamId: string) => {
-    setData((d) => {
-      const current = d.memberships.find(
-        (m) => m.enrollmentId === enrollmentId && !m.endDate,
-      );
-      if (current?.teamId === teamId) return d;
-      // Close the current membership and open a new one, keeping history.
-      const memberships = d.memberships.map((m) =>
-        m === current ? { ...m, endDate: d.today } : m,
-      );
-      memberships.push({ enrollmentId, teamId, startDate: d.today });
-      return { ...d, memberships };
-    });
-  }, []);
+  const updateParticipant = useCallback(
+    (enrollmentId: string, draft: ParticipantDraft) => {
+      setData((d) => applyDraft(d, enrollmentId, draft));
+    },
+    [],
+  );
 
   const addParticipants = useCallback(
     (rows: NewParticipant[]) => {
@@ -168,6 +169,7 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
           cohortId: d.cohort.id,
           status: "active" as const,
           joinedAt: d.today,
+          fields: row.fields,
         };
         next.enrollments.push(enrollment);
         added++;
@@ -222,6 +224,43 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
       ...d,
       requirements: d.requirements.filter((r) => r.id !== id),
       completions: d.completions.filter((c) => c.requirementId !== id),
+      exemptions: d.exemptions.filter((x) => x.requirementId !== id),
+    }));
+  }, []);
+
+  const addField = useCallback((field: Omit<FieldDefinition, "id">) => {
+    setData((d) => ({ ...d, fields: [...d.fields, { ...field, id: newId("field") }] }));
+  }, []);
+
+  const updateField = useCallback<CohortContextValue["updateField"]>((id, patch) => {
+    setData((d) => ({
+      ...d,
+      fields: d.fields.map((f) => (f.id === id ? { ...f, ...patch } : f)),
+    }));
+  }, []);
+
+  const moveField = useCallback((id: string, toIndex: number) => {
+    setData((d) => {
+      const fields = [...d.fields];
+      const from = fields.findIndex((f) => f.id === id);
+      if (from === -1 || from === toIndex) return d;
+      const [field] = fields.splice(from, 1);
+      fields.splice(toIndex, 0, field);
+      return { ...d, fields };
+    });
+  }, []);
+
+  // Permanent: also removes every participant's value for the field.
+  const deleteField = useCallback((id: string) => {
+    setData((d) => ({
+      ...d,
+      fields: d.fields.filter((f) => f.id !== id),
+      enrollments: d.enrollments.map((e) => {
+        if (!e.fields || !(id in e.fields)) return e;
+        const fields = { ...e.fields };
+        delete fields[id];
+        return { ...e, fields };
+      }),
     }));
   }, []);
 
@@ -233,11 +272,15 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     teamStatuses,
     toggleAttendance,
     toggleCompletion,
-    moveToTeam,
+    updateParticipant,
     addParticipants,
     addEvent,
     addRequirement,
     deleteRequirement,
+    addField,
+    updateField,
+    moveField,
+    deleteField,
     reset,
   };
 

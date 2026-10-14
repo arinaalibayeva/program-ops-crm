@@ -159,6 +159,24 @@ function evaluateTeamMinSize(
       };
 }
 
+/** An excused requirement counts as met, so it never flags the subject. */
+function exemptionResult(
+  data: CohortData,
+  req: Requirement,
+  subjectId: string,
+): RequirementResult | undefined {
+  const ex = data.exemptions.find(
+    (x) => x.requirementId === req.id && x.subjectId === subjectId,
+  );
+  if (!ex) return undefined;
+  return {
+    requirementId: req.id,
+    status: "met",
+    reason: ex.reason ? `Excused: ${ex.reason}` : "Excused",
+    excused: true,
+  };
+}
+
 // ---- Subject-level status ----
 
 function summarize(results: RequirementResult[]): SubjectStatus {
@@ -176,7 +194,9 @@ export function participantStatus(
   const results: RequirementResult[] = [];
   for (const req of data.requirements) {
     if (req.scope !== "participant") continue;
-    if (req.type === "attendance_min") {
+    const excused = exemptionResult(data, req, enrollmentId);
+    if (excused) results.push(excused);
+    else if (req.type === "attendance_min") {
       results.push(evaluateAttendanceMin(data, req, enrollmentId));
     } else if (req.type === "complete_by") {
       results.push(evaluateCompleteBy(data, req, enrollmentId));
@@ -194,7 +214,9 @@ export function teamStatus(data: CohortData, team: Team): SubjectStatus {
   const results: RequirementResult[] = [];
   for (const req of data.requirements) {
     if (req.scope !== "team") continue;
-    if (req.type === "team_min_size") {
+    const excused = exemptionResult(data, req, team.id);
+    if (excused) results.push(excused);
+    else if (req.type === "team_min_size") {
       results.push(evaluateTeamMinSize(data, req, team.id));
     } else if (req.type === "complete_by") {
       results.push(evaluateCompleteBy(data, req, team.id));
