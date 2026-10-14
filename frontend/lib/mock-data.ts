@@ -7,6 +7,7 @@ import type {
   CohortData,
   Completion,
   Enrollment,
+  FieldDefinition,
   Person,
   ProgramEvent,
   Project,
@@ -63,6 +64,46 @@ export const PLANTED = {
   teamMissingBrief: 9, // Ember: missing
   teamsResearchPlanPending: [3, 7, 10], // at risk (due soon)
 };
+
+/** Starting custom fields: generic ones most programs ask for. */
+const FIELDS: FieldDefinition[] = [
+  {
+    id: "field-phone",
+    label: "Phone",
+    type: "text",
+    placeholder: "+1 555 010 0000",
+    required: false,
+    showInList: false,
+    visibleToParticipant: true,
+  },
+  {
+    id: "field-organization",
+    label: "Organization",
+    type: "text",
+    placeholder: "School, company or community group",
+    required: false,
+    showInList: true,
+    visibleToParticipant: true,
+  },
+  {
+    id: "field-location",
+    label: "Location",
+    type: "text",
+    placeholder: "City, country",
+    required: false,
+    showInList: true,
+    visibleToParticipant: true,
+  },
+];
+
+const ORGANIZATIONS = [
+  "Northfield College", "Brightline Labs", "Riverside University",
+  "Open Harbor Foundation", "Cedar Street Studio", "Lakeview Institute",
+];
+const LOCATIONS = [
+  "San Francisco, USA", "Berlin, Germany", "Seoul, South Korea", "Buenos Aires, Argentina",
+  "Hyderabad, India", "Taipei, Taiwan", "London, UK", "Nairobi, Kenya",
+];
 
 /** Small deterministic PRNG so the dummy data is the same on every load. */
 function mulberry32(seed: number) {
@@ -243,6 +284,17 @@ export function buildMockCohort(): CohortData {
     },
   ];
 
+  // Separate generator so adding fields doesn't shift the attendance data above.
+  const fieldRand = mulberry32(7);
+  const pick = <T,>(items: T[]) => items[Math.floor(fieldRand() * items.length)];
+  enrollments.forEach((enr, i) => {
+    enr.fields = {
+      "field-phone": `+1 555 010 ${String(i + 1).padStart(4, "0")}`,
+      "field-organization": pick(ORGANIZATIONS),
+      "field-location": pick(LOCATIONS),
+    };
+  });
+
   const completions: Completion[] = [];
   enrollments.forEach((enr, i) => {
     if (PLANTED.onboardingNotDone.includes(i)) return;
@@ -288,5 +340,7 @@ export function buildMockCohort(): CohortData {
     attendance,
     requirements,
     completions,
+    exemptions: [],
+    fields: FIELDS.map((f) => ({ ...f })),
   };
 }

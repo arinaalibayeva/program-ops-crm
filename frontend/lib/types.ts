@@ -31,6 +31,44 @@ export interface Enrollment {
   status: "active" | "withdrawn";
   joinedAt: ISODate;
   leftAt?: ISODate;
+  /** Values for the program's custom fields, keyed by FieldDefinition id. */
+  fields?: Record<string, FieldValue>;
+}
+
+// ---- Custom participant fields ----
+
+export const FIELD_TYPES = [
+  "text",
+  "long_text",
+  "number",
+  "date",
+  "select",
+  "multi_select",
+  "checkbox",
+  "url",
+] as const;
+export type FieldType = (typeof FIELD_TYPES)[number];
+
+export type FieldValue = string | number | boolean | string[];
+
+/**
+ * An admin-defined participant field. Name, email and team are built in
+ * because the app's logic depends on them; everything else is defined per
+ * program. Array order in CohortData.fields is the display order.
+ */
+export interface FieldDefinition {
+  id: string;
+  label: string;
+  type: FieldType;
+  /** Choices for select and multi_select. */
+  options?: string[];
+  /** Example shown in empty text inputs. */
+  placeholder?: string;
+  required: boolean;
+  showInList: boolean;
+  visibleToParticipant: boolean;
+  /** Archived fields are hidden but keep their values. */
+  archived?: boolean;
 }
 
 export interface Project {
@@ -109,6 +147,13 @@ export interface Completion {
   completedAt: ISODate;
 }
 
+/** Excuses a participant or team from one requirement, e.g. a medical leave. */
+export interface Exemption {
+  requirementId: string;
+  subjectId: string; // enrollmentId or teamId
+  reason?: string;
+}
+
 export interface CohortData {
   program: Program;
   cohort: Cohort;
@@ -122,6 +167,8 @@ export interface CohortData {
   attendance: Attendance[];
   requirements: Requirement[];
   completions: Completion[];
+  exemptions: Exemption[];
+  fields: FieldDefinition[];
 }
 
 // ---- Computed status ----
@@ -133,6 +180,8 @@ export interface RequirementResult {
   requirementId: string;
   status: Status;
   reason: string;
+  /** Counted as met because the subject was excused. */
+  excused?: boolean;
 }
 
 export interface SubjectStatus {
