@@ -1,0 +1,3678 @@
+{
+  "program": {
+    "id": "prog-civic",
+    "name": "Civic Projects"
+  },
+  "cohort": {
+    "id": "c-fall-2026",
+    "programId": "prog-civic",
+    "name": "Fall 2026",
+    "startDate": "2026-09-21",
+    "endDate": "2026-12-11"
+  },
+  "today": "2026-10-19",
+  "people": [
+    {
+      "id": "person-1",
+      "name": "Amara Haddad",
+      "email": "amara.haddad@example.edu"
+    },
+    {
+      "id": "person-2",
+      "name": "Bruno Mensah",
+      "email": "bruno.mensah@example.edu"
+    },
+    {
+      "id": "person-3",
+      "name": "Chen Rahman",
+      "email": "chen.rahman@example.edu"
+    },
+    {
+      "id": "person-4",
+      "name": "Dalia Costa",
+      "email": "dalia.costa@example.edu"
+    },
+    {
+      "id": "person-5",
+      "name": "Emeka Kim",
+      "email": "emeka.kim@example.edu"
+    },
+    {
+      "id": "person-6",
+      "name": "Farah Petrov",
+      "email": "farah.petrov@example.edu"
+    },
+    {
+      "id": "person-7",
+      "name": "Gabriel Iyer",
+      "email": "gabriel.iyer@example.edu"
+    },
+    {
+      "id": "person-8",
+      "name": "Hana Asante",
+      "email": "hana.asante@example.edu"
+    },
+    {
+      "id": "person-9",
+      "name": "Ivan Moreno",
+      "email": "ivan.moreno@example.edu"
+    },
+    {
+      "id": "person-10",
+      "name": "Jaya Rossi",
+      "email": "jaya.rossi@example.edu"
+    },
+    {
+      "id": "person-11",
+      "name": "Kofi Nowak",
+      "email": "kofi.nowak@example.edu"
+    },
+    {
+      "id": "person-12",
+      "name": "Lucía Farouk",
+      "email": "lucia.farouk@example.edu"
+    },
+    {
+      "id": "person-13",
+      "name": "Mateo Shah",
+      "email": "mateo.shah@example.edu"
+    },
+    {
+      "id": "person-14",
+      "name": "Nadia Duarte",
+      "email": "nadia.duarte@example.edu"
+    },
+    {
+      "id": "person-15",
+      "name": "Omar Lindqvist",
+      "email": "omar.lindqvist@example.edu"
+    },
+    {
+      "id": "person-16",
+      "name": "Priya Aziz",
+      "email": "priya.aziz@example.edu"
+    },
+    {
+      "id": "person-17",
+      "name": "Rafael Tanaka",
+      "email": "rafael.tanaka@example.edu"
+    },
+    {
+      "id": "person-18",
+      "name": "Sofia Okafor",
+      "email": "sofia.okafor@example.edu"
+    },
+    {
+      "id": "person-19",
+      "name": "Tariq Silva",
+      "email": "tariq.silva@example.edu"
+    },
+    {
+      "id": "person-20",
+      "name": "Yuki Wang",
+      "email": "yuki.wang@example.edu"
+    },
+    {
+      "id": "person-21",
+      "name": "Amara Asante",
+      "email": "amara.asante@example.edu"
+    },
+    {
+      "id": "person-22",
+      "name": "Bruno Moreno",
+      "email": "bruno.moreno@example.edu"
+    },
+    {
+      "id": "person-23",
+      "name": "Chen Rossi",
+      "email": "chen.rossi@example.edu"
+    },
+    {
+      "id": "person-24",
+      "name": "Dalia Nowak",
+      "email": "dalia.nowak@example.edu"
+    },
+    {
+      "id": "person-25",
+      "name": "Emeka Farouk",
+      "email": "emeka.farouk@example.edu"
+    },
+    {
+      "id": "person-26",
+      "name": "Farah Shah",
+      "email": "farah.shah@example.edu"
+    },
+    {
+      "id": "person-27",
+      "name": "Gabriel Duarte",
+      "email": "gabriel.duarte@example.edu"
+    },
+    {
+      "id": "person-28",
+      "name": "Hana Lindqvist",
+      "email": "hana.lindqvist@example.edu"
+    },
+    {
+      "id": "person-29",
+      "name": "Ivan Aziz",
+      "email": "ivan.aziz@example.edu"
+    },
+    {
+      "id": "person-30",
+      "name": "Jaya Tanaka",
+      "email": "jaya.tanaka@example.edu"
+    },
+    {
+      "id": "person-31",
+      "name": "Kofi Okafor",
+      "email": "kofi.okafor@example.edu"
+    },
+    {
+      "id": "person-32",
+      "name": "Lucía Silva",
+      "email": "lucia.silva@example.edu"
+    },
+    {
+      "id": "person-33",
+      "name": "Mateo Wang",
+      "email": "mateo.wang@example.edu"
+    },
+    {
+      "id": "person-34",
+      "name": "Nadia Haddad",
+      "email": "nadia.haddad@example.edu"
+    },
+    {
+      "id": "person-35",
+      "name": "Omar Mensah",
+      "email": "omar.mensah@example.edu"
+    },
+    {
+      "id": "person-36",
+      "name": "Priya Rahman",
+      "email": "priya.rahman@example.edu"
+    },
+    {
+      "id": "person-37",
+      "name": "Rafael Costa",
+      "email": "rafael.costa@example.edu"
+    },
+    {
+      "id": "person-38",
+      "name": "Sofia Kim",
+      "email": "sofia.kim@example.edu"
+    },
+    {
+      "id": "person-39",
+      "name": "Tariq Petrov",
+      "email": "tariq.petrov@example.edu"
+    },
+    {
+      "id": "person-40",
+      "name": "Yuki Iyer",
+      "email": "yuki.iyer@example.edu"
+    },
+    {
+      "id": "person-41",
+      "name": "Amara Lindqvist",
+      "email": "amara.lindqvist@example.edu"
+    },
+    {
+      "id": "person-42",
+      "name": "Bruno Aziz",
+      "email": "bruno.aziz@example.edu"
+    },
+    {
+      "id": "person-43",
+      "name": "Chen Tanaka",
+      "email": "chen.tanaka@example.edu"
+    },
+    {
+      "id": "person-44",
+      "name": "Dalia Okafor",
+      "email": "dalia.okafor@example.edu"
+    },
+    {
+      "id": "person-45",
+      "name": "Emeka Silva",
+      "email": "emeka.silva@example.edu"
+    },
+    {
+      "id": "person-46",
+      "name": "Farah Wang",
+      "email": "farah.wang@example.edu"
+    },
+    {
+      "id": "person-47",
+      "name": "Gabriel Haddad",
+      "email": "gabriel.haddad@example.edu"
+    },
+    {
+      "id": "person-48",
+      "name": "Hana Mensah",
+      "email": "hana.mensah@example.edu"
+    },
+    {
+      "id": "person-49",
+      "name": "Ivan Rahman",
+      "email": "ivan.rahman@example.edu"
+    },
+    {
+      "id": "person-50",
+      "name": "Jaya Costa",
+      "email": "jaya.costa@example.edu"
+    },
+    {
+      "id": "person-51",
+      "name": "Kofi Kim",
+      "email": "kofi.kim@example.edu"
+    },
+    {
+      "id": "person-52",
+      "name": "Lucía Petrov",
+      "email": "lucia.petrov@example.edu"
+    },
+    {
+      "id": "person-53",
+      "name": "Mateo Iyer",
+      "email": "mateo.iyer@example.edu"
+    },
+    {
+      "id": "person-54",
+      "name": "Nadia Asante",
+      "email": "nadia.asante@example.edu"
+    },
+    {
+      "id": "person-55",
+      "name": "Omar Moreno",
+      "email": "omar.moreno@example.edu"
+    },
+    {
+      "id": "person-56",
+      "name": "Priya Rossi",
+      "email": "priya.rossi@example.edu"
+    },
+    {
+      "id": "person-57",
+      "name": "Rafael Nowak",
+      "email": "rafael.nowak@example.edu"
+    },
+    {
+      "id": "person-58",
+      "name": "Sofia Farouk",
+      "email": "sofia.farouk@example.edu"
+    },
+    {
+      "id": "person-59",
+      "name": "Tariq Shah",
+      "email": "tariq.shah@example.edu"
+    }
+  ],
+  "enrollments": [
+    {
+      "id": "enr-1",
+      "personId": "person-1",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0001",
+        "field-organization": "Northfield College",
+        "field-location": "San Francisco, USA"
+      }
+    },
+    {
+      "id": "enr-2",
+      "personId": "person-2",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0002",
+        "field-organization": "Lakeview Institute",
+        "field-location": "Taipei, Taiwan"
+      }
+    },
+    {
+      "id": "enr-3",
+      "personId": "person-3",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0003",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Buenos Aires, Argentina"
+      }
+    },
+    {
+      "id": "enr-4",
+      "personId": "person-4",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0004",
+        "field-organization": "Riverside University",
+        "field-location": "Berlin, Germany"
+      }
+    },
+    {
+      "id": "enr-5",
+      "personId": "person-5",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0005",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Taipei, Taiwan"
+      }
+    },
+    {
+      "id": "enr-6",
+      "personId": "person-6",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0006",
+        "field-organization": "Brightline Labs",
+        "field-location": "Berlin, Germany"
+      }
+    },
+    {
+      "id": "enr-7",
+      "personId": "person-7",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0007",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-8",
+      "personId": "person-8",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0008",
+        "field-organization": "Brightline Labs",
+        "field-location": "Seoul, South Korea"
+      }
+    },
+    {
+      "id": "enr-9",
+      "personId": "person-9",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0009",
+        "field-organization": "Brightline Labs",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-10",
+      "personId": "person-10",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0010",
+        "field-organization": "Brightline Labs",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-11",
+      "personId": "person-11",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0011",
+        "field-organization": "Brightline Labs",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-12",
+      "personId": "person-12",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0012",
+        "field-organization": "Brightline Labs",
+        "field-location": "Berlin, Germany"
+      }
+    },
+    {
+      "id": "enr-13",
+      "personId": "person-13",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0013",
+        "field-organization": "Northfield College",
+        "field-location": "Seoul, South Korea"
+      }
+    },
+    {
+      "id": "enr-14",
+      "personId": "person-14",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0014",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-15",
+      "personId": "person-15",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0015",
+        "field-organization": "Northfield College",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-16",
+      "personId": "person-16",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0016",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-17",
+      "personId": "person-17",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0017",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-18",
+      "personId": "person-18",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0018",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-19",
+      "personId": "person-19",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0019",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "San Francisco, USA"
+      }
+    },
+    {
+      "id": "enr-20",
+      "personId": "person-20",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0020",
+        "field-organization": "Brightline Labs",
+        "field-location": "Seoul, South Korea"
+      }
+    },
+    {
+      "id": "enr-21",
+      "personId": "person-21",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0021",
+        "field-organization": "Riverside University",
+        "field-location": "San Francisco, USA"
+      }
+    },
+    {
+      "id": "enr-22",
+      "personId": "person-22",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0022",
+        "field-organization": "Northfield College",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-23",
+      "personId": "person-23",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0023",
+        "field-organization": "Riverside University",
+        "field-location": "Buenos Aires, Argentina"
+      }
+    },
+    {
+      "id": "enr-24",
+      "personId": "person-24",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0024",
+        "field-organization": "Riverside University",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-25",
+      "personId": "person-25",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0025",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Taipei, Taiwan"
+      }
+    },
+    {
+      "id": "enr-26",
+      "personId": "person-26",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0026",
+        "field-organization": "Brightline Labs",
+        "field-location": "Seoul, South Korea"
+      }
+    },
+    {
+      "id": "enr-27",
+      "personId": "person-27",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0027",
+        "field-organization": "Northfield College",
+        "field-location": "Berlin, Germany"
+      }
+    },
+    {
+      "id": "enr-28",
+      "personId": "person-28",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0028",
+        "field-organization": "Lakeview Institute",
+        "field-location": "Seoul, South Korea"
+      }
+    },
+    {
+      "id": "enr-29",
+      "personId": "person-29",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0029",
+        "field-organization": "Brightline Labs",
+        "field-location": "Taipei, Taiwan"
+      }
+    },
+    {
+      "id": "enr-30",
+      "personId": "person-30",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0030",
+        "field-organization": "Riverside University",
+        "field-location": "San Francisco, USA"
+      }
+    },
+    {
+      "id": "enr-31",
+      "personId": "person-31",
+      "cohortId": "c-fall-2026",
+      "status": "withdrawn",
+      "joinedAt": "2026-09-21",
+      "leftAt": "2026-10-09",
+      "fields": {
+        "field-phone": "+1 555 010 0031",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-32",
+      "personId": "person-32",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0032",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-33",
+      "personId": "person-33",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0033",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-34",
+      "personId": "person-34",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0034",
+        "field-organization": "Northfield College",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-35",
+      "personId": "person-35",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0035",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-36",
+      "personId": "person-36",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0036",
+        "field-organization": "Lakeview Institute",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-37",
+      "personId": "person-37",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0037",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-38",
+      "personId": "person-38",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0038",
+        "field-organization": "Lakeview Institute",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-39",
+      "personId": "person-39",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0039",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "San Francisco, USA"
+      }
+    },
+    {
+      "id": "enr-40",
+      "personId": "person-40",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0040",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Seoul, South Korea"
+      }
+    },
+    {
+      "id": "enr-41",
+      "personId": "person-41",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0041",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-42",
+      "personId": "person-42",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0042",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-43",
+      "personId": "person-43",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0043",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-44",
+      "personId": "person-44",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0044",
+        "field-organization": "Riverside University",
+        "field-location": "Taipei, Taiwan"
+      }
+    },
+    {
+      "id": "enr-45",
+      "personId": "person-45",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0045",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-46",
+      "personId": "person-46",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0046",
+        "field-organization": "Brightline Labs",
+        "field-location": "Berlin, Germany"
+      }
+    },
+    {
+      "id": "enr-47",
+      "personId": "person-47",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0047",
+        "field-organization": "Northfield College",
+        "field-location": "San Francisco, USA"
+      }
+    },
+    {
+      "id": "enr-48",
+      "personId": "person-48",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0048",
+        "field-organization": "Lakeview Institute",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-49",
+      "personId": "person-49",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0049",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "San Francisco, USA"
+      }
+    },
+    {
+      "id": "enr-50",
+      "personId": "person-50",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0050",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-51",
+      "personId": "person-51",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0051",
+        "field-organization": "Cedar Street Studio",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-52",
+      "personId": "person-52",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0052",
+        "field-organization": "Brightline Labs",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-53",
+      "personId": "person-53",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0053",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-54",
+      "personId": "person-54",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0054",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-55",
+      "personId": "person-55",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0055",
+        "field-organization": "Northfield College",
+        "field-location": "Nairobi, Kenya"
+      }
+    },
+    {
+      "id": "enr-56",
+      "personId": "person-56",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0056",
+        "field-organization": "Open Harbor Foundation",
+        "field-location": "Hyderabad, India"
+      }
+    },
+    {
+      "id": "enr-57",
+      "personId": "person-57",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0057",
+        "field-organization": "Northfield College",
+        "field-location": "Buenos Aires, Argentina"
+      }
+    },
+    {
+      "id": "enr-58",
+      "personId": "person-58",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0058",
+        "field-organization": "Brightline Labs",
+        "field-location": "London, UK"
+      }
+    },
+    {
+      "id": "enr-59",
+      "personId": "person-59",
+      "cohortId": "c-fall-2026",
+      "status": "active",
+      "joinedAt": "2026-09-21",
+      "fields": {
+        "field-phone": "+1 555 010 0059",
+        "field-organization": "Lakeview Institute",
+        "field-location": "Taipei, Taiwan"
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "proj-1",
+      "cohortId": "c-fall-2026",
+      "title": "Volunteer shift scheduling",
+      "partner": "Bayview Community Pantry"
+    },
+    {
+      "id": "proj-2",
+      "cohortId": "c-fall-2026",
+      "title": "Tenant rights info hub",
+      "partner": "Mission Housing Collective"
+    },
+    {
+      "id": "proj-3",
+      "cohortId": "c-fall-2026",
+      "title": "Youth coding club curriculum",
+      "partner": "Eastside Learning Center"
+    },
+    {
+      "id": "proj-4",
+      "cohortId": "c-fall-2026",
+      "title": "Library e-resource onboarding",
+      "partner": "Northgate Public Library"
+    },
+    {
+      "id": "proj-5",
+      "cohortId": "c-fall-2026",
+      "title": "Urban garden plot booking",
+      "partner": "Green Blocks Initiative"
+    },
+    {
+      "id": "proj-6",
+      "cohortId": "c-fall-2026",
+      "title": "Senior tech help desk",
+      "partner": "Golden Years Network"
+    },
+    {
+      "id": "proj-7",
+      "cohortId": "c-fall-2026",
+      "title": "Bike repair co-op inventory",
+      "partner": "Spokes Together"
+    },
+    {
+      "id": "proj-8",
+      "cohortId": "c-fall-2026",
+      "title": "Refugee job board",
+      "partner": "New Roots Alliance"
+    },
+    {
+      "id": "proj-9",
+      "cohortId": "c-fall-2026",
+      "title": "Clinic wait-time tracker",
+      "partner": "Harborview Free Clinic"
+    },
+    {
+      "id": "proj-10",
+      "cohortId": "c-fall-2026",
+      "title": "Neighborhood safety map",
+      "partner": "Westside Residents Assoc."
+    },
+    {
+      "id": "proj-11",
+      "cohortId": "c-fall-2026",
+      "title": "Food waste pickup routing",
+      "partner": "Second Plate"
+    },
+    {
+      "id": "proj-12",
+      "cohortId": "c-fall-2026",
+      "title": "Arts grant application helper",
+      "partner": "City Arts Fund"
+    }
+  ],
+  "teams": [
+    {
+      "id": "team-1",
+      "cohortId": "c-fall-2026",
+      "name": "Harbor",
+      "projectId": "proj-1"
+    },
+    {
+      "id": "team-2",
+      "cohortId": "c-fall-2026",
+      "name": "Lantern",
+      "projectId": "proj-2"
+    },
+    {
+      "id": "team-3",
+      "cohortId": "c-fall-2026",
+      "name": "Compass",
+      "projectId": "proj-3"
+    },
+    {
+      "id": "team-4",
+      "cohortId": "c-fall-2026",
+      "name": "Meridian",
+      "projectId": "proj-4"
+    },
+    {
+      "id": "team-5",
+      "cohortId": "c-fall-2026",
+      "name": "Orchard",
+      "projectId": "proj-5"
+    },
+    {
+      "id": "team-6",
+      "cohortId": "c-fall-2026",
+      "name": "Beacon",
+      "projectId": "proj-6"
+    },
+    {
+      "id": "team-7",
+      "cohortId": "c-fall-2026",
+      "name": "Summit",
+      "projectId": "proj-7"
+    },
+    {
+      "id": "team-8",
+      "cohortId": "c-fall-2026",
+      "name": "Willow",
+      "projectId": "proj-8"
+    },
+    {
+      "id": "team-9",
+      "cohortId": "c-fall-2026",
+      "name": "Atlas",
+      "projectId": "proj-9"
+    },
+    {
+      "id": "team-10",
+      "cohortId": "c-fall-2026",
+      "name": "Ember",
+      "projectId": "proj-10"
+    },
+    {
+      "id": "team-11",
+      "cohortId": "c-fall-2026",
+      "name": "Tide",
+      "projectId": "proj-11"
+    },
+    {
+      "id": "team-12",
+      "cohortId": "c-fall-2026",
+      "name": "Juniper",
+      "projectId": "proj-12"
+    }
+  ],
+  "memberships": [
+    {
+      "enrollmentId": "enr-1",
+      "teamId": "team-1",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-2",
+      "teamId": "team-1",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-3",
+      "teamId": "team-1",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-4",
+      "teamId": "team-1",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-5",
+      "teamId": "team-1",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-6",
+      "teamId": "team-2",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-7",
+      "teamId": "team-2",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-8",
+      "teamId": "team-2",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-9",
+      "teamId": "team-2",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-10",
+      "teamId": "team-2",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-11",
+      "teamId": "team-3",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-12",
+      "teamId": "team-3",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-13",
+      "teamId": "team-3",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-14",
+      "teamId": "team-3",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-15",
+      "teamId": "team-3",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-16",
+      "teamId": "team-4",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-17",
+      "teamId": "team-4",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-18",
+      "teamId": "team-4",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-19",
+      "teamId": "team-4",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-20",
+      "teamId": "team-4",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-21",
+      "teamId": "team-5",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-22",
+      "teamId": "team-5",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-23",
+      "teamId": "team-5",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-24",
+      "teamId": "team-5",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-25",
+      "teamId": "team-5",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-26",
+      "teamId": "team-6",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-27",
+      "teamId": "team-6",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-28",
+      "teamId": "team-6",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-29",
+      "teamId": "team-6",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-30",
+      "teamId": "team-6",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-31",
+      "teamId": "team-7",
+      "startDate": "2026-09-21",
+      "endDate": "2026-10-09"
+    },
+    {
+      "enrollmentId": "enr-32",
+      "teamId": "team-7",
+      "startDate": "2026-09-21",
+      "endDate": "2026-10-05"
+    },
+    {
+      "enrollmentId": "enr-33",
+      "teamId": "team-7",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-34",
+      "teamId": "team-7",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-35",
+      "teamId": "team-8",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-36",
+      "teamId": "team-8",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-37",
+      "teamId": "team-8",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-38",
+      "teamId": "team-8",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-39",
+      "teamId": "team-8",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-40",
+      "teamId": "team-9",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-41",
+      "teamId": "team-9",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-42",
+      "teamId": "team-9",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-43",
+      "teamId": "team-9",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-44",
+      "teamId": "team-9",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-45",
+      "teamId": "team-10",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-46",
+      "teamId": "team-10",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-47",
+      "teamId": "team-10",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-48",
+      "teamId": "team-10",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-49",
+      "teamId": "team-10",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-50",
+      "teamId": "team-11",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-51",
+      "teamId": "team-11",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-52",
+      "teamId": "team-11",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-53",
+      "teamId": "team-11",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-54",
+      "teamId": "team-11",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-55",
+      "teamId": "team-12",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-56",
+      "teamId": "team-12",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-57",
+      "teamId": "team-12",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-58",
+      "teamId": "team-12",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-59",
+      "teamId": "team-12",
+      "startDate": "2026-09-21"
+    },
+    {
+      "enrollmentId": "enr-32",
+      "teamId": "team-3",
+      "startDate": "2026-10-05"
+    }
+  ],
+  "events": [
+    {
+      "id": "ev-1",
+      "cohortId": "c-fall-2026",
+      "title": "Kickoff",
+      "category": "all-hands",
+      "date": "2026-09-22",
+      "isRequired": true,
+      "startTime": "17:00",
+      "endTime": "19:00",
+      "location": "Main hall",
+      "host": "Program team",
+      "description": "Welcome to the cohort! This is the first time everyone is in the same room, so we'll start with introductions and a quick tour of how the program works: the timeline, what's expected of each team and how attendance and check-ins are tracked.\n\nAfter that, you'll meet your team for the first time and hear from two participants from last year about what they wish they had known at the start. We'll finish with an open Q&A.\n\nDinner is provided. Please arrive 10 minutes early to pick up your name badge.",
+      "links": [
+        {
+          "label": "Welcome slides",
+          "url": "https://slides.example.org/kickoff"
+        },
+        {
+          "label": "Program handbook",
+          "url": "https://docs.example.org/handbook"
+        },
+        {
+          "label": "Recording",
+          "url": "https://video.example.org/kickoff-recording"
+        }
+      ],
+      "checkinToken": "chk-ev-1-zsdgn"
+    },
+    {
+      "id": "ev-2",
+      "cohortId": "c-fall-2026",
+      "title": "Workshop 1: Problem framing",
+      "category": "workshop",
+      "date": "2026-09-29",
+      "isRequired": true,
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "location": "Room 204",
+      "host": "Dana Lee",
+      "description": "Most projects struggle not because the solution is wrong but because the problem was never clearly defined. In this workshop, each team turns its partner's broad challenge into a specific problem statement it can actually test.\n\nWe'll work through three short exercises: mapping who is affected, separating symptoms from causes, and writing a \"How might we\" question. By the end, every team should have one problem statement it agrees on.\n\nBring your partner brief and a laptop. Teams will share their statements at the end for quick feedback.",
+      "links": [
+        {
+          "label": "Workshop slides",
+          "url": "https://slides.example.org/problem-framing"
+        },
+        {
+          "label": "Problem statement template",
+          "url": "https://docs.example.org/problem-statement-template"
+        },
+        {
+          "label": "Partner briefs",
+          "url": "https://drive.example.org/partner-briefs"
+        }
+      ],
+      "checkinToken": "chk-ev-2-qoubj"
+    },
+    {
+      "id": "ev-3",
+      "cohortId": "c-fall-2026",
+      "title": "Workshop 2: User research",
+      "category": "workshop",
+      "date": "2026-10-06",
+      "isRequired": true,
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "location": "Room 204",
+      "host": "Dana Lee",
+      "description": "Before building anything, you need to hear from the people your project is for. This session covers how to find interviewees, how to ask open questions without leading people toward the answer you want, and how to take notes your whole team can use.\n\nThe second half is practice: teams pair up and run short mock interviews with each other, then swap roles. You'll leave with an interview guide and a plan to talk to at least five people before the next workshop.",
+      "links": [
+        {
+          "label": "Workshop slides",
+          "url": "https://slides.example.org/user-research"
+        },
+        {
+          "label": "Interview guide template",
+          "url": "https://docs.example.org/interview-guide"
+        },
+        {
+          "label": "Consent form for interviewees",
+          "url": "https://forms.example.org/interview-consent"
+        }
+      ],
+      "checkinToken": "chk-ev-3-1er4oj"
+    },
+    {
+      "id": "ev-4",
+      "cohortId": "c-fall-2026",
+      "title": "Partner meet & greet",
+      "category": "partner",
+      "date": "2026-10-08",
+      "isRequired": false,
+      "startTime": "12:00",
+      "endTime": "13:30",
+      "location": "https://meet.example.org/partners",
+      "host": "Partner organizations",
+      "description": "An informal online call to meet the partner organizations behind this cohort's projects. Each partner will spend a few minutes on who they are, the work they do and why they brought their challenge to the program.\n\nThere will be time for questions at the end, so come with anything you'd like to know about your partner's goals, constraints or the people they serve. The call is optional but strongly recommended if you haven't spoken with your partner yet.\n\nThe recording will be shared afterwards for anyone who can't join.",
+      "links": [
+        {
+          "label": "Call link",
+          "url": "https://meet.example.org/partners"
+        },
+        {
+          "label": "Partner profiles",
+          "url": "https://docs.example.org/partner-profiles"
+        },
+        {
+          "label": "Recording",
+          "url": "https://video.example.org/partner-call"
+        }
+      ],
+      "checkinToken": "chk-ev-4-13vh0c"
+    },
+    {
+      "id": "ev-5",
+      "cohortId": "c-fall-2026",
+      "title": "Workshop 3: Prototyping",
+      "category": "workshop",
+      "date": "2026-10-13",
+      "isRequired": true,
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "location": "Maker lab",
+      "host": "Sam Ortiz",
+      "description": "Now that you understand the problem, it's time to make something people can react to. This workshop is about building quick, rough versions of your idea, like paper sketches, clickable mockups or a simple role-play, before investing weeks into a polished solution.\n\nWe'll look at examples of good and bad prototypes, then teams will have about an hour in the maker lab to build their first one. Materials are provided, including paper, markers, sticky notes and a few tablets.\n\nThe goal is not perfection. If your prototype takes more than an hour to make, it's probably too detailed.",
+      "links": [
+        {
+          "label": "Workshop slides",
+          "url": "https://slides.example.org/prototyping"
+        },
+        {
+          "label": "Prototype examples",
+          "url": "https://board.example.org/prototype-examples"
+        },
+        {
+          "label": "Maker lab booking form",
+          "url": "https://forms.example.org/maker-lab"
+        }
+      ],
+      "checkinToken": "chk-ev-5-aeoq5"
+    },
+    {
+      "id": "ev-6",
+      "cohortId": "c-fall-2026",
+      "title": "Social night",
+      "category": "social",
+      "date": "2026-10-16",
+      "isRequired": false,
+      "startTime": "19:00",
+      "location": "Courtyard",
+      "description": "A relaxed evening with food, music and games, and no work talk required. It's a chance to get to know people from other teams, swap stories about how your projects are going and meet some of the mentors outside of workshops.\n\nVegetarian and vegan options will be available. Friends and partners are welcome to come along.",
+      "links": [
+        {
+          "label": "RSVP for food",
+          "url": "https://forms.example.org/social-rsvp"
+        }
+      ],
+      "checkinToken": "chk-ev-6-vco52"
+    },
+    {
+      "id": "ev-9",
+      "cohortId": "c-fall-2026",
+      "title": "Weekly team check-in",
+      "category": "meeting",
+      "date": "2026-10-19",
+      "startTime": "17:00",
+      "endTime": "18:00",
+      "location": "Room 204",
+      "host": "Program team",
+      "description": "A short weekly meeting where each team shares what they did last week, what they plan to do next and anything they're stuck on.\n\nKeep it to two minutes per team. Mentors will stay afterwards for anyone who wants help.",
+      "links": [
+        {
+          "label": "Weekly update form",
+          "url": "https://forms.example.org/weekly-update"
+        }
+      ],
+      "isRequired": false,
+      "checkinToken": "chk-ev-9-today"
+    },
+    {
+      "id": "ev-7",
+      "cohortId": "c-fall-2026",
+      "title": "Workshop 4: Testing with users",
+      "category": "workshop",
+      "date": "2026-10-27",
+      "isRequired": true,
+      "startTime": "18:00",
+      "endTime": "20:00",
+      "location": "Room 204",
+      "host": "Sam Ortiz",
+      "description": "Time to put your prototype in front of real users and find out what works. We'll cover how to run a short testing session, what to watch for while someone uses your prototype and how to avoid explaining it too much.\n\nEach team will then run at least two live tests with invited guests during the session. At the end, teams will sort what they saw into what to keep, change and drop, and decide on next steps before the midpoint showcase.\n\nPlease bring your latest prototype and make sure it's ready to be tested.",
+      "links": [
+        {
+          "label": "Testing script template",
+          "url": "https://docs.example.org/testing-script"
+        },
+        {
+          "label": "Guest sign-up sheet",
+          "url": "https://sheets.example.org/test-guests"
+        }
+      ],
+      "checkinToken": "chk-ev-7-g9men"
+    },
+    {
+      "id": "ev-8",
+      "cohortId": "c-fall-2026",
+      "title": "Midpoint showcase",
+      "category": "all-hands",
+      "date": "2026-11-10",
+      "isRequired": true,
+      "startTime": "17:00",
+      "endTime": "19:30",
+      "location": "Main hall",
+      "host": "Program team",
+      "description": "The midpoint showcase is where each team presents its progress to partners, mentors and the rest of the cohort. Every team gets five minutes to present followed by three minutes of questions.\n\nCover the problem you're working on, what you've learned from users so far, what your prototype looks like now and what you plan to do in the second half of the program. Slides are optional; a short demo is encouraged.\n\nPartners will give written feedback to each team after the event. Please send your slides, if any, to the program team by noon on the day.",
+      "links": [
+        {
+          "label": "Presentation guidelines",
+          "url": "https://docs.example.org/showcase-guidelines"
+        },
+        {
+          "label": "Slide upload folder",
+          "url": "https://drive.example.org/showcase-slides"
+        },
+        {
+          "label": "Feedback form for partners",
+          "url": "https://forms.example.org/showcase-feedback"
+        }
+      ],
+      "checkinToken": "chk-ev-8-1171lt"
+    }
+  ],
+  "attendance": [
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-1",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-1",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-1",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-1",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-1",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-2",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-2",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-2",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-2",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-2",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-2",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-3",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-3",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-3",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-3",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-3",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-3",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-4",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-4",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-4",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-4",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-4",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-5",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-5",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-5",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-5",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-5",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-6",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-6",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-6",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-6",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-6",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-7",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-7",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-7",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-7",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-7",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-8",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-8",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-8",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-8",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-8",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-9",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-9",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-9",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-9",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-9",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-9",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-10",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-10",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-10",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-10",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-10",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-11",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-11",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-11",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-11",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-11",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-12",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-12",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-12",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-12",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-13",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-13",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-13",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-13",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-13",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-14",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-14",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-14",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-14",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-14",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-15",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-15",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-15",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-15",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-15",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-15",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-16",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-16",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-16",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-16",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-16",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-16",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-17",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-17",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-17",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-17",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-17",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-18",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-18",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-18",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-18",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-18",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-19",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-19",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-19",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-19",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-19",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-19",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-20",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-20",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-20",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-20",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-20",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-20",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-21",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-21",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-21",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-21",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-21",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-22",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-22",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-22",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-22",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-22",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-22",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-23",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-23",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-23",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-23",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-24",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-24",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-24",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-24",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-24",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-24",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-25",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-25",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-25",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-25",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-25",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-25",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-26",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-26",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-26",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-26",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-26",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-27",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-27",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-27",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-27",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-27",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-27",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-28",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-28",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-28",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-28",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-28",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-28",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-29",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-29",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-29",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-29",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-30",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-30",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-30",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-30",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-30",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-31",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-31",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-31",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-31",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-32",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-32",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-32",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-32",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-32",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-33",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-33",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-33",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-33",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-33",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-33",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-34",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-34",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-34",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-34",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-34",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-35",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-35",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-35",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-35",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-35",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-35",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-36",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-36",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-36",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-36",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-36",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-37",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-37",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-37",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-38",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-38",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-38",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-38",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-38",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-38",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-39",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-39",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-39",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-39",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-39",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-39",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-40",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-40",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-40",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-40",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-41",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-41",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-41",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-41",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-41",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-42",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-42",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-42",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-42",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-42",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-43",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-43",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-43",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-43",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-44",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-44",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-44",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-44",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-45",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-45",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-45",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-45",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-46",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-46",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-46",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-46",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-47",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-47",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-47",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-47",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-47",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-48",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-48",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-48",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-48",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-48",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-49",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-49",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-49",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-49",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-50",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-50",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-50",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-50",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-51",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-51",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-51",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-51",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-51",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-51",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-52",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-52",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-52",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-52",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-52",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-52",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-53",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-53",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-53",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-53",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-53",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-53",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-54",
+      "source": "manual"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-54",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-54",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-54",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-54",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-55",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-55",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-55",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-55",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-55",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-56",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-56",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-56",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-56",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-57",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-57",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-57",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-57",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-58",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-58",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-58",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-4",
+      "enrollmentId": "enr-58",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-58",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-1",
+      "enrollmentId": "enr-59",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-2",
+      "enrollmentId": "enr-59",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-3",
+      "enrollmentId": "enr-59",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-5",
+      "enrollmentId": "enr-59",
+      "source": "link"
+    },
+    {
+      "eventId": "ev-6",
+      "enrollmentId": "enr-59",
+      "source": "link"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "req-1",
+      "name": "Workshop attendance",
+      "scope": "participant",
+      "type": "attendance_min",
+      "params": {
+        "category": "workshop",
+        "minCount": 3
+      }
+    },
+    {
+      "id": "req-2",
+      "name": "All-hands attendance",
+      "scope": "participant",
+      "type": "attendance_min",
+      "params": {
+        "category": "all-hands",
+        "minCount": 2
+      }
+    },
+    {
+      "id": "req-3",
+      "name": "Onboarding form",
+      "scope": "participant",
+      "type": "complete_by",
+      "params": {
+        "dueDate": "2026-10-02"
+      }
+    },
+    {
+      "id": "req-4",
+      "name": "Minimum team size",
+      "scope": "team",
+      "type": "team_min_size",
+      "params": {
+        "minActive": 3
+      }
+    },
+    {
+      "id": "req-5",
+      "name": "Project brief",
+      "scope": "team",
+      "type": "complete_by",
+      "params": {
+        "dueDate": "2026-10-16"
+      }
+    },
+    {
+      "id": "req-6",
+      "name": "User research plan",
+      "scope": "team",
+      "type": "complete_by",
+      "params": {
+        "dueDate": "2026-10-23"
+      }
+    }
+  ],
+  "completions": [
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-1",
+      "completedAt": "2026-09-25"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-2",
+      "completedAt": "2026-09-29"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-3",
+      "completedAt": "2026-09-29"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-4",
+      "completedAt": "2026-09-24"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-5",
+      "completedAt": "2026-09-30"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-6",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-7",
+      "completedAt": "2026-09-23"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-8",
+      "completedAt": "2026-09-28"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-9",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-10",
+      "completedAt": "2026-09-23"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-11",
+      "completedAt": "2026-09-30"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-12",
+      "completedAt": "2026-09-22"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-13",
+      "completedAt": "2026-09-23"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-14",
+      "completedAt": "2026-10-01"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-15",
+      "completedAt": "2026-09-24"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-16",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-17",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-18",
+      "completedAt": "2026-09-28"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-19",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-20",
+      "completedAt": "2026-09-28"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-21",
+      "completedAt": "2026-09-23"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-22",
+      "completedAt": "2026-10-01"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-24",
+      "completedAt": "2026-09-30"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-25",
+      "completedAt": "2026-09-25"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-26",
+      "completedAt": "2026-09-24"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-27",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-28",
+      "completedAt": "2026-09-29"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-29",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-30",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-31",
+      "completedAt": "2026-09-24"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-32",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-33",
+      "completedAt": "2026-09-22"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-34",
+      "completedAt": "2026-09-30"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-35",
+      "completedAt": "2026-09-25"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-36",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-37",
+      "completedAt": "2026-09-24"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-38",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-39",
+      "completedAt": "2026-09-22"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-40",
+      "completedAt": "2026-09-28"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-41",
+      "completedAt": "2026-09-22"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-42",
+      "completedAt": "2026-10-01"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-43",
+      "completedAt": "2026-09-29"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-44",
+      "completedAt": "2026-09-28"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-45",
+      "completedAt": "2026-09-30"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-46",
+      "completedAt": "2026-09-22"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-47",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-48",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-49",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-50",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-51",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-53",
+      "completedAt": "2026-09-26"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-54",
+      "completedAt": "2026-09-27"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-55",
+      "completedAt": "2026-09-22"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-56",
+      "completedAt": "2026-09-29"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-57",
+      "completedAt": "2026-09-22"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-58",
+      "completedAt": "2026-09-28"
+    },
+    {
+      "requirementId": "req-3",
+      "subjectId": "enr-59",
+      "completedAt": "2026-09-23"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-1",
+      "completedAt": "2026-10-12"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-1",
+      "completedAt": "2026-10-17"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-2",
+      "completedAt": "2026-10-15"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-2",
+      "completedAt": "2026-10-15"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-3",
+      "completedAt": "2026-10-14"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-3",
+      "completedAt": "2026-10-18"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-4",
+      "completedAt": "2026-10-13"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-5",
+      "completedAt": "2026-10-11"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-5",
+      "completedAt": "2026-10-16"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-6",
+      "completedAt": "2026-10-13"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-6",
+      "completedAt": "2026-10-16"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-7",
+      "completedAt": "2026-10-13"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-7",
+      "completedAt": "2026-10-17"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-8",
+      "completedAt": "2026-10-11"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-9",
+      "completedAt": "2026-10-14"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-9",
+      "completedAt": "2026-10-16"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-10",
+      "completedAt": "2026-10-18"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-11",
+      "completedAt": "2026-10-15"
+    },
+    {
+      "requirementId": "req-5",
+      "subjectId": "team-12",
+      "completedAt": "2026-10-13"
+    },
+    {
+      "requirementId": "req-6",
+      "subjectId": "team-12",
+      "completedAt": "2026-10-14"
+    }
+  ],
+  "exemptions": [],
+  "fields": [
+    {
+      "id": "field-phone",
+      "label": "Phone",
+      "type": "text",
+      "placeholder": "+1 555 010 0000",
+      "required": false,
+      "showInList": false,
+      "visibleToParticipant": true
+    },
+    {
+      "id": "field-organization",
+      "label": "Organization",
+      "type": "text",
+      "placeholder": "School, company or community group",
+      "required": false,
+      "showInList": true,
+      "visibleToParticipant": true
+    },
+    {
+      "id": "field-location",
+      "label": "Location",
+      "type": "text",
+      "placeholder": "City, country",
+      "required": false,
+      "showInList": true,
+      "visibleToParticipant": true
+    }
+  ]
+}
