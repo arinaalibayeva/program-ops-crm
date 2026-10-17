@@ -195,6 +195,10 @@ export function buildMockCohort(): CohortData {
     category: ProgramEvent["category"],
     date: string,
     isRequired: boolean,
+    details: Pick<
+      ProgramEvent,
+      "startTime" | "endTime" | "location" | "host" | "description" | "links"
+    >,
   ): ProgramEvent => ({
     id,
     cohortId,
@@ -202,18 +206,129 @@ export function buildMockCohort(): CohortData {
     category,
     date,
     isRequired,
+    ...details,
     checkinToken: `chk-${id}-${Math.floor(rand() * 1e8).toString(36)}`,
   });
 
   const events: ProgramEvent[] = [
-    ev("ev-1", "Kickoff", "all-hands", "2026-09-22", true),
-    ev("ev-2", "Workshop 1: Problem framing", "workshop", "2026-09-29", true),
-    ev("ev-3", "Workshop 2: User research", "workshop", "2026-10-06", true),
-    ev("ev-4", "Partner meet & greet", "partner", "2026-10-08", false),
-    ev("ev-5", "Workshop 3: Prototyping", "workshop", "2026-10-13", true),
-    ev("ev-6", "Social night", "social", "2026-10-16", false),
-    ev("ev-7", "Workshop 4: Testing with users", "workshop", "2026-10-27", true),
-    ev("ev-8", "Midpoint showcase", "all-hands", "2026-11-10", true),
+    ev("ev-1", "Kickoff", "all-hands", "2026-09-22", true, {
+      startTime: "17:00",
+      endTime: "19:00",
+      location: "Main hall",
+      host: "Program team",
+      description:
+        "Welcome to the cohort! This is the first time everyone is in the same room, so we'll start with introductions and a quick tour of how the program works: the timeline, what's expected of each team and how attendance and check-ins are tracked.\n\nAfter that, you'll meet your team for the first time and hear from two participants from last year about what they wish they had known at the start. We'll finish with an open Q&A.\n\nDinner is provided. Please arrive 10 minutes early to pick up your name badge.",
+      links: [
+        { label: "Welcome slides", url: "https://slides.example.org/kickoff" },
+        { label: "Program handbook", url: "https://docs.example.org/handbook" },
+        { label: "Recording", url: "https://video.example.org/kickoff-recording" },
+      ],
+    }),
+    ev("ev-2", "Workshop 1: Problem framing", "workshop", "2026-09-29", true, {
+      startTime: "18:00",
+      endTime: "20:00",
+      location: "Room 204",
+      host: "Dana Lee",
+      description:
+        "Most projects struggle not because the solution is wrong but because the problem was never clearly defined. In this workshop, each team turns its partner's broad challenge into a specific problem statement it can actually test.\n\nWe'll work through three short exercises: mapping who is affected, separating symptoms from causes, and writing a \"How might we\" question. By the end, every team should have one problem statement it agrees on.\n\nBring your partner brief and a laptop. Teams will share their statements at the end for quick feedback.",
+      links: [
+        { label: "Workshop slides", url: "https://slides.example.org/problem-framing" },
+        { label: "Problem statement template", url: "https://docs.example.org/problem-statement-template" },
+        { label: "Partner briefs", url: "https://drive.example.org/partner-briefs" },
+      ],
+    }),
+    ev("ev-3", "Workshop 2: User research", "workshop", "2026-10-06", true, {
+      startTime: "18:00",
+      endTime: "20:00",
+      location: "Room 204",
+      host: "Dana Lee",
+      description:
+        "Before building anything, you need to hear from the people your project is for. This session covers how to find interviewees, how to ask open questions without leading people toward the answer you want, and how to take notes your whole team can use.\n\nThe second half is practice: teams pair up and run short mock interviews with each other, then swap roles. You'll leave with an interview guide and a plan to talk to at least five people before the next workshop.",
+      links: [
+        { label: "Workshop slides", url: "https://slides.example.org/user-research" },
+        { label: "Interview guide template", url: "https://docs.example.org/interview-guide" },
+        { label: "Consent form for interviewees", url: "https://forms.example.org/interview-consent" },
+      ],
+    }),
+    ev("ev-4", "Partner meet & greet", "partner", "2026-10-08", false, {
+      startTime: "12:00",
+      endTime: "13:30",
+      location: "https://meet.example.org/partners",
+      host: "Partner organizations",
+      description:
+        "An informal online call to meet the partner organizations behind this cohort's projects. Each partner will spend a few minutes on who they are, the work they do and why they brought their challenge to the program.\n\nThere will be time for questions at the end, so come with anything you'd like to know about your partner's goals, constraints or the people they serve. The call is optional but strongly recommended if you haven't spoken with your partner yet.\n\nThe recording will be shared afterwards for anyone who can't join.",
+      links: [
+        { label: "Call link", url: "https://meet.example.org/partners" },
+        { label: "Partner profiles", url: "https://docs.example.org/partner-profiles" },
+        { label: "Recording", url: "https://video.example.org/partner-call" },
+      ],
+    }),
+    ev("ev-5", "Workshop 3: Prototyping", "workshop", "2026-10-13", true, {
+      startTime: "18:00",
+      endTime: "20:00",
+      location: "Maker lab",
+      host: "Sam Ortiz",
+      description:
+        "Now that you understand the problem, it's time to make something people can react to. This workshop is about building quick, rough versions of your idea, like paper sketches, clickable mockups or a simple role-play, before investing weeks into a polished solution.\n\nWe'll look at examples of good and bad prototypes, then teams will have about an hour in the maker lab to build their first one. Materials are provided, including paper, markers, sticky notes and a few tablets.\n\nThe goal is not perfection. If your prototype takes more than an hour to make, it's probably too detailed.",
+      links: [
+        { label: "Workshop slides", url: "https://slides.example.org/prototyping" },
+        { label: "Prototype examples", url: "https://board.example.org/prototype-examples" },
+        { label: "Maker lab booking form", url: "https://forms.example.org/maker-lab" },
+      ],
+    }),
+    ev("ev-6", "Social night", "social", "2026-10-16", false, {
+      startTime: "19:00",
+      location: "Courtyard",
+      description:
+        "A relaxed evening with food, music and games, and no work talk required. It's a chance to get to know people from other teams, swap stories about how your projects are going and meet some of the mentors outside of workshops.\n\nVegetarian and vegan options will be available. Friends and partners are welcome to come along.",
+      links: [
+        { label: "RSVP for food", url: "https://forms.example.org/social-rsvp" },
+      ],
+    }),
+    // Happening on the demo's "today" so the check-in page can be tried.
+    // Built without ev() so it doesn't draw from rand() and shift the
+    // planted attendance below.
+    {
+      id: "ev-9",
+      cohortId,
+      title: "Weekly team check-in",
+      category: "meeting",
+      date: "2026-10-19",
+      startTime: "17:00",
+      endTime: "18:00",
+      location: "Room 204",
+      host: "Program team",
+      description:
+        "A short weekly meeting where each team shares what they did last week, what they plan to do next and anything they're stuck on.\n\nKeep it to two minutes per team. Mentors will stay afterwards for anyone who wants help.",
+      links: [{ label: "Weekly update form", url: "https://forms.example.org/weekly-update" }],
+      isRequired: false,
+      checkinToken: "chk-ev-9-today",
+    },
+    ev("ev-7", "Workshop 4: Testing with users", "workshop", "2026-10-27", true, {
+      startTime: "18:00",
+      endTime: "20:00",
+      location: "Room 204",
+      host: "Sam Ortiz",
+      description:
+        "Time to put your prototype in front of real users and find out what works. We'll cover how to run a short testing session, what to watch for while someone uses your prototype and how to avoid explaining it too much.\n\nEach team will then run at least two live tests with invited guests during the session. At the end, teams will sort what they saw into what to keep, change and drop, and decide on next steps before the midpoint showcase.\n\nPlease bring your latest prototype and make sure it's ready to be tested.",
+      links: [
+        { label: "Testing script template", url: "https://docs.example.org/testing-script" },
+        { label: "Guest sign-up sheet", url: "https://sheets.example.org/test-guests" },
+      ],
+    }),
+    ev("ev-8", "Midpoint showcase", "all-hands", "2026-11-10", true, {
+      startTime: "17:00",
+      endTime: "19:30",
+      location: "Main hall",
+      host: "Program team",
+      description:
+        "The midpoint showcase is where each team presents its progress to partners, mentors and the rest of the cohort. Every team gets five minutes to present followed by three minutes of questions.\n\nCover the problem you're working on, what you've learned from users so far, what your prototype looks like now and what you plan to do in the second half of the program. Slides are optional; a short demo is encouraged.\n\nPartners will give written feedback to each team after the event. Please send your slides, if any, to the program team by noon on the day.",
+      links: [
+        { label: "Presentation guidelines", url: "https://docs.example.org/showcase-guidelines" },
+        { label: "Slide upload folder", url: "https://drive.example.org/showcase-slides" },
+        { label: "Feedback form for partners", url: "https://forms.example.org/showcase-feedback" },
+      ],
+    }),
   ];
 
   const today = "2026-10-19";
