@@ -169,6 +169,43 @@ def delete_requirement(session: Session, cohort: m.Cohort, requirement_id: str) 
     session.delete(req)
 
 
+# ---- Team notes ----
+
+
+def _note_body(body: str) -> str:
+    body = body.strip()
+    if not body:
+        raise bad_request("Write something first.")
+    if len(body) > 10_000:
+        raise bad_request("Keep notes under 10,000 characters.")
+    return body
+
+
+def _team_note(session: Session, cohort: m.Cohort, note_id: str) -> m.TeamNote:
+    note = session.get(m.TeamNote, note_id)
+    team = note and session.get(m.Team, note.team_id)
+    if not team or team.cohort_id != cohort.id:
+        raise HTTPException(status_code=404, detail="Note not found.")
+    return note
+
+
+def add_team_note(session: Session, cohort: m.Cohort, team_id: str, body: str, author: str) -> None:
+    team = session.get(m.Team, team_id)
+    if not team or team.cohort_id != cohort.id:
+        raise HTTPException(status_code=404, detail="Team not found.")
+    session.add(m.TeamNote(id=new_id("note"), team_id=team.id, body=_note_body(body), author=author))
+
+
+def update_team_note(session: Session, cohort: m.Cohort, note_id: str, body: str) -> None:
+    note = _team_note(session, cohort, note_id)
+    note.body = _note_body(body)
+    note.updated_at = m.now()
+
+
+def delete_team_note(session: Session, cohort: m.Cohort, note_id: str) -> None:
+    session.delete(_team_note(session, cohort, note_id))
+
+
 # ---- Participants ----
 
 EMAIL = re.compile(r"^\S+@\S+\.\S+$")

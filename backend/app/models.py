@@ -96,6 +96,20 @@ class Team(Base):
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
+class TeamNote(Base):
+    """A note an admin wrote about a team, like what came up in a meeting."""
+
+    __tablename__ = "team_notes"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    team_id: Mapped[str] = mapped_column(ForeignKey("teams.id"), index=True)
+    body: Mapped[str] = mapped_column(Text)
+    # Kept as a name so a note still shows who wrote it if the account goes away.
+    author: Mapped[str | None]
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
+    updated_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class TeamMembership(Base):
     """Dated team membership, so team changes keep their history."""
 

@@ -1,5 +1,7 @@
 """Builds the CohortData the frontend works with from the database."""
 
+import datetime as dt
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
@@ -101,6 +103,17 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
             s.Exemption(requirement_id=x.requirement_id, subject_id=x.subject_id, reason=x.reason)
             for x in session.scalars(select(m.Exemption).where(m.Exemption.requirement_id.in_(requirement_ids)))
         ],
+        team_notes=[
+            s.TeamNote(
+                id=n.id, team_id=n.team_id, body=n.body, author=n.author,
+                created_at=as_utc(n.created_at), updated_at=as_utc(n.updated_at) if n.updated_at else None,
+            )
+            for n in session.scalars(
+                select(m.TeamNote)
+                .where(m.TeamNote.team_id.in_([t.id for t in teams]))
+                .order_by(m.TeamNote.created_at.desc(), m.TeamNote.id)
+            )
+        ],
         fields=[
             s.FieldDefinition(
                 id=f.id,
@@ -120,6 +133,11 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
             )
         ],
     )
+
+
+def as_utc(value: dt.datetime) -> dt.datetime:
+    """SQLite gives back naive datetimes; they were stored in UTC."""
+    return value if value.tzinfo else value.replace(tzinfo=dt.timezone.utc)
 
 
 def event_schema(e: m.Event) -> s.ProgramEvent:

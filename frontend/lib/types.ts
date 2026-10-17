@@ -85,6 +85,16 @@ export interface Team {
   projectId?: string;
 }
 
+/** A note an admin wrote about a team. Times are ISO date-times. */
+export interface TeamNote {
+  id: string;
+  teamId: string;
+  body: string;
+  author?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
 /** Dated team membership, so team changes keep their history. */
 export interface TeamMembership {
   enrollmentId: string;
@@ -201,6 +211,8 @@ export interface CohortData {
   completions: Completion[];
   exemptions: Exemption[];
   fields: FieldDefinition[];
+  /** Newest first. */
+  teamNotes: TeamNote[];
 }
 
 // ---- Computed status ----

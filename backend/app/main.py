@@ -92,6 +92,35 @@ def delete_requirement(
     return saved(session, cohort)
 
 
+# ---- Team notes ----
+
+
+@admin.post("/api/teams/{team_id}/notes", response_model=s.CohortData, **api)
+def add_team_note(
+    team_id: str,
+    body: s.TeamNoteIn,
+    session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+    user: m.User = Depends(require_admin),
+):
+    actions.add_team_note(session, cohort, team_id, body.body, user.name)
+    return saved(session, cohort)
+
+
+@admin.patch("/api/team-notes/{note_id}", response_model=s.CohortData, **api)
+def update_team_note(
+    note_id: str, body: s.TeamNoteIn, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+):
+    actions.update_team_note(session, cohort, note_id, body.body)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/team-notes/{note_id}", response_model=s.CohortData, **api)
+def delete_team_note(note_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    actions.delete_team_note(session, cohort, note_id)
+    return saved(session, cohort)
+
+
 # ---- Participants ----
 
 

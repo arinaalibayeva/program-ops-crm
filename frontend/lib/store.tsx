@@ -27,7 +27,7 @@ import type {
 } from "./types";
 
 // Bump the version when CohortData changes shape so old saved data is ignored.
-const STORAGE_KEY = "program-ops-crm:cohort:v11";
+const STORAGE_KEY = "program-ops-crm:cohort:v12";
 
 export type NewEvent = Omit<ProgramEvent, "id" | "cohortId" | "checkinToken">;
 
@@ -58,6 +58,9 @@ interface CohortContextValue {
   updateField: (id: string, patch: Partial<Omit<FieldDefinition, "id">>) => void;
   moveField: (id: string, toIndex: number) => void;
   deleteField: (id: string) => void;
+  addTeamNote: (teamId: string, body: string) => void;
+  updateTeamNote: (id: string, body: string) => void;
+  deleteTeamNote: (id: string) => void;
   reset: () => void;
   /** The last change the backend refused, shown until dismissed. */
   syncError?: string;
@@ -358,6 +361,27 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     sync(() => api(`/fields/${id}`, { method: "DELETE" }));
   }, [sync]);
 
+  const addTeamNote = useCallback((teamId: string, body: string) => {
+    const note = { id: newId("note"), teamId, body: body.trim(), createdAt: new Date().toISOString() };
+    setData((d) => ({ ...d, teamNotes: [note, ...d.teamNotes] }));
+    sync(() => api(`/teams/${teamId}/notes`, { body: { body } }));
+  }, [sync]);
+
+  const updateTeamNote = useCallback((id: string, body: string) => {
+    setData((d) => ({
+      ...d,
+      teamNotes: d.teamNotes.map((n) =>
+        n.id === id ? { ...n, body: body.trim(), updatedAt: new Date().toISOString() } : n,
+      ),
+    }));
+    sync(() => api(`/team-notes/${id}`, { method: "PATCH", body: { body } }));
+  }, [sync]);
+
+  const deleteTeamNote = useCallback((id: string) => {
+    setData((d) => ({ ...d, teamNotes: d.teamNotes.filter((n) => n.id !== id) }));
+    sync(() => api(`/team-notes/${id}`, { method: "DELETE" }));
+  }, [sync]);
+
   const reset = useCallback(() => {
     if (USE_BACKEND) sync(() => api("/reset", { method: "POST" }));
     else setData(buildMockCohort());
@@ -380,6 +404,9 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     updateField,
     moveField,
     deleteField,
+    addTeamNote,
+    updateTeamNote,
+    deleteTeamNote,
     reset,
     syncError,
     clearSyncError: () => setSyncError(undefined),

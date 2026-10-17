@@ -157,6 +157,19 @@ class Exemption(CamelModel):
     reason: str | None = None
 
 
+class TeamNote(CamelModel):
+    id: str
+    team_id: str
+    body: str
+    author: str | None = None
+    created_at: dt.datetime
+    updated_at: dt.datetime | None = None
+
+
+class TeamNoteIn(CamelModel):
+    body: str
+
+
 class CohortData(CamelModel):
     program: Program
     cohort: Cohort
@@ -172,6 +185,7 @@ class CohortData(CamelModel):
     completions: list[Completion]
     exemptions: list[Exemption]
     fields: list[FieldDefinition]
+    team_notes: list[TeamNote] = []
 
 
 # ---- Computed status ----

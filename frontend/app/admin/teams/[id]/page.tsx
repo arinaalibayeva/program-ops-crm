@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
+import { TeamNotes } from "@/components/team-notes";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { activeMembers } from "@/lib/requirements";
 import { formatDate } from "@/lib/format";
@@ -127,6 +128,8 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         <div className="space-y-6">
+          <TeamNotes teamId={id} />
+
           <Card>
             <CardHeader>
               <CardTitle>Membership changes</CardTitle>
@@ -150,12 +153,12 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
           <Card className="border-dashed bg-transparent shadow-none">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-muted-foreground">
-                <MessageSquareText className="size-4" /> Weekly check-ins &amp; notes
+                <MessageSquareText className="size-4" /> Weekly check-ins
               </CardTitle>
             </CardHeader>
             <CardContent className="text-xs text-muted-foreground">
-              Coming next: the team&apos;s weekly progress check-ins, mentor notes and a
-              timeline of this team&apos;s history.
+              Coming next: the team&apos;s weekly progress check-ins and a timeline of
+              this team&apos;s history.
             </CardContent>
           </Card>
         </div>

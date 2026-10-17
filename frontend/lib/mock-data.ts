@@ -457,5 +457,6 @@ export function buildMockCohort(): CohortData {
     completions,
     exemptions: [],
     fields: FIELDS.map((f) => ({ ...f })),
+    teamNotes: [],
   };
 }

@@ -168,3 +168,32 @@ def test_profile_read_and_update(client):
     updated = client.put("/api/me", json={"name": "Arina A", "email": "arina@example.edu", "pronouns": "she/her", "jobTitle": " "}).json()
     assert updated["name"] == "Arina A" and updated["pronouns"] == "she/her" and "jobTitle" not in updated
     assert client.put("/api/me", json={"name": "", "email": "a@b.co"}).status_code == 400
+
+
+# ---- Team notes ----
+
+
+def test_team_notes(client):
+    team = SAMPLE["teams"][0]["id"]
+    notes = client.post(f"/api/teams/{team}/notes", json={"body": "  Met with their partner.  "}).json()["teamNotes"]
+    assert [(n["teamId"], n["body"]) for n in notes] == [(team, "Met with their partner.")]
+    note = notes[0]
+    assert note["author"] and "updatedAt" not in note
+
+    edited = client.patch(f"/api/team-notes/{note['id']}", json={"body": "Met with the partner."}).json()
+    assert edited["teamNotes"][0]["body"] == "Met with the partner."
+    assert edited["teamNotes"][0]["updatedAt"]
+
+    assert client.delete(f"/api/team-notes/{note['id']}").json()["teamNotes"] == []
+
+
+def test_team_note_validation(client):
+    team = SAMPLE["teams"][0]["id"]
+    assert client.post(f"/api/teams/{team}/notes", json={"body": "   "}).status_code == 400
+    assert client.post("/api/teams/nope/notes", json={"body": "Hi"}).status_code == 404
+    assert client.patch("/api/team-notes/nope", json={"body": "Hi"}).status_code == 404
+
+
+def test_team_notes_need_sign_in(anonymous):
+    team = SAMPLE["teams"][0]["id"]
+    assert anonymous.post(f"/api/teams/{team}/notes", json={"body": "Hi"}).status_code == 401

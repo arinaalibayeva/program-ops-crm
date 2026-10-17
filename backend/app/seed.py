@@ -21,7 +21,7 @@ SAMPLE = Path(__file__).parent / "sample" / "cohort.json"
 # Children before parents, so foreign keys allow the deletes. Accounts and
 # sessions aren't sample data, so resetting leaves them alone.
 TABLES = [
-    m.Attendance, m.Completion, m.Exemption, m.TeamMembership, m.Event, m.Requirement,
+    m.TeamNote, m.Attendance, m.Completion, m.Exemption, m.TeamMembership, m.Event, m.Requirement,
     m.Enrollment, m.Team, m.Project, m.Person, m.FieldDefinition, m.Cohort, m.Program,
 ]
 
