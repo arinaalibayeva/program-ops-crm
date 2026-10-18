@@ -1,8 +1,8 @@
 # Program Ops CRM
 
-A CRM for cohort-based team programs. It tracks participants, teams, events, attendance and requirements.
+A CRM for cohort-based programs: participants, teams, event calendars, check-ins, requirements and team notes.
 
-Built with Next.js, TypeScript, FastAPI and Postgres.
+Built with Next.js, TypeScript and FastAPI. Uses SQLite locally or Postgres.
 
 ## Run locally
 
