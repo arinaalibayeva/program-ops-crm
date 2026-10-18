@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Search, Upload } from "lucide-react";
+import { Plus, Search, SlidersHorizontal, Upload } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -109,6 +109,13 @@ export default function ParticipantsPage() {
         description={`${data.enrollments.filter((e) => e.status === "active").length} active in ${data.cohort.name}`}
         actions={
           <>
+            <Link
+              href="/admin/participants/fields"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              <SlidersHorizontal />
+              Manage fields
+            </Link>
             <Link href="/admin/import" className={buttonVariants({ variant: "outline" })}>
               <Upload />
               Import spreadsheet
@@ -251,7 +258,7 @@ function AddParticipantDialog() {
   const [error, setError] = useState("");
   const fields = activeFields(data);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !/^\S+@\S+\.\S+$/.test(email)) {
       setError("Enter a name and a valid email.");
@@ -262,9 +269,13 @@ function AddParticipantDialog() {
       setError(fieldError);
       return;
     }
-    const added = addParticipants([
-      { name: name.trim(), email: email.trim(), fields: values },
-    ]);
+    let added: number;
+    try {
+      added = await addParticipants([{ name: name.trim(), email: email.trim(), fields: values }]);
+    } catch (e) {
+      setError((e as Error).message);
+      return;
+    }
     if (added === 0) {
       setError("This person is already in the cohort.");
       return;

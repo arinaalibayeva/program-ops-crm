@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import {
   Archive,
+  ArrowLeft,
   ArchiveRestore,
   ChevronDown,
   ChevronUp,
@@ -55,6 +57,12 @@ export default function FieldsPage() {
 
   return (
     <>
+      <Link
+        href="/admin/participants"
+        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="size-4" /> Participants
+      </Link>
       <PageHeader
         title="Participant fields"
         description="Choose what you track about each participant. Drag to reorder: forms and profiles use this order."
