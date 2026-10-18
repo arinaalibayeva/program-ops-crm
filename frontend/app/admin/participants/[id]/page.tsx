@@ -14,6 +14,7 @@ import { SectionBoard, type BoardLayout } from "@/components/section-board";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort } from "@/lib/store";
 import { currentTeamId, participantStatus } from "@/lib/requirements";
+import { EVENT_CATEGORY_LABELS } from "@/lib/events";
 import { formatDate } from "@/lib/format";
 import { activeFields, formatFieldValue } from "@/lib/fields";
 import {
@@ -23,7 +24,7 @@ import {
   type ParticipantDraft,
 } from "@/lib/participant-draft";
 import { cn } from "@/lib/utils";
-import type { CohortData, Enrollment, SubjectStatus } from "@/lib/types";
+import type { CohortData, Enrollment } from "@/lib/types";
 
 type SectionId = "requirements" | "attendance" | "profile" | "team" | "notes";
 
@@ -184,7 +185,7 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
         render={(sectionId) => {
           switch (sectionId) {
             case "requirements":
-              return <RequirementsSection {...section} status={status} />;
+              return <RequirementsSection />;
             case "attendance":
               return <AttendanceSection {...section} />;
             case "profile":
@@ -216,113 +217,23 @@ function NotesSection() {
   );
 }
 
-function RequirementsSection({
-  view,
-  draft,
-  update,
-  status,
-}: SectionProps & { status?: SubjectStatus }) {
+// Placeholder until requirements are designed properly; statuses are still
+// calculated in lib/requirements.ts.
+function RequirementsSection() {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Requirements</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-3">
-        {status?.results.map((result) => {
-          const req = view.requirements.find((r) => r.id === result.requirementId)!;
-          const doneDate = draft?.completions[req.id];
-          const excuse = draft?.exemptions[req.id];
-          return (
-            <div key={req.id} className="rounded-lg border p-3">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <div className="text-sm font-medium">{req.name}</div>
-                  <div className="text-xs text-muted-foreground">{result.reason}</div>
-                </div>
-                {result.excused ? (
-                  <span className="text-xs text-muted-foreground">Excused</span>
-                ) : (
-                  <StatusBadge status={result.status} />
-                )}
-              </div>
-
-              {draft && (
-                <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 border-t pt-3 text-sm">
-                  {req.type === "complete_by" ? (
-                    <div className="flex items-center gap-2">
-                      <label className="flex items-center gap-2">
-                        <Checkbox
-                          checked={doneDate !== undefined}
-                          onCheckedChange={(on) => {
-                            const completions = { ...draft.completions };
-                            if (on) completions[req.id] = view.today;
-                            else delete completions[req.id];
-                            update({ completions });
-                          }}
-                        />
-                        Completed
-                      </label>
-                      {doneDate !== undefined && (
-                        <Input
-                          type="date"
-                          aria-label={`${req.name} completed on`}
-                          value={doneDate}
-                          max={view.today}
-                          onChange={(e) =>
-                            update({
-                              completions: { ...draft.completions, [req.id]: e.target.value },
-                            })
-                          }
-                          className="h-7 w-40"
-                        />
-                      )}
-                    </div>
-                  ) : (
-                    <span className="text-xs text-muted-foreground">
-                      Calculated from attendance below
-                    </span>
-                  )}
-                  <div className="flex flex-1 items-center gap-2">
-                    <label className="flex items-center gap-2">
-                      <Checkbox
-                        checked={excuse !== undefined}
-                        onCheckedChange={(on) => {
-                          const exemptions = { ...draft.exemptions };
-                          if (on) exemptions[req.id] = "";
-                          else delete exemptions[req.id];
-                          update({ exemptions });
-                        }}
-                      />
-                      Excused
-                    </label>
-                    {excuse !== undefined && (
-                      <Input
-                        aria-label={`Reason ${req.name} is excused`}
-                        value={excuse}
-                        onChange={(e) =>
-                          update({ exemptions: { ...draft.exemptions, [req.id]: e.target.value } })
-                        }
-                        placeholder="Reason (optional)"
-                        className="h-7 min-w-40 flex-1"
-                      />
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-        {!status && (
-          <p className="text-sm text-muted-foreground">
-            Requirements aren&apos;t tracked for withdrawn participants.
-          </p>
-        )}
+      <CardContent>
+        <p className="text-sm text-muted-foreground">Coming soon.</p>
       </CardContent>
     </Card>
   );
 }
 
 function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
+  const { toggleAttendance } = useCohort();
   const attended = new Set(
     view.attendance.filter((a) => a.enrollmentId === enrollment.id).map((a) => a.eventId),
   );
@@ -389,7 +300,7 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
               <div className="min-w-0 flex-1">
                 <div className="text-sm">{event.title}</div>
                 <div className="text-xs text-muted-foreground">
-                  {formatDate(event.date, { weekday: true })} · {event.category}
+                  {formatDate(event.date, { weekday: true })} · {EVENT_CATEGORY_LABELS[event.category]}
                   {event.isRequired ? " · required" : ""}
                 </div>
               </div>
@@ -429,13 +340,37 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
                 {details}
                 {isUpcoming ? (
                   <span className="text-xs">Upcoming</span>
-                ) : didAttend ? (
-                  <span className="text-xs text-muted-foreground">Attended</span>
                 ) : (
-                  <span className="inline-flex items-center gap-1.5 text-xs font-medium">
-                    <span className="size-1.5 rounded-full bg-red-500" />
-                    Absent
-                  </span>
+                  // Quick edit outside edit mode: saved as soon as it's clicked.
+                  <div
+                    role="radiogroup"
+                    aria-label={`Attendance for ${event.title}`}
+                    className="inline-flex rounded-md border p-0.5 text-xs"
+                  >
+                    {[true, false].map((present) => {
+                      const selected = present === didAttend;
+                      return (
+                        <button
+                          key={String(present)}
+                          type="button"
+                          role="radio"
+                          aria-checked={selected}
+                          onClick={() => !selected && toggleAttendance(event.id, enrollment.id)}
+                          className={cn(
+                            "inline-flex items-center gap-1.5 rounded px-2 py-0.5 transition-colors",
+                            selected
+                              ? "bg-muted font-medium text-foreground"
+                              : "text-muted-foreground hover:text-foreground",
+                          )}
+                        >
+                          {!present && selected && (
+                            <span className="size-1.5 rounded-full bg-red-500" />
+                          )}
+                          {present ? "Present" : "Absent"}
+                        </button>
+                      );
+                    })}
+                  </div>
                 )}
               </li>
             );
@@ -495,7 +430,7 @@ function ProfileSection({ view, enrollment, draft, update }: SectionProps) {
         ) : fields.length === 0 ? (
           <p className="text-sm text-muted-foreground">
             No profile fields yet.{" "}
-            <Link href="/admin/fields" className="underline">
+            <Link href="/admin/participants/fields" className="underline">
               Add fields
             </Link>
           </p>

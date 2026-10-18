@@ -1,0 +1,1508 @@
+{
+  "participants": {
+    "enr-1": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-25"
+        }
+      ],
+      "flags": []
+    },
+    "enr-2": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-29"
+        }
+      ],
+      "flags": []
+    },
+    "enr-3": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-29"
+        }
+      ],
+      "flags": []
+    },
+    "enr-4": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "at_risk",
+          "reason": "Missed 1 of 3 workshops, must attend the last one"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-24"
+        }
+      ],
+      "flags": [
+        "Missed 1 of 3 workshops, must attend the last one"
+      ]
+    },
+    "enr-5": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-30"
+        }
+      ],
+      "flags": []
+    },
+    "enr-6": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-7": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-23"
+        }
+      ],
+      "flags": []
+    },
+    "enr-8": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-28"
+        }
+      ],
+      "flags": []
+    },
+    "enr-9": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-10": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-23"
+        }
+      ],
+      "flags": []
+    },
+    "enr-11": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-30"
+        }
+      ],
+      "flags": []
+    },
+    "enr-12": {
+      "status": "missing",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "missing",
+          "reason": "Missed 2 of 3 workshops, can no longer reach 3"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-22"
+        }
+      ],
+      "flags": [
+        "Missed 2 of 3 workshops, can no longer reach 3"
+      ]
+    },
+    "enr-13": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-23"
+        }
+      ],
+      "flags": []
+    },
+    "enr-14": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-10-01"
+        }
+      ],
+      "flags": []
+    },
+    "enr-15": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-24"
+        }
+      ],
+      "flags": []
+    },
+    "enr-16": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-17": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-18": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "at_risk",
+          "reason": "Missed 1 of 3 workshops, must attend the last one"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-28"
+        }
+      ],
+      "flags": [
+        "Missed 1 of 3 workshops, must attend the last one"
+      ]
+    },
+    "enr-19": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-20": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-28"
+        }
+      ],
+      "flags": []
+    },
+    "enr-21": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-23"
+        }
+      ],
+      "flags": []
+    },
+    "enr-22": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-10-01"
+        }
+      ],
+      "flags": []
+    },
+    "enr-23": {
+      "status": "missing",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "missing",
+          "reason": "Onboarding form overdue by 17 days"
+        }
+      ],
+      "flags": [
+        "Onboarding form overdue by 17 days"
+      ]
+    },
+    "enr-24": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-30"
+        }
+      ],
+      "flags": []
+    },
+    "enr-25": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-25"
+        }
+      ],
+      "flags": []
+    },
+    "enr-26": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-24"
+        }
+      ],
+      "flags": []
+    },
+    "enr-27": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-28": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-29"
+        }
+      ],
+      "flags": []
+    },
+    "enr-29": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "at_risk",
+          "reason": "Missed 1 of 3 workshops, must attend the last one"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": [
+        "Missed 1 of 3 workshops, must attend the last one"
+      ]
+    },
+    "enr-30": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-32": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-33": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-22"
+        }
+      ],
+      "flags": []
+    },
+    "enr-34": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-30"
+        }
+      ],
+      "flags": []
+    },
+    "enr-35": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-25"
+        }
+      ],
+      "flags": []
+    },
+    "enr-36": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-37": {
+      "status": "missing",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "missing",
+          "reason": "Missed 2 of 3 workshops, can no longer reach 3"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-24"
+        }
+      ],
+      "flags": [
+        "Missed 2 of 3 workshops, can no longer reach 3"
+      ]
+    },
+    "enr-38": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-39": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-22"
+        }
+      ],
+      "flags": []
+    },
+    "enr-40": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-28"
+        }
+      ],
+      "flags": []
+    },
+    "enr-41": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-22"
+        }
+      ],
+      "flags": []
+    },
+    "enr-42": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-10-01"
+        }
+      ],
+      "flags": []
+    },
+    "enr-43": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-29"
+        }
+      ],
+      "flags": []
+    },
+    "enr-44": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-28"
+        }
+      ],
+      "flags": []
+    },
+    "enr-45": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "at_risk",
+          "reason": "Missed 1 of 3 workshops, must attend the last one"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-30"
+        }
+      ],
+      "flags": [
+        "Missed 1 of 3 workshops, must attend the last one"
+      ]
+    },
+    "enr-46": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-22"
+        }
+      ],
+      "flags": []
+    },
+    "enr-47": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-48": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-49": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-50": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-51": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-52": {
+      "status": "missing",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "missing",
+          "reason": "Onboarding form overdue by 17 days"
+        }
+      ],
+      "flags": [
+        "Onboarding form overdue by 17 days"
+      ]
+    },
+    "enr-53": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-26"
+        }
+      ],
+      "flags": []
+    },
+    "enr-54": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-27"
+        }
+      ],
+      "flags": []
+    },
+    "enr-55": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-22"
+        }
+      ],
+      "flags": []
+    },
+    "enr-56": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-29"
+        }
+      ],
+      "flags": []
+    },
+    "enr-57": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-22"
+        }
+      ],
+      "flags": []
+    },
+    "enr-58": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-28"
+        }
+      ],
+      "flags": []
+    },
+    "enr-59": {
+      "status": "on_track",
+      "results": [
+        {
+          "requirementId": "req-1",
+          "status": "met",
+          "reason": "Attended 3 workshops (needs 3)"
+        },
+        {
+          "requirementId": "req-2",
+          "status": "on_track",
+          "reason": "Attended 1 of 1 all hands so far"
+        },
+        {
+          "requirementId": "req-3",
+          "status": "met",
+          "reason": "Onboarding form done on 2026-09-23"
+        }
+      ],
+      "flags": []
+    }
+  },
+  "teams": {
+    "team-1": {
+      "status": "met",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-12"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-17"
+        }
+      ],
+      "flags": []
+    },
+    "team-2": {
+      "status": "met",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-15"
+        }
+      ],
+      "flags": []
+    },
+    "team-3": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "6 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-14"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-18"
+        }
+      ],
+      "flags": [
+        "1 member missing requirements"
+      ]
+    },
+    "team-4": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-13"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "at_risk",
+          "reason": "User research plan due in 4 days, not done yet"
+        }
+      ],
+      "flags": [
+        "User research plan due in 4 days, not done yet"
+      ]
+    },
+    "team-5": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-11"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-16"
+        }
+      ],
+      "flags": [
+        "1 member missing requirements"
+      ]
+    },
+    "team-6": {
+      "status": "met",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-13"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-16"
+        }
+      ],
+      "flags": []
+    },
+    "team-7": {
+      "status": "missing",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "missing",
+          "reason": "Down to 2 active members (min 3)"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-13"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-17"
+        }
+      ],
+      "flags": [
+        "Down to 2 active members (min 3)"
+      ]
+    },
+    "team-8": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-11"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "at_risk",
+          "reason": "User research plan due in 4 days, not done yet"
+        }
+      ],
+      "flags": [
+        "User research plan due in 4 days, not done yet",
+        "1 member missing requirements"
+      ]
+    },
+    "team-9": {
+      "status": "met",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-14"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-16"
+        }
+      ],
+      "flags": []
+    },
+    "team-10": {
+      "status": "missing",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "missing",
+          "reason": "Project brief overdue by 3 days"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-18"
+        }
+      ],
+      "flags": [
+        "Project brief overdue by 3 days"
+      ]
+    },
+    "team-11": {
+      "status": "at_risk",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "at_risk",
+          "reason": "User research plan due in 4 days, not done yet"
+        }
+      ],
+      "flags": [
+        "User research plan due in 4 days, not done yet",
+        "1 member missing requirements"
+      ]
+    },
+    "team-12": {
+      "status": "met",
+      "results": [
+        {
+          "requirementId": "req-4",
+          "status": "met",
+          "reason": "5 active members"
+        },
+        {
+          "requirementId": "req-5",
+          "status": "met",
+          "reason": "Project brief done on 2026-10-13"
+        },
+        {
+          "requirementId": "req-6",
+          "status": "met",
+          "reason": "User research plan done on 2026-10-14"
+        }
+      ],
+      "flags": []
+    }
+  }
+}

@@ -46,6 +46,7 @@ export default function ImportPage() {
   const [csv, setCsv] = useState<{ headers: string[]; rows: string[][] }>();
   const [mapping, setMapping] = useState<Record<Field, number>>({ name: -1, email: -1, team: -1 });
   const [result, setResult] = useState<number>();
+  const [importError, setImportError] = useState<string>();
 
   function load(text: string, name: string) {
     const parsed = parseCsv(text);
@@ -96,9 +97,14 @@ export default function ImportPage() {
   const valid = checked.filter((r) => !r.error);
   const mappingComplete = FIELDS.every((f) => !f.required || mapping[f.key] >= 0);
 
-  function runImport() {
-    setResult(addParticipants(valid.map((r) => r.values)));
-    setCsv(undefined);
+  async function runImport() {
+    setImportError(undefined);
+    try {
+      setResult(await addParticipants(valid.map((r) => r.values)));
+      setCsv(undefined);
+    } catch (e) {
+      setImportError((e as Error).message);
+    }
   }
 
   return (
@@ -107,6 +113,12 @@ export default function ImportPage() {
         title="Import participants"
         description="Upload a CSV export of your roster or matching spreadsheet. Nothing is saved until you confirm."
       />
+
+      {importError && (
+        <p className="mb-6 rounded-lg border border-destructive/30 px-4 py-3 text-sm text-destructive">
+          Nothing was imported: {importError}
+        </p>
+      )}
 
       {result !== undefined && (
         <div className="mb-6 flex items-center gap-2 rounded-lg border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800 dark:text-emerald-300">

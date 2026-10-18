@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangle, CalendarDays, Users, UsersRound } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { buttonVariants } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CopyLinkButton } from "@/components/copy-link-button";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { currentTeamId, needsAttention } from "@/lib/requirements";
+import { EVENT_CATEGORY_LABELS, formatEventTime } from "@/lib/events";
 import { cohortWeek, formatDate } from "@/lib/format";
-import type { Status } from "@/lib/types";
+import type { ProgramEvent, Status } from "@/lib/types";
 
 const SEVERITY: Record<Status, number> = { missing: 0, at_risk: 1, on_track: 2, met: 3 };
 
@@ -26,217 +28,204 @@ export default function DashboardPage() {
     .filter(({ status }) => needsAttention(status.status))
     .sort((a, b) => SEVERITY[a.status.status] - SEVERITY[b.status.status]);
 
-  const missingCount = flaggedPeople.filter((p) => p.status.status === "missing").length;
-  const atRiskCount = flaggedPeople.length - missingCount;
-
   const pastEvents = data.events.filter((e) => e.date < data.today);
-  const upcoming = data.events.filter((e) => e.date >= data.today).slice(0, 3);
-  const lastRequired = [...pastEvents].reverse().find((e) => e.isRequired);
+  const upcoming = data.events.filter((e) => e.date >= data.today).slice(0, 4);
+  const next = upcoming[0];
   const attendanceRate = (eventId: string) => {
     const count = data.attendance.filter(
       (a) => a.eventId === eventId && active.some((e) => e.id === a.enrollmentId),
     ).length;
     return { count, pct: Math.round((count / active.length) * 100) };
   };
-  const lastRate = lastRequired ? attendanceRate(lastRequired.id) : null;
 
   return (
     <>
       <PageHeader
-        title="Dashboard"
+        title="Today"
         description={`Week ${cohortWeek(data.cohort.startDate, data.today)} · ${formatDate(data.today, { weekday: true })} · ${data.program.name}, ${data.cohort.name}`}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          icon={Users}
-          label="Active participants"
-          value={active.length}
-          sub={`${data.enrollments.length - active.length} withdrawn`}
-        />
-        <StatCard
-          icon={AlertTriangle}
-          label="Participants needing attention"
-          value={flaggedPeople.length}
-          sub={`${missingCount} missing · ${atRiskCount} at risk`}
-          tone={flaggedPeople.length ? "warn" : undefined}
-        />
-        <StatCard
-          icon={UsersRound}
-          label="Teams needing attention"
-          value={flaggedTeams.length}
-          sub={`of ${data.teams.length} teams`}
-          tone={flaggedTeams.length ? "warn" : undefined}
-        />
-        <StatCard
-          icon={CalendarDays}
-          label="Last required event"
-          value={lastRate ? `${lastRate.pct}%` : "—"}
-          sub={lastRequired ? `${lastRequired.title} attendance` : "No events yet"}
-        />
-      </div>
+      {next && <NextEvent event={next} later={upcoming.slice(1)} />}
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-5">
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle>Participants needing attention</CardTitle>
-          </CardHeader>
-          <CardContent className="px-0">
-            {flaggedPeople.length === 0 ? (
-              <Empty text="Everyone is on track." />
-            ) : (
-              <ul className="divide-y">
-                {flaggedPeople.map(({ enrollment, status }) => {
-                  const person = personFor(enrollment.id)!;
-                  const teamId = currentTeamId(data, enrollment.id);
-                  return (
-                    <li key={enrollment.id}>
-                      <Link
-                        href={`/admin/participants/${enrollment.id}`}
-                        className="flex items-start justify-between gap-4 px-4 py-3 hover:bg-muted/50"
-                      >
-                        <div className="min-w-0">
-                          <div className="text-sm font-medium">{person.name}</div>
-                          <div className="text-xs text-muted-foreground">
-                            {teamId ? `Team ${teamById.get(teamId)?.name}` : "No team"}
-                          </div>
-                          <ul className="mt-1 space-y-0.5">
-                            {status.flags.map((flag) => (
-                              <li key={flag} className="text-xs text-foreground/80">
-                                {flag}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <StatusBadge status={status.status} overall />
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
-
-        <div className="space-y-6 lg:col-span-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Teams needing attention</CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              {flaggedTeams.length === 0 ? (
-                <Empty text="All teams are on track." />
-              ) : (
-                <ul className="divide-y">
-                  {flaggedTeams.map(({ team, status }) => (
-                    <li key={team.id}>
-                      <Link
-                        href={`/admin/teams/${team.id}`}
-                        className="flex items-start justify-between gap-4 px-4 py-3 hover:bg-muted/50"
-                      >
-                        <div>
-                          <div className="text-sm font-medium">Team {team.name}</div>
-                          <ul className="mt-1 space-y-0.5">
-                            {status.flags.map((flag) => (
-                              <li key={flag} className="text-xs text-foreground/80">
-                                {flag}
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <StatusBadge status={status.status} overall />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Attendance at past events</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {pastEvents.map((event) => {
-                const { count, pct } = attendanceRate(event.id);
+      <div className="mt-12 grid gap-x-12 gap-y-12 lg:grid-cols-3">
+        <Section title="People to follow up with" count={flaggedPeople.length}>
+          {flaggedPeople.length === 0 ? (
+            <Empty text="Everyone is on track." />
+          ) : (
+            <ul className="divide-y">
+              {flaggedPeople.map(({ enrollment, status }) => {
+                const person = personFor(enrollment.id)!;
+                const teamId = currentTeamId(data, enrollment.id);
                 return (
-                  <Link key={event.id} href={`/admin/events/${event.id}`} className="block">
-                    <div className="flex justify-between text-xs">
-                      <span className="truncate pr-2">
-                        {event.title}
-                        {!event.isRequired && (
-                          <span className="text-muted-foreground"> · optional</span>
-                        )}
-                      </span>
-                      <span className="tabular-nums text-muted-foreground">
-                        {count}/{active.length}
-                      </span>
-                    </div>
-                    <div className="mt-1 h-1.5 rounded-full bg-muted">
-                      <div
-                        className={`h-full rounded-full ${event.isRequired ? "bg-primary" : "bg-muted-foreground/40"}`}
-                        style={{ width: `${pct}%` }}
-                      />
-                    </div>
-                  </Link>
+                  <li key={enrollment.id}>
+                    <Link
+                      href={`/admin/participants/${enrollment.id}`}
+                      className="-mx-2 flex items-start justify-between gap-4 rounded-md px-2 py-3 hover:bg-muted/60"
+                    >
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium">
+                          {person.name}
+                          <span className="font-normal text-muted-foreground">
+                            {" "}
+                            · {teamId ? `Team ${teamById.get(teamId)?.name}` : "No team"}
+                          </span>
+                        </div>
+                        {status.flags.map((flag) => (
+                          <div key={flag} className="mt-0.5 text-sm text-muted-foreground">
+                            {flag}
+                          </div>
+                        ))}
+                      </div>
+                      <StatusBadge status={status.status} overall />
+                    </Link>
+                  </li>
                 );
               })}
-            </CardContent>
-          </Card>
+            </ul>
+          )}
+        </Section>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Coming up</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              {upcoming.map((event) => (
-                <Link
-                  key={event.id}
-                  href={`/admin/events/${event.id}`}
-                  className="flex items-center justify-between text-sm hover:underline"
-                >
-                  <span>{event.title}</span>
-                  <span className="text-xs text-muted-foreground">
-                    {formatDate(event.date, { weekday: true })}
-                  </span>
-                </Link>
+        <Section title="Teams to check in on" count={flaggedTeams.length}>
+          {flaggedTeams.length === 0 ? (
+            <Empty text="All teams are on track." />
+          ) : (
+            <ul className="divide-y">
+              {flaggedTeams.map(({ team, status }) => (
+                <li key={team.id}>
+                  <Link
+                    href={`/admin/teams/${team.id}`}
+                    className="-mx-2 flex items-start justify-between gap-4 rounded-md px-2 py-3 hover:bg-muted/60"
+                  >
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium">Team {team.name}</div>
+                      {status.flags.map((flag) => (
+                        <div key={flag} className="mt-0.5 text-sm text-muted-foreground">
+                          {flag}
+                        </div>
+                      ))}
+                    </div>
+                    <StatusBadge status={status.status} overall />
+                  </Link>
+                </li>
               ))}
-            </CardContent>
-          </Card>
-        </div>
+            </ul>
+          )}
+        </Section>
+
+        <Section title="Attendance so far">
+          <div className="space-y-4">
+            {pastEvents.map((event) => {
+              const { count, pct } = attendanceRate(event.id);
+              return (
+                <Link key={event.id} href={`/admin/events/${event.id}`} className="group block">
+                  <div className="flex justify-between gap-2 text-sm">
+                    <span className="truncate group-hover:underline">
+                      {event.title}
+                      {!event.isRequired && (
+                        <span className="text-muted-foreground"> · optional</span>
+                      )}
+                    </span>
+                    <span className="text-muted-foreground tabular-nums">
+                      {count}/{active.length}
+                    </span>
+                  </div>
+                  <div className="mt-1.5 h-1 rounded-full bg-muted">
+                    <div
+                      className={`h-full rounded-full ${event.isRequired ? "bg-primary" : "bg-muted-foreground/40"}`}
+                      style={{ width: `${pct}%` }}
+                    />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </Section>
       </div>
     </>
   );
 }
 
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  sub,
-  tone,
+function Section({
+  title,
+  count,
+  children,
 }: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: React.ReactNode;
-  sub: string;
-  tone?: "warn";
+  title: string;
+  count?: number;
+  children: React.ReactNode;
 }) {
   return (
+    <section>
+      <h2 className="mb-2 text-lg font-semibold">
+        {title}
+        {count !== undefined && (
+          <span className="ml-2 font-normal text-muted-foreground tabular-nums">{count}</span>
+        )}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+/** The one highlighted card on the page: what's happening next. */
+function NextEvent({ event, later }: { event: ProgramEvent; later: ProgramEvent[] }) {
+  const { data } = useCohort();
+  const days = Math.round((Date.parse(event.date) - Date.parse(data.today)) / 86_400_000);
+  const when = days === 0 ? "Today" : days === 1 ? "Tomorrow" : `In ${days} days`;
+  const intro = event.description?.split(/\n\s*\n/)[0];
+
+  return (
     <Card>
-      <CardContent>
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          {label}
-          <Icon className={`size-4 ${tone === "warn" ? "text-amber-600 dark:text-amber-400" : ""}`} />
+      <CardContent className="grid gap-8 lg:grid-cols-3">
+        <div className="space-y-3 lg:col-span-2">
+          <div className="text-sm font-medium text-primary">Next up · {when}</div>
+          <div>
+            <h2 className="text-2xl font-semibold">{event.title}</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {[
+                formatDate(event.date, { weekday: true }),
+                formatEventTime(event),
+                event.location,
+                EVENT_CATEGORY_LABELS[event.category],
+                event.isRequired ? "Required" : "Optional",
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </p>
+          </div>
+          {intro && <p className="line-clamp-2 max-w-prose text-sm">{intro}</p>}
+          <div className="flex flex-wrap gap-2 pt-1">
+            <Link href={`/admin/events/${event.id}`} className={buttonVariants()}>
+              Open event
+            </Link>
+            <CopyLinkButton path={`/checkin/${event.checkinToken}`} />
+          </div>
         </div>
-        <div className="mt-2 text-3xl font-semibold tabular-nums">{value}</div>
-        <div className="mt-1 text-xs text-muted-foreground">{sub}</div>
+        {later.length > 0 && (
+          <div>
+            <div className="mb-2 text-sm font-medium text-muted-foreground">After that</div>
+            <ul className="space-y-2">
+              {later.map((e) => (
+                <li key={e.id}>
+                  <Link
+                    href={`/admin/events/${e.id}`}
+                    className="flex justify-between gap-3 text-sm hover:underline"
+                  >
+                    <span className="truncate">{e.title}</span>
+                    <span className="shrink-0 text-muted-foreground">
+                      {formatDate(e.date, { weekday: true })}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
 }
 
 function Empty({ text }: { text: string }) {
-  return <p className="px-4 py-6 text-center text-sm text-muted-foreground">{text}</p>;
+  return <p className="py-3 text-sm text-muted-foreground">{text}</p>;
 }

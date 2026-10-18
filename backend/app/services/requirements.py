@@ -1,0 +1,187 @@
+"""Requirement evaluation, ported 1:1 from frontend/lib/requirements.ts.
+
+Every function is pure: it reads a CohortData snapshot and returns a status,
+so it's easy to test and gives the same answers as the frontend.
+"""
+
+import datetime as dt
+
+from ..schemas import CohortData, Enrollment, Requirement, RequirementResult, Status, SubjectStatus, Team
+
+STATUS_RANK: dict[str, int] = {"met": 0, "on_track": 1, "at_risk": 2, "missing": 3}
+
+# A complete_by item due within this many days counts as at risk.
+DUE_SOON_DAYS = 7
+
+
+def worst_status(statuses: list[Status]) -> Status:
+    worst: Status = "met"
+    for s in statuses:
+        if STATUS_RANK[s] > STATUS_RANK[worst]:
+            worst = s
+    return worst
+
+
+def needs_attention(status: Status) -> bool:
+    return status in ("at_risk", "missing")
+
+
+def category_plural(category: str) -> str:
+    """Lowercase plural for sentences, e.g. "workshops", "office hours"."""
+    words = category.replace("-", " ", 1)
+    return words if words.endswith("s") else f"{words}s"
+
+
+# ---- Membership helpers ----
+
+
+def current_team_id(data: CohortData, enrollment_id: str) -> str | None:
+    for m in data.memberships:
+        if m.enrollment_id == enrollment_id and m.end_date is None:
+            return m.team_id
+    return None
+
+
+def active_members(data: CohortData, team_id: str) -> list[Enrollment]:
+    ids = {m.enrollment_id for m in data.memberships if m.team_id == team_id and m.end_date is None}
+    return [e for e in data.enrollments if e.id in ids and e.status == "active"]
+
+
+# ---- Evaluators ----
+
+
+def _attendance_min(data: CohortData, req: Requirement, enrollment_id: str) -> RequirementResult:
+    category = req.params["category"]
+    min_count = req.params["minCount"]
+    events = [e for e in data.events if e.category == category]
+    past = [e for e in events if e.date < data.today]
+    remaining = len(events) - len(past)
+    attended_ids = {a.event_id for a in data.attendance if a.enrollment_id == enrollment_id}
+    attended = sum(1 for e in past if e.id in attended_ids)
+    missed = len(past) - attended
+    still_needed = min_count - attended
+    label = category_plural(category)
+
+    if attended >= min_count:
+        status, reason = "met", f"Attended {attended} {label} (needs {min_count})"
+    elif attended + remaining < min_count:
+        # Can no longer reach the minimum even by attending everything left.
+        status = "missing"
+        reason = f"Missed {missed} of {len(past)} {label}, can no longer reach {min_count}"
+    elif missed > 0 and still_needed >= remaining:
+        # Still possible, but there is no slack left.
+        status = "at_risk"
+        reason = (
+            f"Missed {missed} of {len(past)} {label}, must attend the last one"
+            if remaining == 1
+            else f"Missed {missed} of {len(past)} {label}, must attend all {remaining} remaining"
+        )
+    else:
+        status, reason = "on_track", f"Attended {attended} of {len(past)} {label} so far"
+    return RequirementResult(requirement_id=req.id, status=status, reason=reason)
+
+
+def _complete_by(data: CohortData, req: Requirement, subject_id: str) -> RequirementResult:
+    done = next(
+        (c for c in data.completions if c.requirement_id == req.id and c.subject_id == subject_id),
+        None,
+    )
+    if done:
+        return RequirementResult(
+            requirement_id=req.id, status="met", reason=f"{req.name} done on {done.completed_at.isoformat()}"
+        )
+    due = req.params["dueDate"]
+    days_left = (_as_date(due) - data.today).days
+    if days_left < 0:
+        return RequirementResult(
+            requirement_id=req.id, status="missing", reason=f"{req.name} overdue by {-days_left} days"
+        )
+    if days_left <= DUE_SOON_DAYS:
+        return RequirementResult(
+            requirement_id=req.id, status="at_risk", reason=f"{req.name} due in {days_left} days, not done yet"
+        )
+    return RequirementResult(requirement_id=req.id, status="on_track", reason=f"{req.name} due {due}")
+
+
+def _team_min_size(data: CohortData, req: Requirement, team_id: str) -> RequirementResult:
+    count = len(active_members(data, team_id))
+    min_active = req.params["minActive"]
+    if count >= min_active:
+        return RequirementResult(requirement_id=req.id, status="met", reason=f"{count} active members")
+    return RequirementResult(
+        requirement_id=req.id, status="missing", reason=f"Down to {count} active members (min {min_active})"
+    )
+
+
+def _exemption(data: CohortData, req: Requirement, subject_id: str) -> RequirementResult | None:
+    """An excused requirement counts as met, so it never flags the subject."""
+    ex = next(
+        (x for x in data.exemptions if x.requirement_id == req.id and x.subject_id == subject_id),
+        None,
+    )
+    if ex is None:
+        return None
+    return RequirementResult(
+        requirement_id=req.id,
+        status="met",
+        reason=f"Excused: {ex.reason}" if ex.reason else "Excused",
+        excused=True,
+    )
+
+
+def _as_date(value: dt.date | str) -> dt.date:
+    return value if isinstance(value, dt.date) else dt.date.fromisoformat(value)
+
+
+# ---- Subject-level status ----
+
+
+def _summarize(results: list[RequirementResult]) -> SubjectStatus:
+    return SubjectStatus(
+        status=worst_status([r.status for r in results]),
+        results=results,
+        flags=[r.reason for r in results if needs_attention(r.status)],
+    )
+
+
+def participant_status(data: CohortData, enrollment_id: str) -> SubjectStatus:
+    results: list[RequirementResult] = []
+    for req in data.requirements:
+        if req.scope != "participant":
+            continue
+        excused = _exemption(data, req, enrollment_id)
+        if excused:
+            results.append(excused)
+        elif req.type == "attendance_min":
+            results.append(_attendance_min(data, req, enrollment_id))
+        elif req.type == "complete_by":
+            results.append(_complete_by(data, req, enrollment_id))
+    return _summarize(results)
+
+
+def team_status(data: CohortData, team: Team) -> SubjectStatus:
+    """A team's status is the worst of its team-level requirements. If any
+    active member is missing a requirement, the team is at least "at risk" so
+    the organizer sees it, but one member can't make the whole team "missing"."""
+    results: list[RequirementResult] = []
+    for req in data.requirements:
+        if req.scope != "team":
+            continue
+        excused = _exemption(data, req, team.id)
+        if excused:
+            results.append(excused)
+        elif req.type == "team_min_size":
+            results.append(_team_min_size(data, req, team.id))
+        elif req.type == "complete_by":
+            results.append(_complete_by(data, req, team.id))
+    summary = _summarize(results)
+
+    missing_members = sum(
+        1 for e in active_members(data, team.id) if participant_status(data, e.id).status == "missing"
+    )
+    if missing_members > 0:
+        summary.flags.append(
+            f"{missing_members} member{'s' if missing_members > 1 else ''} missing requirements"
+        )
+        summary.status = worst_status([summary.status, "at_risk"])
+    return summary

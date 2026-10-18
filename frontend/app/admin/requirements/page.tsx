@@ -19,6 +19,7 @@ import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
 import { useCohort } from "@/lib/store";
 import { describeRequirement } from "@/lib/requirements";
+import { EVENT_CATEGORY_LABELS } from "@/lib/events";
 import {
   EVENT_CATEGORIES,
   type EventCategory,
@@ -212,11 +213,11 @@ function NewRequirementDialog() {
                   id="cat"
                   value={category}
                   onChange={(e) => setCategory(e.target.value as EventCategory)}
-                  className="w-full capitalize"
+                  className="w-full"
                 >
                   {EVENT_CATEGORIES.map((c) => (
                     <option key={c} value={c}>
-                      {c}
+                      {EVENT_CATEGORY_LABELS[c]}
                     </option>
                   ))}
                 </NativeSelect>

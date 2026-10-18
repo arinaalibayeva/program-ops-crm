@@ -2,6 +2,7 @@
 // so this logic can be ported 1:1 to backend/app/services/requirements.py
 // and unit tested there.
 
+import { categoryPlural } from "./events";
 import type {
   CohortData,
   Enrollment,
@@ -77,7 +78,7 @@ function evaluateAttendanceMin(
   ).length;
   const missed = past.length - attended;
   const stillNeeded = minCount - attended;
-  const label = category.endsWith("s") ? category : `${category}s`;
+  const label = categoryPlural(category);
 
   let status: Status;
   let reason: string;
@@ -239,7 +240,7 @@ export function teamStatus(data: CohortData, team: Team): SubjectStatus {
 export function describeRequirement(req: Requirement): string {
   switch (req.type) {
     case "attendance_min":
-      return `Attend at least ${req.params.minCount} ${req.params.category} events`;
+      return `Attend at least ${req.params.minCount} ${categoryPlural(req.params.category)}`;
     case "complete_by":
       return `Complete by ${req.params.dueDate}`;
     case "team_min_size":

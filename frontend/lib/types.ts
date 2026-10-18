@@ -85,6 +85,16 @@ export interface Team {
   projectId?: string;
 }
 
+/** A note an admin wrote about a team. Times are ISO date-times. */
+export interface TeamNote {
+  id: string;
+  teamId: string;
+  body: string;
+  author?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
 /** Dated team membership, so team changes keep their history. */
 export interface TeamMembership {
   enrollmentId: string;
@@ -93,15 +103,47 @@ export interface TeamMembership {
   endDate?: ISODate;
 }
 
-export const EVENT_CATEGORIES = ["workshop", "all-hands", "partner", "social"] as const;
+export const EVENT_CATEGORIES = [
+  "workshop",
+  "talk",
+  "panel",
+  "meeting",
+  "all-hands",
+  "office-hours",
+  "mentoring",
+  "orientation",
+  "showcase",
+  "partner",
+  "networking",
+  "social",
+  "other",
+] as const;
 export type EventCategory = (typeof EVENT_CATEGORIES)[number];
+
+/** A labelled link on an event: slides, a recording, a form. */
+export interface EventLink {
+  label: string;
+  url: string;
+}
 
 export interface ProgramEvent {
   id: string;
   cohortId: string;
   title: string;
   category: EventCategory;
+  /** First (or only) day. */
   date: ISODate;
+  /** Last day, for events that span several days. */
+  endDate?: ISODate;
+  /** "HH:MM", 24-hour. No start time means all day. */
+  startTime?: string;
+  endTime?: string;
+  /** A room or address, or a meeting link. */
+  location?: string;
+  /** Who runs the event: a facilitator, speaker or partner. */
+  host?: string;
+  description?: string;
+  links?: EventLink[];
   isRequired: boolean;
   checkinToken: string;
 }
@@ -169,6 +211,8 @@ export interface CohortData {
   completions: Completion[];
   exemptions: Exemption[];
   fields: FieldDefinition[];
+  /** Newest first. */
+  teamNotes: TeamNote[];
 }
 
 // ---- Computed status ----

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plus, Search, Upload } from "lucide-react";
+import { Plus, Search, SlidersHorizontal, Upload } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -49,7 +49,6 @@ export default function ParticipantsPage() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["value"]>("all");
   const [teamFilter, setTeamFilter] = useState("all");
-  const [showWithdrawn, setShowWithdrawn] = useState(false);
   // Filters for pick-one / pick-several columns, keyed by field id.
   const [fieldFilters, setFieldFilters] = useState<Record<string, string>>({});
 
@@ -61,7 +60,7 @@ export default function ParticipantsPage() {
 
   const rows = useMemo(() => {
     return data.enrollments
-      .filter((e) => showWithdrawn || e.status === "active")
+      .filter((e) => e.status === "active")
       .map((e) => {
         const person = personFor(e.id)!;
         const teamId = currentTeamId(data, e.id);
@@ -97,7 +96,6 @@ export default function ParticipantsPage() {
     teamFilter,
     filterable,
     fieldFilters,
-    showWithdrawn,
   ]);
 
   const participantReqs = data.requirements.filter((r) => r.scope === "participant");
@@ -109,6 +107,13 @@ export default function ParticipantsPage() {
         description={`${data.enrollments.filter((e) => e.status === "active").length} active in ${data.cohort.name}`}
         actions={
           <>
+            <Link
+              href="/admin/participants/fields"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              <SlidersHorizontal />
+              Manage fields
+            </Link>
             <Link href="/admin/import" className={buttonVariants({ variant: "outline" })}>
               <Upload />
               Import spreadsheet
@@ -166,14 +171,6 @@ export default function ParticipantsPage() {
             ))}
           </NativeSelect>
         ))}
-        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <input
-            type="checkbox"
-            checked={showWithdrawn}
-            onChange={(e) => setShowWithdrawn(e.target.checked)}
-          />
-          Show withdrawn
-        </label>
       </div>
 
       <Card className="py-0">
@@ -217,11 +214,7 @@ export default function ParticipantsPage() {
                   );
                 })}
                 <TableCell className="pr-4">
-                  {enrollment.status === "withdrawn" ? (
-                    <span className="text-xs text-muted-foreground">Withdrawn</span>
-                  ) : (
-                    status && <StatusBadge status={status.status} overall />
-                  )}
+                  {status && <StatusBadge status={status.status} overall />}
                 </TableCell>
               </TableRow>
             ))}
@@ -251,7 +244,7 @@ function AddParticipantDialog() {
   const [error, setError] = useState("");
   const fields = activeFields(data);
 
-  function submit(e: React.FormEvent) {
+  async function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim() || !/^\S+@\S+\.\S+$/.test(email)) {
       setError("Enter a name and a valid email.");
@@ -262,9 +255,13 @@ function AddParticipantDialog() {
       setError(fieldError);
       return;
     }
-    const added = addParticipants([
-      { name: name.trim(), email: email.trim(), fields: values },
-    ]);
+    let added: number;
+    try {
+      added = await addParticipants([{ name: name.trim(), email: email.trim(), fields: values }]);
+    } catch (e) {
+      setError((e as Error).message);
+      return;
+    }
     if (added === 0) {
       setError("This person is already in the cohort.");
       return;
