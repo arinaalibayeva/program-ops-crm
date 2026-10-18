@@ -49,7 +49,6 @@ export default function ParticipantsPage() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["value"]>("all");
   const [teamFilter, setTeamFilter] = useState("all");
-  const [showWithdrawn, setShowWithdrawn] = useState(false);
   // Filters for pick-one / pick-several columns, keyed by field id.
   const [fieldFilters, setFieldFilters] = useState<Record<string, string>>({});
 
@@ -61,7 +60,7 @@ export default function ParticipantsPage() {
 
   const rows = useMemo(() => {
     return data.enrollments
-      .filter((e) => showWithdrawn || e.status === "active")
+      .filter((e) => e.status === "active")
       .map((e) => {
         const person = personFor(e.id)!;
         const teamId = currentTeamId(data, e.id);
@@ -97,7 +96,6 @@ export default function ParticipantsPage() {
     teamFilter,
     filterable,
     fieldFilters,
-    showWithdrawn,
   ]);
 
   const participantReqs = data.requirements.filter((r) => r.scope === "participant");
@@ -173,14 +171,6 @@ export default function ParticipantsPage() {
             ))}
           </NativeSelect>
         ))}
-        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <input
-            type="checkbox"
-            checked={showWithdrawn}
-            onChange={(e) => setShowWithdrawn(e.target.checked)}
-          />
-          Show withdrawn
-        </label>
       </div>
 
       <Card className="py-0">
@@ -224,11 +214,7 @@ export default function ParticipantsPage() {
                   );
                 })}
                 <TableCell className="pr-4">
-                  {enrollment.status === "withdrawn" ? (
-                    <span className="text-xs text-muted-foreground">Withdrawn</span>
-                  ) : (
-                    status && <StatusBadge status={status.status} overall />
-                  )}
+                  {status && <StatusBadge status={status.status} overall />}
                 </TableCell>
               </TableRow>
             ))}
