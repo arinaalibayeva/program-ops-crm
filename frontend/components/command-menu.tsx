@@ -10,7 +10,6 @@ import {
   RotateCcw,
   Search,
   SlidersHorizontal,
-  Upload,
   User,
   UsersRound,
   type LucideIcon,
@@ -19,7 +18,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { USE_BACKEND, signOut } from "@/lib/api";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { formatDate } from "@/lib/format";
-import { DOCK_ITEMS } from "@/lib/nav";
+import { NAV_LINKS } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
 interface Command {
@@ -65,7 +64,7 @@ function CommandList({ close }: { close: () => void }) {
   const all = useMemo<Command[]>(() => {
     const go = (href: string) => () => router.push(href);
     return [
-      ...DOCK_ITEMS.map((item) => ({
+      ...NAV_LINKS.map((item) => ({
         id: item.href,
         group: "Go to",
         label: item.label,
@@ -74,7 +73,6 @@ function CommandList({ close }: { close: () => void }) {
       })),
       { id: "requirements", group: "Go to", label: "Requirements", icon: ClipboardCheck, run: go("/admin/requirements") },
       { id: "fields", group: "Go to", label: "Participant fields", icon: SlidersHorizontal, run: go("/admin/participants/fields") },
-      { id: "import", group: "Go to", label: "Import spreadsheet", icon: Upload, run: go("/admin/import") },
       ...data.enrollments.map((e) => ({
         id: e.id,
         group: "People",
