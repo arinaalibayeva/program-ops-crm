@@ -208,3 +208,93 @@ class UserSession(Base):
     user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
     expires_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+
+
+# ---- Custom record types ----
+# Admin-defined kinds of records. Field values, including links, are stored as
+# JSON on each record; the types, fields, calculations and rules describe them.
+
+
+class RecordType(Base):
+    __tablename__ = "record_types"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    program_id: Mapped[str] = mapped_column(ForeignKey("programs.id"), index=True)
+    name: Mapped[str]
+    singular: Mapped[str]
+    position: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class RecordField(Base):
+    __tablename__ = "record_fields"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    type_id: Mapped[str] = mapped_column(ForeignKey("record_types.id"), index=True)
+    label: Mapped[str]
+    type: Mapped[str]  # a participant field type, or link
+    options: Mapped[list | None] = mapped_column(JSON)
+    required: Mapped[bool] = mapped_column(Boolean, default=False)
+    # Links: participant | team | event | a record type id.
+    link_to: Mapped[str | None]
+    multiple: Mapped[bool] = mapped_column(Boolean, default=False)
+    position: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class CustomRecord(Base):
+    __tablename__ = "records"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    type_id: Mapped[str] = mapped_column(ForeignKey("record_types.id"), index=True)
+    cohort_id: Mapped[str] = mapped_column(ForeignKey("cohorts.id"), index=True)
+    # Field id -> value; links hold a record id, or a list of ids.
+    values: Mapped[dict] = mapped_column(JSON)
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
+    updated_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class Calculation(Base):
+    """A number or date worked out from linked records, shown on what it's `on`."""
+
+    __tablename__ = "calculations"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    program_id: Mapped[str] = mapped_column(ForeignKey("programs.id"), index=True)
+    label: Mapped[str]
+    on: Mapped[str]  # participant | team | a record type id
+    kind: Mapped[str]  # count | latest | days_since | percent
+    source_type_id: Mapped[str] = mapped_column(ForeignKey("record_types.id"))
+    via_field_id: Mapped[str] = mapped_column(ForeignKey("record_fields.id"))
+    date_field_id: Mapped[str | None] = mapped_column(ForeignKey("record_fields.id"))
+    filter: Mapped[dict | None] = mapped_column(JSON)  # {fieldId, op, value}
+    position: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class Rule(Base):
+    """Flags whatever a calculation is on when its value crosses a threshold."""
+
+    __tablename__ = "rules"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    calculation_id: Mapped[str] = mapped_column(ForeignKey("calculations.id"), index=True)
+    op: Mapped[str]  # gt | gte | lt | lte | eq
+    value: Mapped[float]
+    when_empty: Mapped[bool] = mapped_column(Boolean, default=False)
+    status: Mapped[str]  # at_risk | missing
+    message: Mapped[str]
+    position: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class RecordForm(Base):
+    """A shareable link that creates records of one type."""
+
+    __tablename__ = "record_forms"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    type_id: Mapped[str] = mapped_column(ForeignKey("record_types.id"), index=True)
+    title: Mapped[str]
+    description: Mapped[str | None] = mapped_column(Text)
+    field_ids: Mapped[list] = mapped_column(JSON)
+    token: Mapped[str] = mapped_column(String, unique=True, index=True)
+    roster: Mapped[bool] = mapped_column(Boolean, default=True)
+    is_open: Mapped[bool] = mapped_column(Boolean, default=True)
+    position: Mapped[int] = mapped_column(Integer, default=0)

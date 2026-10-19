@@ -3675,5 +3675,1354 @@
       "visibleToParticipant": true
     }
   ],
-  "teamNotes": []
+  "teamNotes": [],
+  "recordTypes": [
+    {
+      "id": "rt-meetings",
+      "programId": "prog-civic",
+      "name": "Partner meetings",
+      "singular": "Partner meeting",
+      "fields": [
+        {
+          "id": "rf-m-summary",
+          "label": "Summary",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "rf-m-date",
+          "label": "Date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "rf-m-team",
+          "label": "Team",
+          "type": "link",
+          "linkTo": "team",
+          "required": true
+        },
+        {
+          "id": "rf-m-attended",
+          "label": "Attended by",
+          "type": "link",
+          "linkTo": "participant",
+          "multiple": true,
+          "required": false
+        },
+        {
+          "id": "rf-m-partner",
+          "label": "Partner attended",
+          "type": "checkbox",
+          "required": false
+        },
+        {
+          "id": "rf-m-notes",
+          "label": "Notes",
+          "type": "long_text",
+          "required": false
+        },
+        {
+          "id": "rf-m-next",
+          "label": "Next steps",
+          "type": "long_text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "rt-issues",
+      "programId": "prog-civic",
+      "name": "Issues",
+      "singular": "Issue",
+      "fields": [
+        {
+          "id": "rf-i-title",
+          "label": "Title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "rf-i-status",
+          "label": "Status",
+          "type": "select",
+          "options": [
+            "Open",
+            "Resolved"
+          ],
+          "required": true
+        },
+        {
+          "id": "rf-i-severity",
+          "label": "Severity",
+          "type": "select",
+          "options": [
+            "Low",
+            "Medium",
+            "High"
+          ],
+          "required": false
+        },
+        {
+          "id": "rf-i-team",
+          "label": "Team",
+          "type": "link",
+          "linkTo": "team",
+          "required": false
+        },
+        {
+          "id": "rf-i-people",
+          "label": "People involved",
+          "type": "link",
+          "linkTo": "participant",
+          "multiple": true,
+          "required": false
+        },
+        {
+          "id": "rf-i-opened",
+          "label": "Opened on",
+          "type": "date",
+          "required": false
+        },
+        {
+          "id": "rf-i-details",
+          "label": "Details",
+          "type": "long_text",
+          "required": false
+        }
+      ]
+    }
+  ],
+  "records": [
+    {
+      "id": "rec-1",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-11",
+        "rf-m-team": "team-1",
+        "rf-m-attended": [
+          "enr-1",
+          "enr-2",
+          "enr-3",
+          "enr-4",
+          "enr-5"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-2",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-19",
+        "rf-m-team": "team-1",
+        "rf-m-attended": [
+          "enr-1",
+          "enr-2",
+          "enr-3",
+          "enr-4",
+          "enr-5"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-19T18:00:00.000Z"
+    },
+    {
+      "id": "rec-3",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-27",
+        "rf-m-team": "team-1",
+        "rf-m-attended": [
+          "enr-3",
+          "enr-4",
+          "enr-5"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-27T18:00:00.000Z"
+    },
+    {
+      "id": "rec-4",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-03",
+        "rf-m-team": "team-1",
+        "rf-m-attended": [
+          "enr-1",
+          "enr-2",
+          "enr-3",
+          "enr-4",
+          "enr-5"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-03T18:00:00.000Z"
+    },
+    {
+      "id": "rec-5",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-10",
+        "rf-m-team": "team-1",
+        "rf-m-attended": [
+          "enr-1",
+          "enr-2",
+          "enr-4",
+          "enr-5"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-10T18:00:00.000Z"
+    },
+    {
+      "id": "rec-6",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-16",
+        "rf-m-team": "team-1",
+        "rf-m-attended": [
+          "enr-1",
+          "enr-2",
+          "enr-3",
+          "enr-4",
+          "enr-5"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-16T18:00:00.000Z"
+    },
+    {
+      "id": "rec-7",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-12",
+        "rf-m-team": "team-2",
+        "rf-m-attended": [
+          "enr-6",
+          "enr-9",
+          "enr-10"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-12T18:00:00.000Z"
+    },
+    {
+      "id": "rec-8",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-19",
+        "rf-m-team": "team-2",
+        "rf-m-attended": [
+          "enr-6",
+          "enr-7",
+          "enr-9"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-19T18:00:00.000Z"
+    },
+    {
+      "id": "rec-9",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-27",
+        "rf-m-team": "team-2",
+        "rf-m-attended": [
+          "enr-6",
+          "enr-7",
+          "enr-8",
+          "enr-9"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-27T18:00:00.000Z"
+    },
+    {
+      "id": "rec-10",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-04",
+        "rf-m-team": "team-2",
+        "rf-m-attended": [
+          "enr-6",
+          "enr-7",
+          "enr-8",
+          "enr-9",
+          "enr-10"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-04T18:00:00.000Z"
+    },
+    {
+      "id": "rec-11",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-10",
+        "rf-m-team": "team-2",
+        "rf-m-attended": [
+          "enr-6",
+          "enr-7",
+          "enr-9",
+          "enr-10"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-10T18:00:00.000Z"
+    },
+    {
+      "id": "rec-12",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-19",
+        "rf-m-team": "team-2",
+        "rf-m-attended": [
+          "enr-6",
+          "enr-7",
+          "enr-8",
+          "enr-9",
+          "enr-10"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-19T18:00:00.000Z"
+    },
+    {
+      "id": "rec-13",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-10",
+        "rf-m-team": "team-3",
+        "rf-m-attended": [
+          "enr-11",
+          "enr-12",
+          "enr-13",
+          "enr-32"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-10T18:00:00.000Z"
+    },
+    {
+      "id": "rec-14",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-18",
+        "rf-m-team": "team-3",
+        "rf-m-attended": [
+          "enr-12",
+          "enr-13",
+          "enr-14",
+          "enr-15",
+          "enr-32"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-18T18:00:00.000Z"
+    },
+    {
+      "id": "rec-15",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-26",
+        "rf-m-team": "team-3",
+        "rf-m-attended": [
+          "enr-11",
+          "enr-13",
+          "enr-14",
+          "enr-15",
+          "enr-32"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-26T18:00:00.000Z"
+    },
+    {
+      "id": "rec-16",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-11",
+        "rf-m-team": "team-4",
+        "rf-m-attended": [
+          "enr-16",
+          "enr-17",
+          "enr-18",
+          "enr-19",
+          "enr-20"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-17",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-17",
+        "rf-m-team": "team-4",
+        "rf-m-attended": [
+          "enr-16",
+          "enr-17",
+          "enr-18",
+          "enr-19",
+          "enr-20"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-17T18:00:00.000Z"
+    },
+    {
+      "id": "rec-18",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-24",
+        "rf-m-team": "team-4",
+        "rf-m-attended": [
+          "enr-17",
+          "enr-18",
+          "enr-20"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-24T18:00:00.000Z"
+    },
+    {
+      "id": "rec-19",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-03",
+        "rf-m-team": "team-4",
+        "rf-m-attended": [
+          "enr-17",
+          "enr-18",
+          "enr-19",
+          "enr-20"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-03T18:00:00.000Z"
+    },
+    {
+      "id": "rec-20",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-09",
+        "rf-m-team": "team-4",
+        "rf-m-attended": [
+          "enr-16",
+          "enr-17",
+          "enr-19"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-09T18:00:00.000Z"
+    },
+    {
+      "id": "rec-21",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-18",
+        "rf-m-team": "team-4",
+        "rf-m-attended": [
+          "enr-16",
+          "enr-17",
+          "enr-18",
+          "enr-19",
+          "enr-20"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-18T18:00:00.000Z"
+    },
+    {
+      "id": "rec-22",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-11",
+        "rf-m-team": "team-5",
+        "rf-m-attended": [
+          "enr-21",
+          "enr-22",
+          "enr-23"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-23",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-18",
+        "rf-m-team": "team-5",
+        "rf-m-attended": [
+          "enr-21",
+          "enr-22",
+          "enr-23",
+          "enr-24",
+          "enr-25"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-18T18:00:00.000Z"
+    },
+    {
+      "id": "rec-24",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-27",
+        "rf-m-team": "team-5",
+        "rf-m-attended": [
+          "enr-21",
+          "enr-22",
+          "enr-23",
+          "enr-24",
+          "enr-25"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-27T18:00:00.000Z"
+    },
+    {
+      "id": "rec-25",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-05",
+        "rf-m-team": "team-5",
+        "rf-m-attended": [
+          "enr-24"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-05T18:00:00.000Z"
+    },
+    {
+      "id": "rec-26",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-11",
+        "rf-m-team": "team-5",
+        "rf-m-attended": [
+          "enr-21",
+          "enr-22",
+          "enr-23",
+          "enr-24"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-27",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-19",
+        "rf-m-team": "team-5",
+        "rf-m-attended": [
+          "enr-21",
+          "enr-23",
+          "enr-25"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-19T18:00:00.000Z"
+    },
+    {
+      "id": "rec-28",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-11",
+        "rf-m-team": "team-6",
+        "rf-m-attended": [
+          "enr-26",
+          "enr-27",
+          "enr-28",
+          "enr-29",
+          "enr-30"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-29",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-17",
+        "rf-m-team": "team-6",
+        "rf-m-attended": [
+          "enr-26",
+          "enr-28",
+          "enr-29",
+          "enr-30"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-17T18:00:00.000Z"
+    },
+    {
+      "id": "rec-30",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-26",
+        "rf-m-team": "team-6",
+        "rf-m-attended": [
+          "enr-27",
+          "enr-28",
+          "enr-29",
+          "enr-30"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-26T18:00:00.000Z"
+    },
+    {
+      "id": "rec-31",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-05",
+        "rf-m-team": "team-6",
+        "rf-m-attended": [
+          "enr-26",
+          "enr-27",
+          "enr-28",
+          "enr-29",
+          "enr-30"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-05T18:00:00.000Z"
+    },
+    {
+      "id": "rec-32",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-11",
+        "rf-m-team": "team-6",
+        "rf-m-attended": [
+          "enr-29",
+          "enr-30"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-33",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-17",
+        "rf-m-team": "team-6",
+        "rf-m-attended": [
+          "enr-26",
+          "enr-28",
+          "enr-29"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-17T18:00:00.000Z"
+    },
+    {
+      "id": "rec-34",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-10",
+        "rf-m-team": "team-7",
+        "rf-m-attended": [
+          "enr-33"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-10T18:00:00.000Z"
+    },
+    {
+      "id": "rec-35",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-18",
+        "rf-m-team": "team-7",
+        "rf-m-attended": [
+          "enr-33",
+          "enr-34"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-18T18:00:00.000Z"
+    },
+    {
+      "id": "rec-36",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-26",
+        "rf-m-team": "team-7",
+        "rf-m-attended": [
+          "enr-33",
+          "enr-34"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-26T18:00:00.000Z"
+    },
+    {
+      "id": "rec-37",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-05",
+        "rf-m-team": "team-7",
+        "rf-m-attended": [
+          "enr-33",
+          "enr-34"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-05T18:00:00.000Z"
+    },
+    {
+      "id": "rec-38",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-11",
+        "rf-m-team": "team-7",
+        "rf-m-attended": [
+          "enr-33",
+          "enr-34"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-39",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-17",
+        "rf-m-team": "team-7",
+        "rf-m-attended": [
+          "enr-33"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-17T18:00:00.000Z"
+    },
+    {
+      "id": "rec-40",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-12",
+        "rf-m-team": "team-8",
+        "rf-m-attended": [
+          "enr-35",
+          "enr-36",
+          "enr-37",
+          "enr-38",
+          "enr-39"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-12T18:00:00.000Z"
+    },
+    {
+      "id": "rec-41",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-19",
+        "rf-m-team": "team-8",
+        "rf-m-attended": [
+          "enr-35",
+          "enr-38",
+          "enr-39"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-19T18:00:00.000Z"
+    },
+    {
+      "id": "rec-42",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-28",
+        "rf-m-team": "team-8",
+        "rf-m-attended": [
+          "enr-35",
+          "enr-37",
+          "enr-38",
+          "enr-39"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-28T18:00:00.000Z"
+    },
+    {
+      "id": "rec-43",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-07",
+        "rf-m-team": "team-8",
+        "rf-m-attended": [
+          "enr-35",
+          "enr-36",
+          "enr-37",
+          "enr-38",
+          "enr-39"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-07T18:00:00.000Z"
+    },
+    {
+      "id": "rec-44",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-13",
+        "rf-m-team": "team-8",
+        "rf-m-attended": [
+          "enr-35",
+          "enr-37",
+          "enr-38",
+          "enr-39"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-13T18:00:00.000Z"
+    },
+    {
+      "id": "rec-45",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-10",
+        "rf-m-team": "team-9",
+        "rf-m-attended": [
+          "enr-43",
+          "enr-44"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-10T18:00:00.000Z"
+    },
+    {
+      "id": "rec-46",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-17",
+        "rf-m-team": "team-9",
+        "rf-m-attended": [
+          "enr-40",
+          "enr-41",
+          "enr-42",
+          "enr-43",
+          "enr-44"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-17T18:00:00.000Z"
+    },
+    {
+      "id": "rec-47",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-26",
+        "rf-m-team": "team-9",
+        "rf-m-attended": [
+          "enr-40",
+          "enr-41",
+          "enr-42",
+          "enr-43"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-26T18:00:00.000Z"
+    },
+    {
+      "id": "rec-48",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-03",
+        "rf-m-team": "team-9",
+        "rf-m-attended": [
+          "enr-40",
+          "enr-41",
+          "enr-43",
+          "enr-44"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-03T18:00:00.000Z"
+    },
+    {
+      "id": "rec-49",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-09",
+        "rf-m-team": "team-9",
+        "rf-m-attended": [
+          "enr-40",
+          "enr-41",
+          "enr-43",
+          "enr-44"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-09T18:00:00.000Z"
+    },
+    {
+      "id": "rec-50",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-15",
+        "rf-m-team": "team-9",
+        "rf-m-attended": [
+          "enr-41",
+          "enr-42",
+          "enr-43",
+          "enr-44"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-15T18:00:00.000Z"
+    },
+    {
+      "id": "rec-51",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-11",
+        "rf-m-team": "team-10",
+        "rf-m-attended": [
+          "enr-46",
+          "enr-47",
+          "enr-48",
+          "enr-49"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-11T18:00:00.000Z"
+    },
+    {
+      "id": "rec-52",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-20",
+        "rf-m-team": "team-10",
+        "rf-m-attended": [
+          "enr-45",
+          "enr-49"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-20T18:00:00.000Z"
+    },
+    {
+      "id": "rec-53",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-26",
+        "rf-m-team": "team-10",
+        "rf-m-attended": [
+          "enr-47",
+          "enr-48"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-26T18:00:00.000Z"
+    },
+    {
+      "id": "rec-54",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Kickoff and scope",
+        "rf-m-date": "2026-09-10",
+        "rf-m-team": "team-11",
+        "rf-m-attended": [
+          "enr-50",
+          "enr-51"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-10T18:00:00.000Z"
+    },
+    {
+      "id": "rec-55",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Weekly sync",
+        "rf-m-date": "2026-09-18",
+        "rf-m-team": "team-11",
+        "rf-m-attended": [
+          "enr-51",
+          "enr-52",
+          "enr-53",
+          "enr-54"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-18T18:00:00.000Z"
+    },
+    {
+      "id": "rec-56",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Interview findings review",
+        "rf-m-date": "2026-09-24",
+        "rf-m-team": "team-11",
+        "rf-m-attended": [
+          "enr-51",
+          "enr-52",
+          "enr-53",
+          "enr-54"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-09-24T18:00:00.000Z"
+    },
+    {
+      "id": "rec-57",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Prototype walkthrough",
+        "rf-m-date": "2026-10-01",
+        "rf-m-team": "team-11",
+        "rf-m-attended": [
+          "enr-50",
+          "enr-51",
+          "enr-52",
+          "enr-53",
+          "enr-54"
+        ],
+        "rf-m-partner": true,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-01T18:00:00.000Z"
+    },
+    {
+      "id": "rec-58",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Feedback on wireframes",
+        "rf-m-date": "2026-10-08",
+        "rf-m-team": "team-11",
+        "rf-m-attended": [
+          "enr-50",
+          "enr-51",
+          "enr-52",
+          "enr-53",
+          "enr-54"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-08T18:00:00.000Z"
+    },
+    {
+      "id": "rec-59",
+      "typeId": "rt-meetings",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-m-summary": "Planning next sprint",
+        "rf-m-date": "2026-10-16",
+        "rf-m-team": "team-11",
+        "rf-m-attended": [
+          "enr-51",
+          "enr-52",
+          "enr-53",
+          "enr-54"
+        ],
+        "rf-m-partner": false,
+        "rf-m-notes": "Went through progress since last week and open questions."
+      },
+      "createdAt": "2026-10-16T18:00:00.000Z"
+    },
+    {
+      "id": "rec-60",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Partner contact changed jobs",
+        "rf-i-status": "Open",
+        "rf-i-severity": "High",
+        "rf-i-team": "team-5",
+        "rf-i-opened": "2026-10-14",
+        "rf-i-details": "Their main contact left the organization. Waiting to hear who takes over."
+      },
+      "createdAt": "2026-10-14T18:00:00.000Z"
+    },
+    {
+      "id": "rec-61",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Disagreement over project scope",
+        "rf-i-status": "Resolved",
+        "rf-i-severity": "Medium",
+        "rf-i-team": "team-2",
+        "rf-i-opened": "2026-10-02",
+        "rf-i-details": "Resolved after a meeting with the partner on Oct 6."
+      },
+      "createdAt": "2026-10-02T18:00:00.000Z"
+    }
+  ],
+  "calculations": [
+    {
+      "id": "calc-last-meeting",
+      "programId": "prog-civic",
+      "label": "Last partner meeting",
+      "on": "team",
+      "kind": "latest",
+      "sourceTypeId": "rt-meetings",
+      "viaFieldId": "rf-m-team",
+      "dateFieldId": "rf-m-date"
+    },
+    {
+      "id": "calc-days-since-meeting",
+      "programId": "prog-civic",
+      "label": "Days since partner meeting",
+      "on": "team",
+      "kind": "days_since",
+      "sourceTypeId": "rt-meetings",
+      "viaFieldId": "rf-m-team",
+      "dateFieldId": "rf-m-date"
+    },
+    {
+      "id": "calc-partner-present",
+      "programId": "prog-civic",
+      "label": "Meetings the partner attended",
+      "on": "team",
+      "kind": "percent",
+      "sourceTypeId": "rt-meetings",
+      "viaFieldId": "rf-m-team",
+      "filter": {
+        "fieldId": "rf-m-partner",
+        "op": "is",
+        "value": "yes"
+      }
+    },
+    {
+      "id": "calc-open-issues",
+      "programId": "prog-civic",
+      "label": "Open issues",
+      "on": "team",
+      "kind": "count",
+      "sourceTypeId": "rt-issues",
+      "viaFieldId": "rf-i-team",
+      "filter": {
+        "fieldId": "rf-i-status",
+        "op": "is",
+        "value": "Open"
+      }
+    },
+    {
+      "id": "calc-meetings-attended",
+      "programId": "prog-civic",
+      "label": "Partner meetings attended",
+      "on": "participant",
+      "kind": "count",
+      "sourceTypeId": "rt-meetings",
+      "viaFieldId": "rf-m-attended"
+    }
+  ],
+  "rules": [
+    {
+      "id": "rule-meeting-gap",
+      "calculationId": "calc-days-since-meeting",
+      "op": "gt",
+      "value": 14,
+      "whenEmpty": true,
+      "status": "at_risk",
+      "message": "No partner meeting in over 2 weeks"
+    },
+    {
+      "id": "rule-open-issue",
+      "calculationId": "calc-open-issues",
+      "op": "gte",
+      "value": 1,
+      "whenEmpty": false,
+      "status": "at_risk",
+      "message": "Has an open issue"
+    }
+  ],
+  "forms": [
+    {
+      "id": "form-meeting",
+      "typeId": "rt-meetings",
+      "title": "Log a partner meeting",
+      "description": "Fill this in after every meeting with your partner. It takes a minute.",
+      "fieldIds": [
+        "rf-m-summary",
+        "rf-m-date",
+        "rf-m-partner",
+        "rf-m-notes",
+        "rf-m-next"
+      ],
+      "token": "log-meeting-demo",
+      "roster": true,
+      "isOpen": true
+    }
+  ]
 }
