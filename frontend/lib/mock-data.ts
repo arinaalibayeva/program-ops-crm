@@ -4,14 +4,19 @@
 
 import type {
   Attendance,
+  Calculation,
   CohortData,
   Completion,
+  CustomRecord,
   Enrollment,
   FieldDefinition,
   Person,
   ProgramEvent,
   Project,
+  RecordForm,
+  RecordType,
   Requirement,
+  Rule,
   Team,
   TeamMembership,
 } from "./types";
@@ -458,5 +463,138 @@ export function buildMockCohort(): CohortData {
     exemptions: [],
     fields: FIELDS.map((f) => ({ ...f })),
     teamNotes: [],
+    ...sampleRecords(cohortId, teams, memberships),
+  };
+}
+
+// ---- Custom record types ----
+// Two example types, set up the way an admin would through Customize, so the
+// demo shows links, calculations, rules and a form working together.
+
+export const RECORD_PLANTED = {
+  /** Last partner meeting more than two weeks before "today". */
+  teamsStaleMeetings: [2, 9],
+  /** Never logged a partner meeting. */
+  teamNoMeetings: 11,
+  /** Has an open issue. */
+  teamOpenIssue: 4,
+};
+
+const RECORD_TYPES: RecordType[] = [
+  {
+    id: "rt-meetings",
+    programId: "prog-civic",
+    name: "Partner meetings",
+    singular: "Partner meeting",
+    fields: [
+      { id: "rf-m-summary", label: "Summary", type: "text", required: true },
+      { id: "rf-m-date", label: "Date", type: "date", required: true },
+      { id: "rf-m-team", label: "Team", type: "link", linkTo: "team", required: true },
+      { id: "rf-m-attended", label: "Attended by", type: "link", linkTo: "participant", multiple: true, required: false },
+      { id: "rf-m-partner", label: "Partner attended", type: "checkbox", required: false },
+      { id: "rf-m-notes", label: "Notes", type: "long_text", required: false },
+      { id: "rf-m-next", label: "Next steps", type: "long_text", required: false },
+    ],
+  },
+  {
+    id: "rt-issues",
+    programId: "prog-civic",
+    name: "Issues",
+    singular: "Issue",
+    fields: [
+      { id: "rf-i-title", label: "Title", type: "text", required: true },
+      { id: "rf-i-status", label: "Status", type: "select", options: ["Open", "Resolved"], required: true },
+      { id: "rf-i-severity", label: "Severity", type: "select", options: ["Low", "Medium", "High"], required: false },
+      { id: "rf-i-team", label: "Team", type: "link", linkTo: "team", required: false },
+      { id: "rf-i-people", label: "People involved", type: "link", linkTo: "participant", multiple: true, required: false },
+      { id: "rf-i-opened", label: "Opened on", type: "date", required: false },
+      { id: "rf-i-details", label: "Details", type: "long_text", required: false },
+    ],
+  },
+];
+
+const CALCULATIONS: Calculation[] = [
+  { id: "calc-last-meeting", programId: "prog-civic", label: "Last partner meeting", on: "team", kind: "latest", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", dateFieldId: "rf-m-date" },
+  { id: "calc-days-since-meeting", programId: "prog-civic", label: "Days since partner meeting", on: "team", kind: "days_since", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", dateFieldId: "rf-m-date" },
+  { id: "calc-partner-present", programId: "prog-civic", label: "Meetings the partner attended", on: "team", kind: "percent", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", filter: { fieldId: "rf-m-partner", op: "is", value: "yes" } },
+  { id: "calc-open-issues", programId: "prog-civic", label: "Open issues", on: "team", kind: "count", sourceTypeId: "rt-issues", viaFieldId: "rf-i-team", filter: { fieldId: "rf-i-status", op: "is", value: "Open" } },
+  { id: "calc-meetings-attended", programId: "prog-civic", label: "Partner meetings attended", on: "participant", kind: "count", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-attended" },
+];
+
+const RULES: Rule[] = [
+  { id: "rule-meeting-gap", calculationId: "calc-days-since-meeting", op: "gt", value: 14, whenEmpty: true, status: "at_risk", message: "No partner meeting in over 2 weeks" },
+  { id: "rule-open-issue", calculationId: "calc-open-issues", op: "gte", value: 1, whenEmpty: false, status: "at_risk", message: "Has an open issue" },
+];
+
+const FORMS: RecordForm[] = [
+  {
+    id: "form-meeting",
+    typeId: "rt-meetings",
+    title: "Log a partner meeting",
+    description: "Fill this in after every meeting with your partner. It takes a minute.",
+    fieldIds: ["rf-m-summary", "rf-m-date", "rf-m-partner", "rf-m-notes", "rf-m-next"],
+    token: "log-meeting-demo",
+    roster: true,
+    isOpen: true,
+  },
+];
+
+const MEETING_TOPICS = [
+  "Kickoff and scope",
+  "Weekly sync",
+  "Interview findings review",
+  "Prototype walkthrough",
+  "Feedback on wireframes",
+  "Planning next sprint",
+];
+
+function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembership[]) {
+  const rand = mulberry32(11);
+  const records: CustomRecord[] = [];
+  let n = 0;
+  const add = (typeId: string, date: string, values: CustomRecord["values"]) =>
+    records.push({ id: `rec-${++n}`, typeId, cohortId, values, createdAt: `${date}T18:00:00.000Z` });
+
+  teams.forEach((team, i) => {
+    if (i === RECORD_PLANTED.teamNoMeetings) return;
+    const members = memberships.filter((m) => m.teamId === team.id && !m.endDate).map((m) => m.enrollmentId);
+    // Roughly weekly from the kickoff; stale teams stop early.
+    const last = RECORD_PLANTED.teamsStaleMeetings.includes(i) ? "2026-09-30" : "2026-10-19";
+    for (let date = addDays("2026-09-10", Math.floor(rand() * 3)), k = 0; date <= last; date = addDays(date, 6 + Math.floor(rand() * 4)), k++) {
+      add("rt-meetings", date, {
+        "rf-m-summary": MEETING_TOPICS[Math.min(k, MEETING_TOPICS.length - 1)],
+        "rf-m-date": date,
+        "rf-m-team": team.id,
+        "rf-m-attended": members.filter(() => rand() > 0.2),
+        "rf-m-partner": rand() > 0.25,
+        "rf-m-notes": "Went through progress since last week and open questions.",
+      });
+    }
+  });
+
+  const issueTeam = teams[RECORD_PLANTED.teamOpenIssue];
+  add("rt-issues", "2026-10-14", {
+    "rf-i-title": "Partner contact changed jobs",
+    "rf-i-status": "Open",
+    "rf-i-severity": "High",
+    "rf-i-team": issueTeam.id,
+    "rf-i-opened": "2026-10-14",
+    "rf-i-details": "Their main contact left the organization. Waiting to hear who takes over.",
+  });
+  add("rt-issues", "2026-10-02", {
+    "rf-i-title": "Disagreement over project scope",
+    "rf-i-status": "Resolved",
+    "rf-i-severity": "Medium",
+    "rf-i-team": teams[1].id,
+    "rf-i-opened": "2026-10-02",
+    "rf-i-details": "Resolved after a meeting with the partner on Oct 6.",
+  });
+
+  return {
+    recordTypes: RECORD_TYPES.map((t) => ({ ...t, fields: t.fields.map((f) => ({ ...f })) })),
+    records,
+    calculations: CALCULATIONS.map((c) => ({ ...c })),
+    rules: RULES.map((r) => ({ ...r })),
+    forms: FORMS.map((f) => ({ ...f })),
   };
 }

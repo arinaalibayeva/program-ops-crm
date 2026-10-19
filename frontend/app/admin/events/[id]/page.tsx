@@ -16,6 +16,7 @@ import {
   type EventFormValues,
 } from "@/components/event-form";
 import { PageHeader } from "@/components/page-header";
+import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { currentTeamId } from "@/lib/requirements";
 import { EVENT_CATEGORY_LABELS, formatEventTime } from "@/lib/events";
@@ -76,6 +77,10 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
           </div>
         )}
         <AttendanceCard event={event} />
+        <div className="grid gap-6 lg:grid-cols-2">
+          <TrackedNumbers on="event" id={event.id} />
+          <LinkedRecords target="event" id={event.id} />
+        </div>
       </div>
     </>
   );

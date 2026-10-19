@@ -85,6 +85,115 @@ export interface Team {
   projectId?: string;
 }
 
+// ---- Custom record types ----
+// Admins describe their own kinds of records (partner meetings, issues,
+// submissions...) and link them to built-in things or to each other.
+// Calculations read linked records; rules turn calculations into flags.
+
+/** Built-in things a link can point at. Anything else is a record type id. */
+export const BUILT_IN_TARGETS = ["participant", "team", "event"] as const;
+export type BuiltInTarget = (typeof BUILT_IN_TARGETS)[number];
+
+export type RecordFieldType = FieldType | "link";
+
+export interface RecordField {
+  id: string;
+  label: string;
+  type: RecordFieldType;
+  /** Choices for select and multi_select. */
+  options?: string[];
+  required: boolean;
+  /** For links: a built-in target or a record type id. */
+  linkTo?: string;
+  /** For links: can hold several records. */
+  multiple?: boolean;
+}
+
+export interface RecordType {
+  id: string;
+  programId: string;
+  /** Plural, as shown in navigation: "Partner meetings". */
+  name: string;
+  /** "Partner meeting". */
+  singular: string;
+  /** In display order. The first non-link field titles each record. */
+  fields: RecordField[];
+}
+
+/** Link fields hold a record id, or a list of ids when multiple. */
+export interface CustomRecord {
+  id: string;
+  typeId: string;
+  cohortId: string;
+  values: Record<string, FieldValue>;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export const CONDITION_OPS = ["is", "is_not", "is_empty", "is_not_empty"] as const;
+export type ConditionOp = (typeof CONDITION_OPS)[number];
+
+export interface Condition {
+  fieldId: string;
+  op: ConditionOp;
+  value?: string;
+}
+
+export const CALCULATION_KINDS = ["count", "latest", "days_since", "percent"] as const;
+export type CalculationKind = (typeof CALCULATION_KINDS)[number];
+
+/**
+ * A number or date worked out from linked records, shown on every record it's
+ * "on" (participant, team or a record type id). It reads records of
+ * sourceTypeId whose link field viaFieldId points at that record.
+ */
+export interface Calculation {
+  id: string;
+  programId: string;
+  label: string;
+  on: string;
+  kind: CalculationKind;
+  sourceTypeId: string;
+  viaFieldId: string;
+  /** For latest and days_since. */
+  dateFieldId?: string;
+  /** count: only matching records. percent: the share that match. */
+  filter?: Condition;
+}
+
+export const RULE_OPS = ["gt", "gte", "lt", "lte", "eq"] as const;
+export type RuleOp = (typeof RULE_OPS)[number];
+
+/** Flags a record when its calculation crosses a threshold. */
+export interface Rule {
+  id: string;
+  calculationId: string;
+  op: RuleOp;
+  value: number;
+  /** Also flag when there's nothing to calculate from (e.g. no meetings yet). */
+  whenEmpty: boolean;
+  status: "at_risk" | "missing";
+  /** Shown on Today, e.g. "No partner meeting in 2 weeks". */
+  message: string;
+}
+
+/** A shareable link that creates records of one type. */
+export interface RecordForm {
+  id: string;
+  typeId: string;
+  title: string;
+  description?: string;
+  /** Non-link fields to ask for, in order. */
+  fieldIds: string[];
+  token: string;
+  /**
+   * Ask for the submitter's email and match it to an active participant;
+   * links to participants and teams are then filled in automatically.
+   */
+  roster: boolean;
+  isOpen: boolean;
+}
+
 /** A note an admin wrote about a team. Times are ISO date-times. */
 export interface TeamNote {
   id: string;
@@ -213,6 +322,12 @@ export interface CohortData {
   fields: FieldDefinition[];
   /** Newest first. */
   teamNotes: TeamNote[];
+  recordTypes: RecordType[];
+  /** Oldest first. */
+  records: CustomRecord[];
+  calculations: Calculation[];
+  rules: Rule[];
+  forms: RecordForm[];
 }
 
 // ---- Computed status ----
@@ -228,9 +343,17 @@ export interface RequirementResult {
   excused?: boolean;
 }
 
+export interface RuleResult {
+  ruleId: string;
+  status: Status;
+  reason: string;
+}
+
 export interface SubjectStatus {
   status: Status;
   results: RequirementResult[];
+  /** Admin-defined rules that flagged this subject. */
+  ruleResults?: RuleResult[];
   /** Short reasons for anything not met/on track, for the dashboard. */
   flags: string[];
 }

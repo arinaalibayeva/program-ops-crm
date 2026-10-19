@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { TeamNotes } from "@/components/team-notes";
+import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { activeMembers } from "@/lib/requirements";
 import { formatDate } from "@/lib/format";
@@ -125,9 +126,12 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
               })}
             </CardContent>
           </Card>
+          <LinkedRecords target="team" id={id} />
         </div>
 
         <div className="space-y-6">
+          <TrackedNumbers on="team" id={id} />
+
           <TeamNotes teamId={id} />
 
           <Card>

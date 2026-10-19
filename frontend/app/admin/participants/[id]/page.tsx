@@ -12,6 +12,8 @@ import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
 import { SectionBoard, type BoardLayout } from "@/components/section-board";
 import { StatusBadge } from "@/components/status-badge";
+import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
+import { incomingLinks } from "@/lib/records";
 import { useCohort } from "@/lib/store";
 import { currentTeamId, participantStatus } from "@/lib/requirements";
 import { EVENT_CATEGORY_LABELS } from "@/lib/events";
@@ -26,18 +28,19 @@ import {
 import { cn } from "@/lib/utils";
 import type { CohortData, Enrollment } from "@/lib/types";
 
-type SectionId = "requirements" | "attendance" | "profile" | "team" | "notes";
+type SectionId = "requirements" | "attendance" | "records" | "profile" | "team" | "notes";
 
 const SECTION_LABELS: Record<SectionId, string> = {
   requirements: "Requirements",
   attendance: "Attendance",
+  records: "Records",
   profile: "Profile",
   team: "Team",
   notes: "Notes",
 };
 
 const DEFAULT_LAYOUT: BoardLayout<SectionId> = {
-  left: ["requirements", "attendance"],
+  left: ["requirements", "attendance", "records"],
   right: ["profile", "team", "notes"],
 };
 
@@ -194,6 +197,8 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
               return <TeamSection {...section} />;
             case "notes":
               return <NotesSection />;
+            case "records":
+              return <RecordsSection enrollmentId={enrollment.id} />;
           }
         }}
       />
@@ -522,5 +527,31 @@ function TeamSection({ view, enrollment, draft, update }: SectionProps) {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+/** Calculations on this participant, and records of each type that link to them. */
+function RecordsSection({ enrollmentId }: { enrollmentId: string }) {
+  const { data } = useCohort();
+  const empty =
+    incomingLinks(data, "participant").length === 0 && !data.calculations.some((c) => c.on === "participant");
+  if (empty) {
+    return (
+      <Card className="border-dashed bg-transparent shadow-none">
+        <CardContent className="text-xs text-muted-foreground">
+          No record types link to participants yet. Add a link field in{" "}
+          <Link href="/admin/customize" className="underline">
+            Customize
+          </Link>
+          .
+        </CardContent>
+      </Card>
+    );
+  }
+  return (
+    <div className="space-y-6">
+      <TrackedNumbers on="participant" id={enrollmentId} />
+      <LinkedRecords target="participant" id={enrollmentId} />
+    </div>
   );
 }
