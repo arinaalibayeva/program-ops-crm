@@ -121,7 +121,7 @@ export default function ImportPage() {
       )}
 
       {result !== undefined && (
-        <div className="mb-6 flex items-center gap-2 rounded-lg border border-emerald-200 dark:border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-4 py-3 text-sm text-emerald-800 dark:text-emerald-300">
+        <div className="mb-6 flex items-center gap-2 rounded-lg border bg-muted px-4 py-3 text-sm">
           <CheckCircle2 className="size-4" />
           Imported {result} participant{result === 1 ? "" : "s"}.{" "}
           <Link href="/admin/participants" className="font-medium underline">
@@ -226,7 +226,7 @@ export default function ImportPage() {
                               <XCircle className="size-3.5" /> {row.error}
                             </span>
                           ) : (
-                            <span className="flex items-center gap-1 text-emerald-700 dark:text-emerald-400">
+                            <span className="flex items-center gap-1 text-primary">
                               <CheckCircle2 className="size-3.5" /> {row.warning ?? "Ready"}
                             </span>
                           )}
