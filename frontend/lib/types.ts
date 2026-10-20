@@ -225,6 +225,7 @@ export const EVENT_CATEGORIES = [
   "partner",
   "networking",
   "social",
+  "deadline",
   "other",
 ] as const;
 export type EventCategory = (typeof EVENT_CATEGORIES)[number];

@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+from app import models as m
+
 SAMPLE = json.loads((Path(__file__).parents[1] / "app" / "sample" / "cohort.json").read_text())
 TODAY_EVENT = "chk-ev-9-today"  # the sample event on the demo's "today"
 
@@ -17,6 +19,14 @@ def test_cohort_matches_the_frontend_sample(client):
     assert by_key(data["completions"], "requirementId", "subjectId") == by_key(
         SAMPLE["completions"], "requirementId", "subjectId"
     )
+
+
+def test_every_team_has_one_of_each_role():
+    role = next(f for f in SAMPLE["fields"] if f["id"] == "field-role")
+    fields = {e["id"]: e["fields"] for e in SAMPLE["enrollments"]}
+    for team in SAMPLE["teams"]:
+        members = [m["enrollmentId"] for m in SAMPLE["memberships"] if m["teamId"] == team["id"] and "endDate" not in m]
+        assert sorted(fields[e]["field-role"] for e in members) == sorted(role["options"]), team["name"]
 
 
 def test_toggle_attendance(client):
@@ -38,9 +48,9 @@ def test_checkin_info_reveals_no_participants(client):
 def test_checkin_flow(client):
     url = f"/api/checkin/{TODAY_EVENT}"
     assert client.post(url, json={"email": "nobody@example.edu"}).json() == {"status": "not_found"}
-    first = client.post(url, json={"email": "  Amara.Haddad@EXAMPLE.edu "}).json()
-    assert first == {"status": "checked_in", "firstName": "Amara"}
-    again = client.post(url, json={"email": "amara.haddad@example.edu"}).json()
+    first = client.post(url, json={"email": "  Andrei.Farouk@EXAMPLE.edu "}).json()
+    assert first == {"status": "checked_in", "firstName": "Andrei"}
+    again = client.post(url, json={"email": "andrei.farouk@example.edu"}).json()
     assert again["status"] == "already_checked_in"
     records = [a for a in client.get("/api/cohort").json()["attendance"] if a["eventId"] == "ev-9"]
     assert records == [{"eventId": "ev-9", "enrollmentId": "enr-1", "source": "link"}]
@@ -48,15 +58,18 @@ def test_checkin_flow(client):
 
 def test_checkin_only_on_the_day(client):
     tokens = {e["id"]: e["checkinToken"] for e in SAMPLE["events"]}
-    email = {"email": "amara.haddad@example.edu"}
+    email = {"email": "andrei.farouk@example.edu"}
     assert client.post(f"/api/checkin/{tokens['ev-8']}", json=email).json()["status"] == "not_open"
     assert client.post(f"/api/checkin/{tokens['ev-1']}", json=email).json()["status"] == "closed"
     assert client.post("/api/checkin/chk-unknown", json=email).status_code == 404
 
 
-def test_withdrawn_participant_cannot_check_in(client):
-    withdrawn = next(e for e in SAMPLE["enrollments"] if e["status"] == "withdrawn")
-    email = next(p["email"] for p in SAMPLE["people"] if p["id"] == withdrawn["personId"])
+def test_withdrawn_participant_cannot_check_in(client, session_factory):
+    with session_factory() as session:
+        enrollment = session.get(m.Enrollment, "enr-2")
+        enrollment.status = "withdrawn"
+        session.commit()
+        email = session.get(m.Person, enrollment.person_id).email
     assert client.post(f"/api/checkin/{TODAY_EVENT}", json={"email": email}).json()["status"] == "not_found"
 
 
@@ -98,7 +111,7 @@ def test_team_change_keeps_history(client):
 def test_participant_validation(client):
     data = client.get("/api/cohort").json()
     draft = draft_for(data, "enr-2")
-    taken = client.put("/api/participants/enr-2", json=draft | {"email": "amara.haddad@example.edu"})
+    taken = client.put("/api/participants/enr-2", json=draft | {"email": "andrei.farouk@example.edu"})
     assert taken.status_code == 400 and taken.json()["detail"] == "Another person already uses this email."
     assert client.put("/api/participants/enr-2", json=draft | {"name": " "}).status_code == 400
 
@@ -106,7 +119,7 @@ def test_participant_validation(client):
 def test_add_participants_reuses_people(client):
     rows = [
         {"name": "New Person", "email": "new@example.edu", "team": "Brand new team"},
-        {"name": "Amara Again", "email": "amara.haddad@example.edu"},  # already enrolled
+        {"name": "Andrei Again", "email": "andrei.farouk@example.edu"},  # already enrolled
     ]
     result = client.post("/api/participants", json={"rows": rows}).json()
     assert result["added"] == 1
@@ -150,8 +163,8 @@ def test_fields_add_move_delete(client):
 
 
 def test_delete_requirement_removes_its_records(client):
-    data = client.delete("/api/requirements/req-3").json()
-    assert all(c["requirementId"] != "req-3" for c in data["completions"])
+    data = client.delete("/api/requirements/req-5").json()
+    assert all(c["requirementId"] != "req-5" for c in data["completions"])
 
 
 def test_reset_restores_sample(client):

@@ -15,8 +15,14 @@ export const EVENT_CATEGORY_LABELS: Record<EventCategory, string> = {
   partner: "Partner session",
   networking: "Networking",
   social: "Social",
+  deadline: "Deadline",
   other: "Other",
 };
+
+/** Deadlines go on the calendar, but nobody attends or checks in to them. */
+export function takesAttendance(event: Pick<ProgramEvent, "category">): boolean {
+  return event.category !== "deadline";
+}
 
 /** Lowercase plural for sentences, e.g. "workshops", "office hours". */
 export function categoryPlural(category: EventCategory): string {

@@ -123,7 +123,7 @@ const TYPE_OPTIONS: { value: RequirementType; label: string; hint: string }[] = 
   {
     value: "complete_by",
     label: "Complete something by a date",
-    hint: 'e.g. "onboarding form by Oct 2" or "project brief by Week 4"',
+    hint: 'e.g. "project brief by Week 4" or "final report by Dec 11"',
   },
   {
     value: "team_min_size",

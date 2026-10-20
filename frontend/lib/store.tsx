@@ -36,7 +36,7 @@ import type {
 } from "./types";
 
 // Bump the version when CohortData changes shape so old saved data is ignored.
-const STORAGE_KEY = "program-ops-crm:cohort:v13";
+const STORAGE_KEY = "program-ops-crm:cohort:v17";
 
 export type NewEvent = Omit<ProgramEvent, "id" | "cohortId" | "checkinToken">;
 

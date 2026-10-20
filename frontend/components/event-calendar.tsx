@@ -72,7 +72,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
         </div>
       </div>
 
-      <div className="grid grid-cols-7 border-b text-xs text-muted-foreground">
+      <div className="grid grid-cols-7 border-b text-xs font-medium">
         {WEEKDAYS.map((d) => (
           <div key={d} className="px-2 py-1.5">
             {d}
@@ -88,53 +88,40 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
             <div
               key={day}
               className={cn(
-                "min-h-28 min-w-0 border-b p-1.5",
+                "min-h-32 min-w-0 border-b p-1.5",
                 i % 7 !== 6 && "border-r",
                 !inMonth && "bg-muted/30",
               )}
             >
               <div
                 className={cn(
-                  "mb-1 flex size-6 items-center justify-center rounded-full text-xs tabular-nums",
+                  "mb-1 flex size-6 items-center justify-center rounded-full text-xs font-medium tabular-nums",
                   !inMonth && "text-muted-foreground",
-                  day === today && "bg-primary font-medium text-primary-foreground",
+                  day === today && "bg-primary text-primary-foreground",
                 )}
               >
                 {Number(day.slice(8))}
               </div>
-              <div className="space-y-1">
+              <div className="space-y-1.5">
                 {dayEvents.map((event) => (
                   <Link
                     key={event.id}
                     href={`/admin/events/${event.id}`}
                     title={event.title}
-                    className={cn(
-                      "line-clamp-2 rounded-md px-1.5 py-0.5 text-xs leading-snug break-words hover:bg-muted",
-                      event.isRequired ? "bg-muted/70 font-medium" : "border",
-                      day < today && "text-muted-foreground",
-                    )}
+                    className="block rounded-lg bg-primary px-2 py-1.5 text-primary-foreground transition-colors hover:bg-primary/85"
                   >
+                    <span className="line-clamp-2 text-xs leading-snug font-semibold break-words">{event.title}</span>
                     {event.startTime && event.date === day && (
-                      <span className="mr-1 font-normal text-muted-foreground tabular-nums">
-                        {formatTime(event.startTime).replace(":00", "")}
+                      <span className="mt-0.5 block text-[11px] leading-none text-primary-foreground/75 tabular-nums">
+                        {formatTime(event.startTime)}
                       </span>
                     )}
-                    {event.title}
                   </Link>
                 ))}
               </div>
             </div>
           );
         })}
-      </div>
-
-      <div className="flex gap-4 px-4 py-2.5 text-xs text-muted-foreground">
-        <span className="flex items-center gap-1.5">
-          <span className="size-3 rounded-sm bg-muted" /> Required
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="size-3 rounded-sm border" /> Optional
-        </span>
       </div>
     </Card>
   );

@@ -16,7 +16,7 @@ import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { incomingLinks } from "@/lib/records";
 import { useCohort } from "@/lib/store";
 import { currentTeamId, participantStatus } from "@/lib/requirements";
-import { EVENT_CATEGORY_LABELS } from "@/lib/events";
+import { EVENT_CATEGORY_LABELS, takesAttendance } from "@/lib/events";
 import { formatDate } from "@/lib/format";
 import { activeFields, formatFieldValue } from "@/lib/fields";
 import {
@@ -244,7 +244,8 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
   );
   const past = view.events.filter((e) => e.date < view.today);
   // Today's events can be recorded while editing; future ones can't.
-  const recordable = view.events.filter((e) => e.date <= view.today);
+  const events = view.events.filter(takesAttendance);
+  const recordable = events.filter((e) => e.date <= view.today);
 
   function toggle(eventId: string) {
     if (!draft) return;
@@ -273,22 +274,6 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
             >
               Select all
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                update({
-                  attendedEventIds: [
-                    ...new Set([
-                      ...draft.attendedEventIds,
-                      ...recordable.filter((e) => e.isRequired).map((e) => e.id),
-                    ]),
-                  ],
-                })
-              }
-            >
-              Add all required
-            </Button>
             <Button variant="ghost" size="sm" onClick={() => update({ attendedEventIds: [] })}>
               Clear
             </Button>
@@ -297,7 +282,7 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
       </CardHeader>
       <CardContent className="px-0">
         <ul className="divide-y">
-          {view.events.map((event) => {
+          {events.map((event) => {
             const isFuture = event.date > view.today;
             const isUpcoming = event.date >= view.today;
             const didAttend = attended.has(event.id);
@@ -306,7 +291,6 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
                 <div className="text-sm">{event.title}</div>
                 <div className="text-xs text-muted-foreground">
                   {formatDate(event.date, { weekday: true })} · {EVENT_CATEGORY_LABELS[event.category]}
-                  {event.isRequired ? " · required" : ""}
                 </div>
               </div>
             );
