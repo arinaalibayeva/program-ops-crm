@@ -242,7 +242,7 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
   const attended = new Set(
     view.attendance.filter((a) => a.enrollmentId === enrollment.id).map((a) => a.eventId),
   );
-  const past = view.events.filter((e) => e.date < view.today);
+  const past = view.events.filter((e) => takesAttendance(e) && e.date < view.today);
   // Today's events can be recorded while editing; future ones can't.
   const events = view.events.filter(takesAttendance);
   const recordable = events.filter((e) => e.date <= view.today);
