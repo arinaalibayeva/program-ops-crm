@@ -10,7 +10,8 @@ import { useCohort, usePeopleIndex } from "@/lib/store";
 import { currentTeamId, needsAttention } from "@/lib/requirements";
 import { EVENT_CATEGORY_LABELS, formatEventTime } from "@/lib/events";
 import { cohortWeek, formatDate } from "@/lib/format";
-import type { ProgramEvent, Status } from "@/lib/types";
+import type { CohortData, ProgramEvent, Status } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 const SEVERITY: Record<Status, number> = { missing: 0, at_risk: 1, on_track: 2, met: 3 };
 
@@ -167,17 +168,54 @@ function Section({
   );
 }
 
-/** The one highlighted card on the page: what's happening next. */
+/** The next few complete-by deadlines, with how far along everyone is. */
+function dueSoon(data: CohortData, activeCount: number) {
+  return data.requirements
+    .flatMap((req) => {
+      if (req.type !== "complete_by") return [];
+      const dueDate = String(req.params.dueDate);
+      if (dueDate < data.today) return [];
+      const subjects = new Set(
+        req.scope === "team"
+          ? data.teams.map((t) => t.id)
+          : data.enrollments.filter((e) => e.status === "active").map((e) => e.id),
+      );
+      const done = new Set(
+        data.completions.filter((c) => c.requirementId === req.id && subjects.has(c.subjectId)).map((c) => c.subjectId),
+      ).size;
+      const total = req.scope === "team" ? data.teams.length : activeCount;
+      return [{ id: req.id, name: req.name, dueDate, done, total, unit: req.scope === "team" ? "teams" : "people" }];
+    })
+    .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
+    .slice(0, 3);
+}
+
+function CardList({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <div className="mb-3 text-sm font-medium text-muted-foreground">{title}</div>
+      <ul className="space-y-3">{children}</ul>
+    </div>
+  );
+}
+
+/** The one highlighted card on the page: what's happening next, and what follows. */
 function NextEvent({ event, later }: { event: ProgramEvent; later: ProgramEvent[] }) {
   const { data } = useCohort();
   const days = Math.round((Date.parse(event.date) - Date.parse(data.today)) / 86_400_000);
   const when = days === 0 ? "Today" : days === 1 ? "Tomorrow" : `In ${days} days`;
   const intro = event.description?.split(/\n\s*\n/)[0];
+  const active = data.enrollments.filter((e) => e.status === "active");
+  const checkedIn = data.attendance.filter(
+    (a) => a.eventId === event.id && active.some((e) => e.id === a.enrollmentId),
+  ).length;
+  const deadlines = dueSoon(data, active.length);
+  const side = (later.length > 0 ? 1 : 0) + (deadlines.length > 0 ? 1 : 0);
 
   return (
     <Card>
-      <CardContent className="grid gap-8 lg:grid-cols-3">
-        <div className="space-y-3 lg:col-span-2">
+      <CardContent className={cn("grid gap-8", side === 2 && "lg:grid-cols-4", side === 1 && "lg:grid-cols-3")}>
+        <div className={cn("space-y-3", side === 2 && "lg:col-span-2", side === 1 && "lg:col-span-2")}>
           <div className="text-sm font-medium text-primary">Next up · {when}</div>
           <div>
             <h2 className="text-2xl font-semibold">{event.title}</h2>
@@ -194,6 +232,14 @@ function NextEvent({ event, later }: { event: ProgramEvent; later: ProgramEvent[
             </p>
           </div>
           {intro && <p className="line-clamp-2 max-w-prose text-sm">{intro}</p>}
+          {days === 0 && (
+            <p className="text-sm">
+              <span className="font-medium tabular-nums">
+                {checkedIn} of {active.length}
+              </span>{" "}
+              <span className="text-muted-foreground">checked in so far</span>
+            </p>
+          )}
           <div className="flex flex-wrap gap-2 pt-1">
             <Link href={`/admin/events/${event.id}`} className={buttonVariants()}>
               Open event
@@ -202,24 +248,36 @@ function NextEvent({ event, later }: { event: ProgramEvent; later: ProgramEvent[
           </div>
         </div>
         {later.length > 0 && (
-          <div>
-            <div className="mb-2 text-sm font-medium text-muted-foreground">After that</div>
-            <ul className="space-y-2">
-              {later.map((e) => (
-                <li key={e.id}>
-                  <Link
-                    href={`/admin/events/${e.id}`}
-                    className="flex justify-between gap-3 text-sm hover:underline"
-                  >
-                    <span className="truncate">{e.title}</span>
-                    <span className="shrink-0 text-muted-foreground">
-                      {formatDate(e.date, { weekday: true })}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <CardList title="After that">
+            {later.map((e) => (
+              <li key={e.id}>
+                <Link href={`/admin/events/${e.id}`} className="group block text-sm">
+                  <div className="truncate font-medium group-hover:underline">{e.title}</div>
+                  <div className="truncate text-muted-foreground">
+                    {[formatDate(e.date, { weekday: true }), formatEventTime(e), e.location].filter(Boolean).join(" · ")}
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </CardList>
+        )}
+        {deadlines.length > 0 && (
+          <CardList title="Due soon">
+            {deadlines.map((d) => (
+              <li key={d.id}>
+                <Link href="/admin/requirements" className="group block text-sm">
+                  <div className="truncate font-medium group-hover:underline">{d.name}</div>
+                  <div className="text-muted-foreground">
+                    {formatDate(d.dueDate, { weekday: true })} ·{" "}
+                    <span className="tabular-nums">
+                      {d.done} of {d.total}
+                    </span>{" "}
+                    {d.unit} done
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </CardList>
         )}
       </CardContent>
     </Card>
