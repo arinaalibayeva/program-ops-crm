@@ -8,7 +8,7 @@ from pydantic.alias_generators import to_camel
 
 EventCategory = Literal[
     "workshop", "talk", "panel", "meeting", "all-hands", "office-hours", "mentoring",
-    "orientation", "showcase", "partner", "networking", "social", "other",
+    "orientation", "showcase", "partner", "networking", "social", "deadline", "other",
 ]
 FieldType = Literal["text", "long_text", "number", "date", "select", "multi_select", "checkbox", "url"]
 FieldValue = str | int | float | bool | list[str]
@@ -170,6 +170,166 @@ class TeamNoteIn(CamelModel):
     body: str
 
 
+# ---- Custom record types ----
+
+RecordFieldType = Literal["text", "long_text", "number", "date", "select", "multi_select", "checkbox", "url", "link"]
+CalculationKind = Literal["count", "latest", "days_since", "percent"]
+ConditionOp = Literal["is", "is_not", "is_empty", "is_not_empty"]
+RuleOp = Literal["gt", "gte", "lt", "lte", "eq"]
+
+
+class RecordFieldIn(CamelModel):
+    label: str
+    type: RecordFieldType
+    options: list[str] | None = None
+    required: bool = False
+    link_to: str | None = None
+    multiple: bool | None = None
+
+
+class RecordFieldCreate(RecordFieldIn):
+    id: str | None = None
+
+
+class RecordFieldPatch(CamelModel):
+    label: str | None = None
+    options: list[str] | None = None
+    required: bool | None = None
+    multiple: bool | None = None
+
+
+class RecordField(RecordFieldIn):
+    id: str
+
+
+class RecordTypeIn(CamelModel):
+    name: str
+    singular: str
+
+
+class RecordTypeCreate(RecordTypeIn):
+    id: str | None = None
+
+
+class RecordTypePatch(CamelModel):
+    name: str | None = None
+    singular: str | None = None
+
+
+class RecordType(RecordTypeIn):
+    id: str
+    program_id: str
+    fields: list[RecordField]
+
+
+class RecordCreate(CamelModel):
+    id: str | None = None
+    type_id: str
+    values: dict[str, FieldValue]
+
+
+class RecordValues(CamelModel):
+    values: dict[str, FieldValue]
+
+
+class CustomRecord(CamelModel):
+    id: str
+    type_id: str
+    cohort_id: str
+    values: dict[str, FieldValue]
+    created_at: dt.datetime
+    updated_at: dt.datetime | None = None
+
+
+class Condition(CamelModel):
+    field_id: str
+    op: ConditionOp
+    value: str | None = None
+
+
+class CalculationIn(CamelModel):
+    label: str
+    on: str
+    kind: CalculationKind
+    source_type_id: str
+    via_field_id: str
+    date_field_id: str | None = None
+    filter: Condition | None = None
+
+
+class CalculationCreate(CalculationIn):
+    id: str | None = None
+
+
+class Calculation(CalculationIn):
+    id: str
+    program_id: str
+
+
+class RuleIn(CamelModel):
+    calculation_id: str
+    op: RuleOp
+    value: float
+    when_empty: bool = False
+    status: Literal["at_risk", "missing"]
+    message: str
+
+
+class RuleCreate(RuleIn):
+    id: str | None = None
+
+
+class Rule(RuleIn):
+    id: str
+
+
+class RecordFormIn(CamelModel):
+    type_id: str
+    title: str
+    description: str | None = None
+    field_ids: list[str]
+    roster: bool = True
+    is_open: bool = True
+
+
+class RecordFormCreate(RecordFormIn):
+    id: str | None = None
+    token: str | None = None
+
+
+class RecordFormPatch(CamelModel):
+    title: str | None = None
+    description: str | None = None
+    field_ids: list[str] | None = None
+    roster: bool | None = None
+    is_open: bool | None = None
+
+
+class RecordForm(RecordFormIn):
+    id: str
+    token: str
+
+
+class PublicForm(CamelModel):
+    """What someone filling in a form sees: no ids beyond the fields it asks for."""
+
+    title: str
+    description: str | None = None
+    program_name: str
+    roster: bool
+    fields: list[RecordField]
+
+
+class FormSubmission(CamelModel):
+    email: str | None = None
+    values: dict[str, FieldValue]
+
+
+class FormResult(CamelModel):
+    status: Literal["saved", "not_found", "closed"]
+    name: str | None = None
+
+
 class CohortData(CamelModel):
     program: Program
     cohort: Cohort
@@ -186,6 +346,11 @@ class CohortData(CamelModel):
     exemptions: list[Exemption]
     fields: list[FieldDefinition]
     team_notes: list[TeamNote] = []
+    record_types: list[RecordType] = []
+    records: list[CustomRecord] = []
+    calculations: list[Calculation] = []
+    rules: list[Rule] = []
+    forms: list[RecordForm] = []
 
 
 # ---- Computed status ----
@@ -300,6 +465,46 @@ class ProfileIn(CamelModel):
 class Profile(ProfileIn):
     id: str
     role: str
+
+
+TeamRole = Literal["manager", "admin"]
+
+
+class TeamMember(CamelModel):
+    id: str
+    name: str
+    email: str
+    role: str
+    status: Literal["active", "invited", "expired"]
+
+
+class InviteCreate(CamelModel):
+    name: str
+    email: str
+    role: TeamRole = "admin"
+
+
+class InviteLink(CamelModel):
+    """The token is only ever returned here; the database keeps a hash."""
+
+    member: TeamMember
+    token: str
+
+
+class RoleChange(CamelModel):
+    role: TeamRole
+
+
+class InviteInfo(CamelModel):
+    name: str
+    email: str
+    program_name: str | None = None
+    is_reset: bool
+    invited_by: str | None = None
+
+
+class SetPassword(CamelModel):
+    password: str
 
 
 class LoginRequest(CamelModel):

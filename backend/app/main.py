@@ -9,11 +9,25 @@ from sqlalchemy.orm import Session
 
 from . import models as m
 from . import schemas as s
-from .auth import COOKIE, SESSION_DAYS, end_session, find_user, require_admin, start_session, verify_password
+from .auth import (
+    COOKIE,
+    LOCK_MINUTES,
+    SESSION_DAYS,
+    end_session,
+    find_user,
+    is_locked,
+    record_login,
+    require_admin,
+    require_manager,
+    start_session,
+    verify_password,
+)
 from .config import settings
 from .db import get_session
 from .seed import reset
 from .services import actions
+from .services import records
+from .services import team
 from .services.requirements import participant_status, team_status
 from .snapshot import build_snapshot, current_cohort, event_schema
 
@@ -221,10 +235,22 @@ def update_me(body: s.ProfileIn, session: Session = Depends(get_session), user: 
 @app.post("/api/auth/login", response_model=s.Profile, **api)
 def login(body: s.LoginRequest, response: Response, session: Session = Depends(get_session)):
     user = find_user(session, body.email)
+    if user is not None and is_locked(user):
+        raise HTTPException(
+            status_code=429, detail=f"Too many tries. Wait {LOCK_MINUTES} minutes, or ask your manager for a new link."
+        )
+    correct = user is not None and verify_password(body.password, user.password_hash)
+    if user is not None:
+        record_login(user, correct)
     # Same message whether the email or the password is wrong, so it can't be
     # used to find out who has an account.
-    if user is None or not verify_password(body.password, user.password_hash):
+    if not correct:
+        session.commit()
         raise HTTPException(status_code=401, detail="Email or password is incorrect.")
+    return signed_in(session, response, user)
+
+
+def signed_in(session: Session, response: Response, user: m.User) -> s.Profile:
     token = start_session(session, user)
     session.commit()
     response.set_cookie(
@@ -244,6 +270,64 @@ def logout(request: Request, response: Response, session: Session = Depends(get_
     end_session(session, request.cookies.get(COOKIE))
     session.commit()
     response.delete_cookie(COOKIE, path="/")
+
+
+# ---- Invitations (public: the token in the link is the proof) ----
+
+
+@app.get("/api/invites/{token}", response_model=s.InviteInfo, **api)
+def invite_info(token: str, session: Session = Depends(get_session)):
+    cohort = current_cohort(session)
+    program = session.get(m.Program, cohort.program_id) if cohort else None
+    return team.invite_info(session, token, program.name if program else None)
+
+
+@app.post("/api/invites/{token}", response_model=s.Profile, **api)
+def accept_invite(token: str, body: s.SetPassword, response: Response, session: Session = Depends(get_session)):
+    return signed_in(session, response, team.accept(session, token, body.password))
+
+
+# ---- Team access (managers only, except seeing who's on it) ----
+
+
+@admin.get("/api/team", response_model=list[s.TeamMember], **api)
+def get_team(session: Session = Depends(get_session)):
+    return team.members(session)
+
+
+@admin.post("/api/team/invites", response_model=s.InviteLink, **api)
+def invite_member(
+    body: s.InviteCreate, session: Session = Depends(get_session), manager: m.User = Depends(require_manager)
+):
+    link = team.invite(session, manager, body)
+    session.commit()
+    return link
+
+
+@admin.post("/api/team/{user_id}/link", response_model=s.InviteLink, **api)
+def new_member_link(
+    user_id: str, session: Session = Depends(get_session), manager: m.User = Depends(require_manager)
+):
+    link = team.new_link(session, manager, user_id)
+    session.commit()
+    return link
+
+
+@admin.patch("/api/team/{user_id}", response_model=list[s.TeamMember], **api)
+def change_member_role(
+    user_id: str, body: s.RoleChange, session: Session = Depends(get_session),
+    manager: m.User = Depends(require_manager),
+):
+    team.change_role(session, manager, user_id, body.role)
+    session.commit()
+    return team.members(session)
+
+
+@admin.delete("/api/team/{user_id}", response_model=list[s.TeamMember], **api)
+def remove_member(user_id: str, session: Session = Depends(get_session), manager: m.User = Depends(require_manager)):
+    team.remove(session, manager, user_id)
+    session.commit()
+    return team.members(session)
 
 
 # ---- Demo data ----
@@ -277,6 +361,158 @@ def checkin(token: str, body: s.CheckinRequest, session: Session = Depends(get_s
     result = actions.check_in(session, event, body.email, settings.today())
     session.commit()
     return result
+
+
+# ---- Forms (public: anyone with the link) ----
+
+
+@app.get("/api/f/{token}", response_model=s.PublicForm, **api)
+def form_info(token: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    form = records.form_by_token(session, token)
+    program = session.get(m.Program, cohort.program_id)
+    asked = {f.id: f for f in records.fields_of(session, form.type_id)}
+    return s.PublicForm(
+        title=form.title, description=form.description, program_name=program.name, roster=form.roster,
+        fields=[
+            s.RecordField(id=f.id, label=f.label, type=f.type, options=f.options, required=f.required)
+            for f in (asked[i] for i in form.field_ids if i in asked)
+        ],
+    )
+
+
+@app.post("/api/f/{token}", response_model=s.FormResult, **api)
+def submit_form(
+    token: str, body: s.FormSubmission, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+):
+    result = records.submit_form(session, cohort, records.form_by_token(session, token), body)
+    session.commit()
+    return result
+
+
+# ---- Custom record types ----
+
+
+@admin.post("/api/record-types", response_model=s.CohortData, **api)
+def add_record_type(
+    body: s.RecordTypeCreate, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+):
+    records.add_type(session, cohort, body)
+    return saved(session, cohort)
+
+
+@admin.patch("/api/record-types/{type_id}", response_model=s.CohortData, **api)
+def update_record_type(
+    type_id: str, body: s.RecordTypePatch, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    records.update_type(session, cohort, type_id, body)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/record-types/{type_id}", response_model=s.CohortData, **api)
+def delete_record_type(type_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.delete_type(session, cohort, type_id)
+    return saved(session, cohort)
+
+
+@admin.post("/api/record-types/{type_id}/fields", response_model=s.CohortData, **api)
+def add_record_field(
+    type_id: str, body: s.RecordFieldCreate, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    records.add_field(session, cohort, type_id, body)
+    return saved(session, cohort)
+
+
+@admin.patch("/api/record-fields/{field_id}", response_model=s.CohortData, **api)
+def update_record_field(
+    field_id: str, body: s.RecordFieldPatch, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    records.update_field(session, cohort, field_id, body)
+    return saved(session, cohort)
+
+
+@admin.post("/api/record-fields/{field_id}/move", response_model=s.CohortData, **api)
+def move_record_field(
+    field_id: str, body: s.MoveField, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+):
+    records.move_field(session, cohort, field_id, body.to_index)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/record-fields/{field_id}", response_model=s.CohortData, **api)
+def delete_record_field(field_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.delete_field(session, cohort, field_id)
+    return saved(session, cohort)
+
+
+@admin.post("/api/records", response_model=s.CohortData, **api)
+def add_record(body: s.RecordCreate, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.add_record(session, cohort, body)
+    return saved(session, cohort)
+
+
+@admin.put("/api/records/{record_id}", response_model=s.CohortData, **api)
+def update_record(
+    record_id: str, body: s.RecordValues, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    records.update_record(session, cohort, record_id, body.values)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/records/{record_id}", response_model=s.CohortData, **api)
+def delete_record(record_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.delete_record(session, cohort, record_id)
+    return saved(session, cohort)
+
+
+@admin.post("/api/calculations", response_model=s.CohortData, **api)
+def add_calculation(
+    body: s.CalculationCreate, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+):
+    records.add_calculation(session, cohort, body)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/calculations/{calc_id}", response_model=s.CohortData, **api)
+def delete_calculation(calc_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.delete_calculation(session, cohort, calc_id)
+    return saved(session, cohort)
+
+
+@admin.post("/api/rules", response_model=s.CohortData, **api)
+def add_rule(body: s.RuleCreate, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.add_rule(session, cohort, body)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/rules/{rule_id}", response_model=s.CohortData, **api)
+def delete_rule(rule_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.delete_rule(session, cohort, rule_id)
+    return saved(session, cohort)
+
+
+@admin.post("/api/forms", response_model=s.CohortData, **api)
+def add_form(body: s.RecordFormCreate, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.add_form(session, cohort, body)
+    return saved(session, cohort)
+
+
+@admin.patch("/api/forms/{form_id}", response_model=s.CohortData, **api)
+def update_form(
+    form_id: str, body: s.RecordFormPatch, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    records.update_form(session, cohort, form_id, body)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/forms/{form_id}", response_model=s.CohortData, **api)
+def delete_form(form_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    records.delete_form(session, cohort, form_id)
+    return saved(session, cohort)
 
 
 app.include_router(admin)

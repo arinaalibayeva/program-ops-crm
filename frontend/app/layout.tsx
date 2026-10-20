@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist_Mono, IBM_Plex_Sans } from "next/font/google";
+import { ThemePicker } from "@/components/theme-picker";
 import "./globals.css";
 
 const plexSans = IBM_Plex_Sans({
@@ -25,10 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      {/* Browser extensions like Grammarly add attributes to body before React loads. */}
       <body
+        suppressHydrationWarning
         className={`${plexSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         {children}
+        <ThemePicker />
       </body>
     </html>
   );

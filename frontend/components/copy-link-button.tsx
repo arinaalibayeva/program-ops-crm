@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 export function CopyLinkButton({
   path,
   label = "Copy check-in link",
+  className,
 }: {
   path: string;
   label?: string;
+  className?: string;
 }) {
   const [copied, setCopied] = useState(false);
 
@@ -24,7 +26,7 @@ export function CopyLinkButton({
   }
 
   return (
-    <Button variant="outline" size="sm" onClick={copy}>
+    <Button variant="outline" size="sm" onClick={copy} className={className}>
       {copied ? <Check /> : <Link2 />}
       {copied ? "Copied" : label}
     </Button>

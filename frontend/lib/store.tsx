@@ -17,6 +17,15 @@ import { SignInRequired, USE_BACKEND, api, goToSignIn } from "./api";
 import { buildMockCohort } from "./mock-data";
 import { applyDraft, type ParticipantDraft } from "./participant-draft";
 import { participantStatus, teamStatus } from "./requirements";
+import * as records from "./record-actions";
+import type {
+  NewCalculation,
+  NewRecordField,
+  NewRecordForm,
+  NewRecordType,
+  NewRule,
+} from "./record-actions";
+import { evaluateRules, withRules } from "./records";
 import type {
   CohortData,
   FieldDefinition,
@@ -27,7 +36,7 @@ import type {
 } from "./types";
 
 // Bump the version when CohortData changes shape so old saved data is ignored.
-const STORAGE_KEY = "program-ops-crm:cohort:v12";
+const STORAGE_KEY = "program-ops-crm:cohort:v17";
 
 export type NewEvent = Omit<ProgramEvent, "id" | "cohortId" | "checkinToken">;
 
@@ -61,6 +70,25 @@ interface CohortContextValue {
   addTeamNote: (teamId: string, body: string) => void;
   updateTeamNote: (id: string, body: string) => void;
   deleteTeamNote: (id: string) => void;
+  // Custom record types. Adds return the new id so pages can open it.
+  addRecordType: (input: NewRecordType) => string;
+  updateRecordType: (id: string, patch: Partial<NewRecordType>) => void;
+  deleteRecordType: (id: string) => void;
+  addRecordField: (typeId: string, field: NewRecordField) => string;
+  updateRecordField: (typeId: string, fieldId: string, patch: Partial<NewRecordField>) => void;
+  moveRecordField: (typeId: string, fieldId: string, toIndex: number) => void;
+  deleteRecordField: (typeId: string, fieldId: string) => void;
+  addRecord: (typeId: string, values: Record<string, FieldValue>) => string;
+  /** Replaces the record's values. */
+  updateRecord: (id: string, values: Record<string, FieldValue>) => void;
+  deleteRecord: (id: string) => void;
+  addCalculation: (calc: NewCalculation) => string;
+  deleteCalculation: (id: string) => void;
+  addRule: (rule: NewRule) => void;
+  deleteRule: (id: string) => void;
+  addForm: (form: NewRecordForm) => string;
+  updateForm: (id: string, patch: Partial<NewRecordForm>) => void;
+  deleteForm: (id: string) => void;
   reset: () => void;
   /** The last change the backend refused, shown until dismissed. */
   syncError?: string;
@@ -71,6 +99,12 @@ const CohortContext = createContext<CohortContextValue | null>(null);
 
 function newId(prefix: string): string {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+/** Hard to guess, for links shared outside the admin. */
+function newToken(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(12));
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 export function CohortProvider({ children }: { children: React.ReactNode }) {
@@ -153,13 +187,18 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
   const participantStatuses = useMemo(() => {
     const map = new Map<string, SubjectStatus>();
     for (const e of data.enrollments) {
-      if (e.status === "active") map.set(e.id, participantStatus(data, e.id));
+      if (e.status === "active") {
+        map.set(e.id, withRules(participantStatus(data, e.id), evaluateRules(data, "participant", e.id)));
+      }
     }
     return map;
   }, [data]);
 
   const teamStatuses = useMemo(
-    () => new Map(data.teams.map((t) => [t.id, teamStatus(data, t)])),
+    () =>
+      new Map(
+        data.teams.map((t) => [t.id, withRules(teamStatus(data, t), evaluateRules(data, "team", t.id))]),
+      ),
     [data],
   );
 
@@ -382,6 +421,110 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     sync(() => api(`/team-notes/${id}`, { method: "DELETE" }));
   }, [sync]);
 
+  // ---- Custom record types ----
+  // Each applies the change here, then sends it with the same id so the
+  // backend's copy matches and pages can link to it straight away.
+
+  const addRecordType = useCallback((input: NewRecordType) => {
+    const id = newId("rt");
+    setData((d) => records.addRecordType(d, id, input));
+    sync(() => api("/record-types", { body: { id, ...input } }));
+    return id;
+  }, [sync]);
+
+  const updateRecordType = useCallback((id: string, patch: Partial<NewRecordType>) => {
+    setData((d) => records.updateRecordType(d, id, patch));
+    sync(() => api(`/record-types/${id}`, { method: "PATCH", body: patch }));
+  }, [sync]);
+
+  const deleteRecordType = useCallback((id: string) => {
+    setData((d) => records.deleteRecordType(d, id));
+    sync(() => api(`/record-types/${id}`, { method: "DELETE" }));
+  }, [sync]);
+
+  const addRecordField = useCallback((typeId: string, field: NewRecordField) => {
+    const id = newId("rf");
+    setData((d) => records.addRecordField(d, typeId, id, field));
+    sync(() => api(`/record-types/${typeId}/fields`, { body: { id, ...field } }));
+    return id;
+  }, [sync]);
+
+  const updateRecordField = useCallback(
+    (typeId: string, fieldId: string, patch: Partial<NewRecordField>) => {
+      setData((d) => records.updateRecordField(d, typeId, fieldId, patch));
+      sync(() => api(`/record-fields/${fieldId}`, { method: "PATCH", body: patch }));
+    },
+    [sync],
+  );
+
+  const moveRecordField = useCallback((typeId: string, fieldId: string, toIndex: number) => {
+    setData((d) => records.moveRecordField(d, typeId, fieldId, toIndex));
+    sync(() => api(`/record-fields/${fieldId}/move`, { body: { toIndex } }));
+  }, [sync]);
+
+  const deleteRecordField = useCallback((typeId: string, fieldId: string) => {
+    setData((d) => records.deleteRecordField(d, typeId, fieldId));
+    sync(() => api(`/record-fields/${fieldId}`, { method: "DELETE" }));
+  }, [sync]);
+
+  const addRecord = useCallback((typeId: string, values: Record<string, FieldValue>) => {
+    const id = newId("rec");
+    setData((d) => records.addRecord(d, id, typeId, values));
+    sync(() => api("/records", { body: { id, typeId, values } }));
+    return id;
+  }, [sync]);
+
+  const updateRecord = useCallback((id: string, values: Record<string, FieldValue>) => {
+    setData((d) => records.updateRecord(d, id, values));
+    sync(() => api(`/records/${id}`, { method: "PUT", body: { values } }));
+  }, [sync]);
+
+  const deleteRecord = useCallback((id: string) => {
+    setData((d) => records.deleteRecord(d, id));
+    sync(() => api(`/records/${id}`, { method: "DELETE" }));
+  }, [sync]);
+
+  const addCalculation = useCallback((calc: NewCalculation) => {
+    const id = newId("calc");
+    setData((d) => records.addCalculation(d, id, calc));
+    sync(() => api("/calculations", { body: { id, ...calc } }));
+    return id;
+  }, [sync]);
+
+  const deleteCalculation = useCallback((id: string) => {
+    setData((d) => records.deleteCalculation(d, id));
+    sync(() => api(`/calculations/${id}`, { method: "DELETE" }));
+  }, [sync]);
+
+  const addRule = useCallback((rule: NewRule) => {
+    const id = newId("rule");
+    setData((d) => records.addRule(d, id, rule));
+    sync(() => api("/rules", { body: { id, ...rule } }));
+  }, [sync]);
+
+  const deleteRule = useCallback((id: string) => {
+    setData((d) => records.deleteRule(d, id));
+    sync(() => api(`/rules/${id}`, { method: "DELETE" }));
+  }, [sync]);
+
+  const addForm = useCallback((form: NewRecordForm) => {
+    const id = newId("form");
+    const token = newToken();
+    setData((d) => records.addForm(d, id, token, form));
+    sync(() => api("/forms", { body: { id, token, ...form } }));
+    return id;
+  }, [sync]);
+
+  const updateForm = useCallback((id: string, patch: Partial<NewRecordForm>) => {
+    setData((d) => records.updateForm(d, id, patch));
+    sync(() => api(`/forms/${id}`, { method: "PATCH", body: patch }));
+  }, [sync]);
+
+  const deleteForm = useCallback((id: string) => {
+    setData((d) => records.deleteForm(d, id));
+    sync(() => api(`/forms/${id}`, { method: "DELETE" }));
+  }, [sync]);
+
   const reset = useCallback(() => {
     if (USE_BACKEND) sync(() => api("/reset", { method: "POST" }));
     else setData(buildMockCohort());
@@ -407,6 +550,23 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     addTeamNote,
     updateTeamNote,
     deleteTeamNote,
+    addRecordType,
+    updateRecordType,
+    deleteRecordType,
+    addRecordField,
+    updateRecordField,
+    moveRecordField,
+    deleteRecordField,
+    addRecord,
+    updateRecord,
+    deleteRecord,
+    addCalculation,
+    deleteCalculation,
+    addRule,
+    deleteRule,
+    addForm,
+    updateForm,
+    deleteForm,
     reset,
     syncError,
     clearSyncError: () => setSyncError(undefined),

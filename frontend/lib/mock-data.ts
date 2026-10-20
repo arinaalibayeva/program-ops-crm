@@ -4,14 +4,19 @@
 
 import type {
   Attendance,
+  Calculation,
   CohortData,
   Completion,
+  CustomRecord,
   Enrollment,
   FieldDefinition,
   Person,
   ProgramEvent,
   Project,
+  RecordForm,
+  RecordType,
   Requirement,
+  Rule,
   Team,
   TeamMembership,
 } from "./types";
@@ -19,17 +24,25 @@ import type {
 const FIRST_NAMES = [
   "Amara", "Bruno", "Chen", "Dalia", "Emeka", "Farah", "Gabriel", "Hana",
   "Ivan", "Jaya", "Kofi", "Lucía", "Mateo", "Nadia", "Omar", "Priya",
-  "Rafael", "Sofia", "Tariq", "Yuki",
+  "Rafael", "Sofia", "Tariq", "Yuki", "Aisha", "Andrei", "Beatriz", "Camila",
+  "Daniel", "Elena", "Fatima", "Georgia", "Hugo", "Ingrid", "Jonas", "Kavya",
+  "Leila", "Marcus", "Naomi", "Oscar", "Paula", "Quentin", "Rosa", "Samir",
+  "Tessa", "Uma", "Victor", "Wei", "Ximena", "Yusuf", "Zara", "Noah",
 ];
 const LAST_NAMES = [
   "Okafor", "Silva", "Wang", "Haddad", "Mensah", "Rahman", "Costa", "Kim",
   "Petrov", "Iyer", "Asante", "Moreno", "Rossi", "Nowak", "Farouk", "Shah",
-  "Duarte", "Lindqvist", "Aziz", "Tanaka",
+  "Duarte", "Lindqvist", "Aziz", "Tanaka", "Abebe", "Bauer", "Castillo", "Dang",
+  "Eriksen", "Fernandes", "Garcia", "Hassan", "Ivanova", "Jensen", "Khan", "Lopez",
+  "Morales", "Nguyen", "Oliveira", "Park", "Quispe", "Reyes", "Santos", "Torres",
+  "Ueda", "Vargas", "Weber", "Yilmaz", "Zhou", "Banerjee", "Clarke", "Dubois",
 ];
 
 const TEAM_NAMES = [
   "Harbor", "Lantern", "Compass", "Meridian", "Orchard", "Beacon",
   "Summit", "Willow", "Atlas", "Ember", "Tide", "Juniper",
+  "Redwood", "Cypress", "Anchor", "Horizon", "Sequoia", "Marina",
+  "Presidio", "Golden",
 ];
 
 const PROJECTS: { title: string; partner: string }[] = [
@@ -45,10 +58,17 @@ const PROJECTS: { title: string; partner: string }[] = [
   { title: "Neighborhood safety map", partner: "Westside Residents Assoc." },
   { title: "Food waste pickup routing", partner: "Second Plate" },
   { title: "Arts grant application helper", partner: "City Arts Fund" },
+  { title: "Transit access guide", partner: "Bay Rides Coalition" },
+  { title: "Shelter bed availability board", partner: "Oakland Open Door" },
+  { title: "After-school tutor matching", partner: "Richmond Reads" },
+  { title: "Small business grant finder", partner: "Fruitvale Merchants Group" },
+  { title: "Community fridge tracker", partner: "Sunset Mutual Aid" },
+  { title: "Wetlands volunteer log", partner: "Baylands Stewards" },
+  { title: "Immigrant legal clinic intake", partner: "San Jose Legal Access" },
+  { title: "Veteran benefits navigator", partner: "Marin Veterans Hub" },
 ];
 
-// Team index -> original size. Team 6 (Summit) is planted to drop to 2.
-const TEAM_SIZES = [5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5];
+const TEAM_SIZE = 6; // 20 teams, 120 participants
 
 /**
  * Planted problems, by participant index. Matches the example in the project
@@ -57,15 +77,23 @@ const TEAM_SIZES = [5, 5, 5, 5, 5, 5, 4, 5, 5, 5, 5, 5];
 export const PLANTED = {
   missedLastWorkshop: [3, 17, 28, 44], // at risk
   missedTwoWorkshops: [11, 36], // missing
-  onboardingNotDone: [22, 51], // missing
-  // Summit (team 6): one member withdraws, one moves to Compass (team 2).
-  summitWithdrawn: 30,
-  summitMovedOut: 31,
+  // Two people swap teams, so team sizes stay at 6 but history has changes.
+  teamSwap: [31, 13],
   teamMissingBrief: 9, // Ember: missing
   teamsResearchPlanPending: [3, 7, 10], // at risk (due soon)
 };
 
 /** Starting custom fields: generic ones most programs ask for. */
+/** Each team has one of each, as the CCP handbook sets out. */
+const GROUP_ROLES = [
+  "Communication Manager",
+  "Schedule Manager",
+  "Project Timeline Manager",
+  "Production Manager",
+  "Team Manager",
+  "Documentation Manager",
+];
+
 const FIELDS: FieldDefinition[] = [
   {
     id: "field-phone",
@@ -77,10 +105,10 @@ const FIELDS: FieldDefinition[] = [
     visibleToParticipant: true,
   },
   {
-    id: "field-organization",
-    label: "Organization",
-    type: "text",
-    placeholder: "School, company or community group",
+    id: "field-role",
+    label: "Role",
+    type: "select",
+    options: [...GROUP_ROLES],
     required: false,
     showInList: true,
     visibleToParticipant: true,
@@ -96,14 +124,12 @@ const FIELDS: FieldDefinition[] = [
   },
 ];
 
-const ORGANIZATIONS = [
-  "Northfield College", "Brightline Labs", "Riverside University",
-  "Open Harbor Foundation", "Cedar Street Studio", "Lakeview Institute",
-];
-const LOCATIONS = [
-  "San Francisco, USA", "Berlin, Germany", "Seoul, South Korea", "Buenos Aires, Argentina",
-  "Hyderabad, India", "Taipei, Taiwan", "London, UK", "Nairobi, Kenya",
-];
+/** Where each team is based; everyone else is in San Francisco. */
+const TEAM_LOCATIONS: Record<string, string> = {
+  Marina: "Buenos Aires",
+  Presidio: "Buenos Aires",
+  Golden: "VSY",
+};
 
 /** Small deterministic PRNG so the dummy data is the same on every load. */
 function mulberry32(seed: number) {
@@ -125,7 +151,7 @@ function addDays(date: string, days: number): string {
 export function buildMockCohort(): CohortData {
   const rand = mulberry32(42);
   const cohortId = "c-fall-2026";
-  const startDate = "2026-09-21";
+  const startDate = "2026-09-07"; // Monday of Week 1
 
   const projects: Project[] = PROJECTS.map((p, i) => ({
     id: `proj-${i + 1}`,
@@ -145,11 +171,23 @@ export function buildMockCohort(): CohortData {
   const enrollments: Enrollment[] = [];
   const memberships: TeamMembership[] = [];
 
+  // Its own generator so names don't shift the attendance data below.
+  const nameRand = mulberry32(2026);
+  const nameFrom = <T,>(items: T[]) => items[Math.floor(nameRand() * items.length)];
+  const usedNames = new Set<string>();
+  function uniqueName(): [string, string] {
+    for (;;) {
+      const [first, last] = [nameFrom(FIRST_NAMES), nameFrom(LAST_NAMES)];
+      if (usedNames.has(`${first} ${last}`)) continue;
+      usedNames.add(`${first} ${last}`);
+      return [first, last];
+    }
+  }
+
   let index = 0;
-  TEAM_SIZES.forEach((size, teamIndex) => {
-    for (let k = 0; k < size; k++, index++) {
-      const first = FIRST_NAMES[index % 20];
-      const last = LAST_NAMES[(index % 20 + Math.floor(index / 20) * 7 + 3) % 20];
+  teams.forEach((team) => {
+    for (let k = 0; k < TEAM_SIZE; k++, index++) {
+      const [first, last] = uniqueName();
       const personId = `person-${index + 1}`;
       const enrollmentId = `enr-${index + 1}`;
       people.push({
@@ -169,25 +207,21 @@ export function buildMockCohort(): CohortData {
       });
       memberships.push({
         enrollmentId,
-        teamId: teams[teamIndex].id,
+        teamId: team.id,
         startDate,
       });
     }
   });
 
-  // Summit loses two members.
-  const withdrawn = enrollments[PLANTED.summitWithdrawn];
-  withdrawn.status = "withdrawn";
-  withdrawn.leftAt = "2026-10-09";
-  memberships.find((m) => m.enrollmentId === withdrawn.id)!.endDate = "2026-10-09";
-
-  const moved = enrollments[PLANTED.summitMovedOut];
-  memberships.find((m) => m.enrollmentId === moved.id)!.endDate = "2026-10-05";
-  memberships.push({
-    enrollmentId: moved.id,
-    teamId: teams[2].id,
-    startDate: "2026-10-05",
-  });
+  const [swapA, swapB] = PLANTED.teamSwap.map((i) => enrollments[i].id);
+  const swapTeam = (enrollmentId: string, teamId: string) => {
+    memberships.find((m) => m.enrollmentId === enrollmentId)!.endDate = "2026-10-05";
+    memberships.push({ enrollmentId, teamId, startDate: "2026-10-05" });
+  };
+  const teamOf = (enrollmentId: string) => memberships.find((m) => m.enrollmentId === enrollmentId)!.teamId;
+  const [teamA, teamB] = [teamOf(swapA), teamOf(swapB)];
+  swapTeam(swapA, teamB);
+  swapTeam(swapB, teamA);
 
   const ev = (
     id: string,
@@ -211,20 +245,15 @@ export function buildMockCohort(): CohortData {
   });
 
   const events: ProgramEvent[] = [
-    ev("ev-1", "Kickoff", "all-hands", "2026-09-22", true, {
-      startTime: "17:00",
-      endTime: "19:00",
-      location: "Main hall",
-      host: "Program team",
+    ev("ev-1", "CCP Kick-Off", "all-hands", "2026-10-02", true, {
+      startTime: "10:00",
+      endTime: "13:00",
+      location: "In person, San Francisco",
+      host: "CCP team",
       description:
-        "Welcome to the cohort! This is the first time everyone is in the same room, so we'll start with introductions and a quick tour of how the program works: the timeline, what's expected of each team and how attendance and check-ins are tracked.\n\nAfter that, you'll meet your team for the first time and hear from two participants from last year about what they wish they had known at the start. We'll finish with an open Q&A.\n\nDinner is provided. Please arrive 10 minutes early to pick up your name badge.",
-      links: [
-        { label: "Welcome slides", url: "https://slides.example.org/kickoff" },
-        { label: "Program handbook", url: "https://docs.example.org/handbook" },
-        { label: "Recording", url: "https://video.example.org/kickoff-recording" },
-      ],
+        "Introduction to CCP, your team and your project. Attendance at your session is required and no make-up work is available.\n\nM30s in San Francisco: in person, 10:00 am to 1:00 pm PT.\n\nGroups 22 and 23 (predominantly M30s in Buenos Aires): 7:00 to 9:00 am UTC, see the Google Calendar invitation.\n\nGroup 24 (most VSYs): 2:00 to 4:00 pm UTC, see the Google Calendar invitation.",
     }),
-    ev("ev-2", "Workshop 1: Problem framing", "workshop", "2026-09-29", true, {
+    ev("ev-2", "Workshop 1: Problem framing", "workshop", "2026-10-06", true, {
       startTime: "18:00",
       endTime: "20:00",
       location: "Room 204",
@@ -237,7 +266,7 @@ export function buildMockCohort(): CohortData {
         { label: "Partner briefs", url: "https://drive.example.org/partner-briefs" },
       ],
     }),
-    ev("ev-3", "Workshop 2: User research", "workshop", "2026-10-06", true, {
+    ev("ev-3", "Workshop 2: User research", "workshop", "2026-10-13", true, {
       startTime: "18:00",
       endTime: "20:00",
       location: "Room 204",
@@ -263,7 +292,7 @@ export function buildMockCohort(): CohortData {
         { label: "Recording", url: "https://video.example.org/partner-call" },
       ],
     }),
-    ev("ev-5", "Workshop 3: Prototyping", "workshop", "2026-10-13", true, {
+    ev("ev-5", "Workshop 3: Prototyping", "workshop", "2026-10-15", true, {
       startTime: "18:00",
       endTime: "20:00",
       location: "Maker lab",
@@ -331,6 +360,56 @@ export function buildMockCohort(): CohortData {
     }),
   ];
 
+  // The handbook's Fall 2026 timeline. All assignments are due at 11 pm PT, and
+  // Forum closes one day after the due date.
+  const milestone = (
+    id: string,
+    title: string,
+    date: string,
+    description: string,
+    details?: Partial<ProgramEvent>,
+  ): ProgramEvent => ({
+    id,
+    cohortId,
+    title,
+    category: "deadline",
+    date,
+    startTime: "23:00",
+    location: "Forum",
+    host: "CCP team",
+    description,
+    isRequired: true,
+    checkinToken: `chk-${id}`,
+    ...details,
+  });
+  const meetingReport = (month: string) =>
+    `One Forum submission per team covering the ${month} meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting.`;
+  events.push(
+    milestone("ev-10", "October Meeting Report", "2026-10-31", meetingReport("October")),
+    milestone(
+      "ev-11",
+      "Research Synthesis",
+      "2026-11-19",
+      "Group assignment submitted to Forum as a single PDF, scored on #gapanalysis, #evidencebased and #professionalism.\n\nHold your November meetings with your partner, faculty grader and TA before this assignment.",
+    ),
+    milestone("ev-12", "November Meeting Report", "2026-11-30", meetingReport("November")),
+    milestone("ev-13", "December Meeting Report", "2026-12-14", meetingReport("December")),
+    milestone(
+      "ev-14",
+      "Final Project Proposal Presentations",
+      "2026-12-15",
+      "A 10-minute presentation plus 5 minutes of Q&A with your Civic Partner and Faculty Grader. The schedule will be released closer to presentation time.\n\nPresentations are on Zoom, so you must be available with a reliable internet connection during your assigned time.",
+      { category: "showcase", endDate: "2026-12-17", startTime: undefined, location: "Zoom" },
+    ),
+    milestone(
+      "ev-15",
+      "Group and Individual Final Deliverable",
+      "2026-12-18",
+      "Group: Project Proposal and presentation materials.\n\nIndividual: Teamwork Survey and HC Explanations.",
+    ),
+  );
+  events.sort((a, b) => a.date.localeCompare(b.date));
+
   const today = "2026-10-19";
   const attendance: Attendance[] = [];
   const skip = new Map<number, Set<string>>();
@@ -370,13 +449,6 @@ export function buildMockCohort(): CohortData {
       params: { category: "all-hands", minCount: 2 },
     },
     {
-      id: "req-3",
-      name: "Onboarding form",
-      scope: "participant",
-      type: "complete_by",
-      params: { dueDate: "2026-10-02" },
-    },
-    {
       id: "req-4",
       name: "Minimum team size",
       scope: "team",
@@ -399,26 +471,20 @@ export function buildMockCohort(): CohortData {
     },
   ];
 
-  // Separate generator so adding fields doesn't shift the attendance data above.
-  const fieldRand = mulberry32(7);
-  const pick = <T,>(items: T[]) => items[Math.floor(fieldRand() * items.length)];
+  const seatsTaken = new Map<string, number>();
   enrollments.forEach((enr, i) => {
+    const teamId = memberships.find((m) => m.enrollmentId === enr.id && !m.endDate)!.teamId;
+    const teamName = teams.find((t) => t.id === teamId)!.name;
+    const seat = seatsTaken.get(teamId) ?? 0;
+    seatsTaken.set(teamId, seat + 1);
     enr.fields = {
       "field-phone": `+1 555 010 ${String(i + 1).padStart(4, "0")}`,
-      "field-organization": pick(ORGANIZATIONS),
-      "field-location": pick(LOCATIONS),
+      "field-role": GROUP_ROLES[seat],
+      "field-location": TEAM_LOCATIONS[teamName] ?? "San Francisco",
     };
   });
 
   const completions: Completion[] = [];
-  enrollments.forEach((enr, i) => {
-    if (PLANTED.onboardingNotDone.includes(i)) return;
-    completions.push({
-      requirementId: "req-3",
-      subjectId: enr.id,
-      completedAt: addDays(startDate, 1 + Math.floor(rand() * 10)),
-    });
-  });
   teams.forEach((team, i) => {
     if (i !== PLANTED.teamMissingBrief) {
       completions.push({
@@ -443,7 +509,7 @@ export function buildMockCohort(): CohortData {
       programId: "prog-civic",
       name: "Fall 2026",
       startDate,
-      endDate: "2026-12-11",
+      endDate: "2026-12-18",
     },
     today,
     people,
@@ -458,5 +524,138 @@ export function buildMockCohort(): CohortData {
     exemptions: [],
     fields: FIELDS.map((f) => ({ ...f })),
     teamNotes: [],
+    ...sampleRecords(cohortId, teams, memberships),
+  };
+}
+
+// ---- Custom record types ----
+// Two example types, set up the way an admin would through Customize, so the
+// demo shows links, calculations, rules and a form working together.
+
+export const RECORD_PLANTED = {
+  /** Last partner meeting more than two weeks before "today". */
+  teamsStaleMeetings: [2, 9],
+  /** Never logged a partner meeting. */
+  teamNoMeetings: 11,
+  /** Has an open issue. */
+  teamOpenIssue: 4,
+};
+
+const RECORD_TYPES: RecordType[] = [
+  {
+    id: "rt-meetings",
+    programId: "prog-civic",
+    name: "Partner meetings",
+    singular: "Partner meeting",
+    fields: [
+      { id: "rf-m-summary", label: "Summary", type: "text", required: true },
+      { id: "rf-m-date", label: "Date", type: "date", required: true },
+      { id: "rf-m-team", label: "Team", type: "link", linkTo: "team", required: true },
+      { id: "rf-m-attended", label: "Attended by", type: "link", linkTo: "participant", multiple: true, required: false },
+      { id: "rf-m-partner", label: "Partner attended", type: "checkbox", required: false },
+      { id: "rf-m-notes", label: "Notes", type: "long_text", required: false },
+      { id: "rf-m-next", label: "Next steps", type: "long_text", required: false },
+    ],
+  },
+  {
+    id: "rt-issues",
+    programId: "prog-civic",
+    name: "Issues",
+    singular: "Issue",
+    fields: [
+      { id: "rf-i-title", label: "Title", type: "text", required: true },
+      { id: "rf-i-status", label: "Status", type: "select", options: ["Open", "Resolved"], required: true },
+      { id: "rf-i-severity", label: "Severity", type: "select", options: ["Low", "Medium", "High"], required: false },
+      { id: "rf-i-team", label: "Team", type: "link", linkTo: "team", required: false },
+      { id: "rf-i-people", label: "People involved", type: "link", linkTo: "participant", multiple: true, required: false },
+      { id: "rf-i-opened", label: "Opened on", type: "date", required: false },
+      { id: "rf-i-details", label: "Details", type: "long_text", required: false },
+    ],
+  },
+];
+
+const CALCULATIONS: Calculation[] = [
+  { id: "calc-last-meeting", programId: "prog-civic", label: "Last partner meeting", on: "team", kind: "latest", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", dateFieldId: "rf-m-date" },
+  { id: "calc-days-since-meeting", programId: "prog-civic", label: "Days since partner meeting", on: "team", kind: "days_since", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", dateFieldId: "rf-m-date" },
+  { id: "calc-partner-present", programId: "prog-civic", label: "Meetings the partner attended", on: "team", kind: "percent", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", filter: { fieldId: "rf-m-partner", op: "is", value: "yes" } },
+  { id: "calc-open-issues", programId: "prog-civic", label: "Open issues", on: "team", kind: "count", sourceTypeId: "rt-issues", viaFieldId: "rf-i-team", filter: { fieldId: "rf-i-status", op: "is", value: "Open" } },
+  { id: "calc-meetings-attended", programId: "prog-civic", label: "Partner meetings attended", on: "participant", kind: "count", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-attended" },
+];
+
+const RULES: Rule[] = [
+  { id: "rule-meeting-gap", calculationId: "calc-days-since-meeting", op: "gt", value: 14, whenEmpty: true, status: "at_risk", message: "No partner meeting in over 2 weeks" },
+  { id: "rule-open-issue", calculationId: "calc-open-issues", op: "gte", value: 1, whenEmpty: false, status: "at_risk", message: "Has an open issue" },
+];
+
+const FORMS: RecordForm[] = [
+  {
+    id: "form-meeting",
+    typeId: "rt-meetings",
+    title: "Log a partner meeting",
+    description: "Fill this in after every meeting with your partner. It takes a minute.",
+    fieldIds: ["rf-m-summary", "rf-m-date", "rf-m-partner", "rf-m-notes", "rf-m-next"],
+    token: "log-meeting-demo",
+    roster: true,
+    isOpen: true,
+  },
+];
+
+const MEETING_TOPICS = [
+  "Kickoff and scope",
+  "Weekly sync",
+  "Interview findings review",
+  "Prototype walkthrough",
+  "Feedback on wireframes",
+  "Planning next sprint",
+];
+
+function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembership[]) {
+  const rand = mulberry32(11);
+  const records: CustomRecord[] = [];
+  let n = 0;
+  const add = (typeId: string, date: string, values: CustomRecord["values"]) =>
+    records.push({ id: `rec-${++n}`, typeId, cohortId, values, createdAt: `${date}T18:00:00.000Z` });
+
+  teams.forEach((team, i) => {
+    if (i === RECORD_PLANTED.teamNoMeetings) return;
+    const members = memberships.filter((m) => m.teamId === team.id && !m.endDate).map((m) => m.enrollmentId);
+    // Roughly weekly from the kickoff; stale teams stop early.
+    const last = RECORD_PLANTED.teamsStaleMeetings.includes(i) ? "2026-09-30" : "2026-10-19";
+    for (let date = addDays("2026-09-10", Math.floor(rand() * 3)), k = 0; date <= last; date = addDays(date, 6 + Math.floor(rand() * 4)), k++) {
+      add("rt-meetings", date, {
+        "rf-m-summary": MEETING_TOPICS[Math.min(k, MEETING_TOPICS.length - 1)],
+        "rf-m-date": date,
+        "rf-m-team": team.id,
+        "rf-m-attended": members.filter(() => rand() > 0.2),
+        "rf-m-partner": rand() > 0.25,
+        "rf-m-notes": "Went through progress since last week and open questions.",
+      });
+    }
+  });
+
+  const issueTeam = teams[RECORD_PLANTED.teamOpenIssue];
+  add("rt-issues", "2026-10-14", {
+    "rf-i-title": "Partner contact changed jobs",
+    "rf-i-status": "Open",
+    "rf-i-severity": "High",
+    "rf-i-team": issueTeam.id,
+    "rf-i-opened": "2026-10-14",
+    "rf-i-details": "Their main contact left the organization. Waiting to hear who takes over.",
+  });
+  add("rt-issues", "2026-10-02", {
+    "rf-i-title": "Disagreement over project scope",
+    "rf-i-status": "Resolved",
+    "rf-i-severity": "Medium",
+    "rf-i-team": teams[1].id,
+    "rf-i-opened": "2026-10-02",
+    "rf-i-details": "Resolved after a meeting with the partner on Oct 6.",
+  });
+
+  return {
+    recordTypes: RECORD_TYPES.map((t) => ({ ...t, fields: t.fields.map((f) => ({ ...f })) })),
+    records,
+    calculations: CALCULATIONS.map((c) => ({ ...c })),
+    rules: RULES.map((r) => ({ ...r })),
+    forms: FORMS.map((f) => ({ ...f })),
   };
 }

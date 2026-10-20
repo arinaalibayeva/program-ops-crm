@@ -16,9 +16,10 @@ import {
   type EventFormValues,
 } from "@/components/event-form";
 import { PageHeader } from "@/components/page-header";
+import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { currentTeamId } from "@/lib/requirements";
-import { EVENT_CATEGORY_LABELS, formatEventTime } from "@/lib/events";
+import { EVENT_CATEGORY_LABELS, formatEventTime, takesAttendance } from "@/lib/events";
 import { cohortWeek, formatDate } from "@/lib/format";
 import type { ProgramEvent } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -52,16 +53,20 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
                 Edit event
               </Button>
             )}
-            <a
-              href={`/checkin/${event.checkinToken}`}
-              target="_blank"
-              rel="noreferrer"
-              className={buttonVariants({ variant: "outline", size: "sm" })}
-            >
-              <ExternalLink />
-              Open check-in page
-            </a>
-            <CopyLinkButton path={`/checkin/${event.checkinToken}`} />
+            {takesAttendance(event) && (
+              <>
+                <a
+                  href={`/checkin/${event.checkinToken}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                >
+                  <ExternalLink />
+                  Open check-in page
+                </a>
+                <CopyLinkButton path={`/checkin/${event.checkinToken}`} />
+              </>
+            )}
           </>
         }
       />
@@ -75,7 +80,11 @@ export default function EventPage({ params }: { params: Promise<{ id: string }> 
             <MaterialsCard event={event} />
           </div>
         )}
-        <AttendanceCard event={event} />
+        {takesAttendance(event) && <AttendanceCard event={event} />}
+        <div className="grid gap-6 lg:grid-cols-2">
+          <TrackedNumbers on="event" id={event.id} />
+          <LinkedRecords target="event" id={event.id} />
+        </div>
       </div>
     </>
   );
@@ -210,7 +219,6 @@ function EventDetails({ event }: { event: ProgramEvent }) {
     ],
     ["Host", event.host],
     ["Category", EVENT_CATEGORY_LABELS[event.category]],
-    ["Attendance", event.isRequired ? "Required" : "Optional"],
   ];
 
   return (

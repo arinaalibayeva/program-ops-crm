@@ -1,15 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Check, LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Check, KeyRound, LogOut } from "lucide-react";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { OrgChart, YourTeam, staffWithYou } from "@/components/org-chart";
 import { PageHeader } from "@/components/page-header";
+import { YourTeam, staffWithYou } from "@/components/your-team";
 import { USE_BACKEND, signOut } from "@/lib/api";
 import { initials } from "@/lib/format";
 import { useProfile, type Profile } from "@/lib/profile";
+import { ROLE_LABELS } from "@/lib/team";
 
 const FIELDS: {
   key: keyof Profile;
@@ -78,7 +80,7 @@ export default function ProfilePage() {
               <div className="text-sm text-muted-foreground">
                 {[profile?.jobTitle, profile?.pronouns]
                   .filter(Boolean)
-                  .join(" · ") || "Admin"}
+                  .join(" · ") || ROLE_LABELS[profile?.role === "manager" ? "manager" : "admin"]}
               </div>
             </div>
           </div>
@@ -113,7 +115,11 @@ export default function ProfilePage() {
           </form>
 
           {USE_BACKEND && (
-            <div className="border-t pt-6">
+            <div className="flex flex-wrap gap-2 border-t pt-6">
+              <Link href="/admin/team" className={buttonVariants({ variant: "outline" })}>
+                <KeyRound />
+                Team access
+              </Link>
               <Button variant="outline" onClick={signOut}>
                 <LogOut />
                 Sign out
@@ -128,16 +134,6 @@ export default function ProfilePage() {
           <YourTeam staff={staff} />
         </section>
       </div>
-
-      <section className="mt-12 space-y-4 border-t pt-8">
-        <div>
-          <h2 className="text-base font-semibold">Org chart</h2>
-          <p className="text-sm text-muted-foreground">
-            Who does what, and who reports to whom.
-          </p>
-        </div>
-        <OrgChart staff={staff} />
-      </section>
     </>
   );
 }

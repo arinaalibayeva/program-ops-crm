@@ -41,6 +41,7 @@ import {
   addDays,
   formatEventTime,
   repeatDates,
+  takesAttendance,
 } from "@/lib/events";
 import { cohortWeek, formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -150,13 +151,12 @@ function EventTable() {
                   </TableCell>
                   <TableCell>
                     <div className="font-medium">{event.title}</div>
-                    <div className="text-xs text-muted-foreground">
-                      {event.isRequired ? "Required" : "Optional"}
-                    </div>
                   </TableCell>
                   <TableCell>{EVENT_CATEGORY_LABELS[event.category]}</TableCell>
                   <TableCell className="tabular-nums">
-                    {past ? (
+                    {!takesAttendance(event) ? (
+                      <span className="text-muted-foreground">—</span>
+                    ) : past ? (
                       `${count} / ${activeIds.size}`
                     ) : (
                       <span className="text-muted-foreground">Upcoming</span>

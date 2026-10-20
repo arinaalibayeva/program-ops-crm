@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
-import { DOCK_ITEMS, type DockItem } from "@/lib/nav";
+import { dockItems, type DockItem } from "@/lib/nav";
+import { useCohort } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { CommandMenu } from "./command-menu";
 
@@ -27,6 +28,8 @@ const REACH = 90; // px from an item's centre where growth fades to nothing
 /** Floating navigation bar, the same on every page and screen size. */
 export function NavDock() {
   const pathname = usePathname();
+  const { data } = useCohort();
+  const items = useMemo(() => dockItems(data.recordTypes), [data.recordTypes]);
   const [searchOpen, setSearchOpen] = useState(false);
   const [magnify, setMagnify] = useState(false);
   const [tracking, setTracking] = useState(false);
@@ -115,7 +118,7 @@ export function NavDock() {
           }}
           className="pointer-events-auto flex items-end gap-0.5 rounded-full border bg-background/85 p-1.5 shadow-lg backdrop-blur-md"
         >
-          {DOCK_ITEMS.map((dockItem, i) => {
+          {items.map((dockItem, i) => {
             const { href, label, icon: Icon, stack } = dockItem;
             const active = stack
               ? stack.some((link) => isActive(link.href, here))
@@ -159,7 +162,7 @@ export function NavDock() {
           <button
             type="button"
             ref={(el) => {
-              itemRefs.current[DOCK_ITEMS.length] = el;
+              itemRefs.current[items.length] = el;
             }}
             onClick={() => setSearchOpen(true)}
             aria-keyshortcuts="Meta+K Control+K"

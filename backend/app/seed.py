@@ -21,6 +21,7 @@ SAMPLE = Path(__file__).parent / "sample" / "cohort.json"
 # Children before parents, so foreign keys allow the deletes. Accounts and
 # sessions aren't sample data, so resetting leaves them alone.
 TABLES = [
+    m.Rule, m.Calculation, m.RecordForm, m.CustomRecord, m.RecordField, m.RecordType,
     m.TeamNote, m.Attendance, m.Completion, m.Exemption, m.TeamMembership, m.Event, m.Requirement,
     m.Enrollment, m.Team, m.Project, m.Person, m.FieldDefinition, m.Cohort, m.Program,
 ]
@@ -101,6 +102,52 @@ def seed(session: Session, data: CohortData) -> None:
     session.add_all(
         m.Exemption(requirement_id=x.requirement_id, subject_id=x.subject_id, reason=x.reason)
         for x in data.exemptions
+    )
+    session.flush()
+    seed_records(session, data)
+
+
+def seed_records(session: Session, data: CohortData) -> None:
+    for i, t in enumerate(data.record_types):
+        session.add(m.RecordType(id=t.id, program_id=t.program_id, name=t.name, singular=t.singular, position=i))
+        session.flush()
+        session.add_all(
+            m.RecordField(
+                id=f.id, type_id=t.id, label=f.label, type=f.type, options=f.options, required=f.required,
+                link_to=f.link_to, multiple=bool(f.multiple), position=j,
+            )
+            for j, f in enumerate(t.fields)
+        )
+    session.flush()
+    session.add_all(
+        m.CustomRecord(
+            id=r.id, type_id=r.type_id, cohort_id=r.cohort_id, values=r.values,
+            created_at=r.created_at, updated_at=r.updated_at,
+        )
+        for r in data.records
+    )
+    session.add_all(
+        m.Calculation(
+            id=c.id, program_id=c.program_id, label=c.label, on=c.on, kind=c.kind,
+            source_type_id=c.source_type_id, via_field_id=c.via_field_id, date_field_id=c.date_field_id,
+            filter=c.filter.model_dump(by_alias=True, exclude_none=True) if c.filter else None, position=i,
+        )
+        for i, c in enumerate(data.calculations)
+    )
+    session.flush()
+    session.add_all(
+        m.Rule(
+            id=r.id, calculation_id=r.calculation_id, op=r.op, value=r.value, when_empty=r.when_empty,
+            status=r.status, message=r.message, position=i,
+        )
+        for i, r in enumerate(data.rules)
+    )
+    session.add_all(
+        m.RecordForm(
+            id=f.id, type_id=f.type_id, title=f.title, description=f.description, field_ids=f.field_ids,
+            token=f.token, roster=f.roster, is_open=f.is_open, position=i,
+        )
+        for i, f in enumerate(data.forms)
     )
     session.flush()
 

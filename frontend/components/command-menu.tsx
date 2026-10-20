@@ -4,10 +4,14 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   CalendarDays,
+  CircleUserRound,
   ClipboardCheck,
   CornerDownLeft,
+  Handshake,
+  KeyRound,
   LogOut,
   RotateCcw,
+  Rows3,
   Search,
   SlidersHorizontal,
   User,
@@ -18,7 +22,9 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { USE_BACKEND, signOut } from "@/lib/api";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { formatDate } from "@/lib/format";
-import { NAV_LINKS } from "@/lib/nav";
+import { navLinks } from "@/lib/nav";
+import { partnersOf } from "@/lib/partners";
+import { recordTitle, typeById } from "@/lib/records";
 import { cn } from "@/lib/utils";
 
 interface Command {
@@ -64,13 +70,15 @@ function CommandList({ close }: { close: () => void }) {
   const all = useMemo<Command[]>(() => {
     const go = (href: string) => () => router.push(href);
     return [
-      ...NAV_LINKS.map((item) => ({
+      ...navLinks(data.recordTypes).map((item) => ({
         id: item.href,
         group: "Go to",
         label: item.label,
         icon: item.icon,
         run: go(item.href),
       })),
+      { id: "profile", group: "Go to", label: "Profile", icon: CircleUserRound, run: go("/admin/profile") },
+      { id: "team-access", group: "Go to", label: "Team access", icon: KeyRound, run: go("/admin/team") },
       { id: "requirements", group: "Go to", label: "Requirements", icon: ClipboardCheck, run: go("/admin/requirements") },
       { id: "fields", group: "Go to", label: "Participant fields", icon: SlidersHorizontal, run: go("/admin/participants/fields") },
       ...data.enrollments.map((e) => ({
@@ -88,6 +96,13 @@ function CommandList({ close }: { close: () => void }) {
         icon: UsersRound,
         run: go(`/admin/teams/${t.id}`),
       })),
+      ...partnersOf(data).map((p) => ({
+        id: p.id,
+        group: "Partners",
+        label: p.name,
+        icon: Handshake,
+        run: go(`/admin/partners/${p.id}`),
+      })),
       ...data.events.map((ev) => ({
         id: ev.id,
         group: "Events",
@@ -95,6 +110,14 @@ function CommandList({ close }: { close: () => void }) {
         hint: formatDate(ev.date, { weekday: true }),
         icon: CalendarDays,
         run: go(`/admin/events/${ev.id}`),
+      })),
+      ...data.records.map((r) => ({
+        id: r.id,
+        group: "Records",
+        label: recordTitle(data, r),
+        hint: typeById(data, r.typeId)?.singular,
+        icon: Rows3,
+        run: go(`/admin/records/${r.typeId}/${r.id}`),
       })),
       { id: "reset", group: "Actions", label: "Reset demo data", icon: RotateCcw, run: reset },
       ...(USE_BACKEND

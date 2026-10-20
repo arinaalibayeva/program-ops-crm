@@ -114,6 +114,7 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
                 .order_by(m.TeamNote.created_at.desc(), m.TeamNote.id)
             )
         ],
+        **record_snapshot(session, cohort),
         fields=[
             s.FieldDefinition(
                 id=f.id,
@@ -156,4 +157,71 @@ def event_schema(e: m.Event) -> s.ProgramEvent:
         links=e.links,
         is_required=e.is_required,
         checkin_token=e.checkin_token,
+    )
+
+
+def record_snapshot(session: Session, cohort: m.Cohort) -> dict:
+    types = session.scalars(
+        select(m.RecordType).where(m.RecordType.program_id == cohort.program_id).order_by(m.RecordType.position)
+    ).all()
+    type_ids = [t.id for t in types]
+    fields: dict[str, list[s.RecordField]] = {t.id: [] for t in types}
+    for f in session.scalars(
+        select(m.RecordField).where(m.RecordField.type_id.in_(type_ids)).order_by(m.RecordField.position)
+    ):
+        fields[f.type_id].append(
+            s.RecordField(
+                id=f.id, label=f.label, type=f.type, options=f.options, required=f.required,
+                link_to=f.link_to, multiple=f.multiple or None,
+            )
+        )
+    calcs = session.scalars(
+        select(m.Calculation)
+        .where(m.Calculation.program_id == cohort.program_id)
+        .order_by(m.Calculation.position)
+    ).all()
+    return dict(
+        record_types=[
+            s.RecordType(id=t.id, program_id=t.program_id, name=t.name, singular=t.singular, fields=fields[t.id])
+            for t in types
+        ],
+        records=[
+            s.CustomRecord(
+                id=r.id, type_id=r.type_id, cohort_id=r.cohort_id, values=r.values,
+                created_at=as_utc(r.created_at), updated_at=as_utc(r.updated_at) if r.updated_at else None,
+            )
+            for r in session.scalars(
+                select(m.CustomRecord)
+                .where(m.CustomRecord.cohort_id == cohort.id)
+                .order_by(m.CustomRecord.created_at, m.CustomRecord.id)
+            )
+        ],
+        calculations=[
+            s.Calculation(
+                id=c.id, program_id=c.program_id, label=c.label, on=c.on, kind=c.kind,
+                source_type_id=c.source_type_id, via_field_id=c.via_field_id, date_field_id=c.date_field_id,
+                filter=s.Condition.model_validate(c.filter) if c.filter else None,
+            )
+            for c in calcs
+        ],
+        rules=[
+            s.Rule(
+                id=r.id, calculation_id=r.calculation_id, op=r.op, value=r.value,
+                when_empty=r.when_empty, status=r.status, message=r.message,
+            )
+            for r in session.scalars(
+                select(m.Rule)
+                .where(m.Rule.calculation_id.in_([c.id for c in calcs]))
+                .order_by(m.Rule.position, m.Rule.id)
+            )
+        ],
+        forms=[
+            s.RecordForm(
+                id=f.id, type_id=f.type_id, title=f.title, description=f.description, field_ids=f.field_ids,
+                token=f.token, roster=f.roster, is_open=f.is_open,
+            )
+            for f in session.scalars(
+                select(m.RecordForm).where(m.RecordForm.type_id.in_(type_ids)).order_by(m.RecordForm.position)
+            )
+        ],
     )

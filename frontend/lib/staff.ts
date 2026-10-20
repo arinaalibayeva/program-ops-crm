@@ -1,4 +1,4 @@
-// Prototype: sample staff for the profile page's org chart. Nothing here is
+// Prototype: sample staff for the profile page's Your team section. Nothing here is
 // saved yet; the signed-in admin is the "you" node, with their own details.
 
 export interface StaffMember {

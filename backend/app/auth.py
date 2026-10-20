@@ -19,6 +19,9 @@ from .db import get_session
 
 COOKIE = "session"
 SESSION_DAYS = 30
+MIN_PASSWORD = 10
+MAX_FAILED_LOGINS = 5
+LOCK_MINUTES = 15
 
 # scrypt cost settings (OWASP's recommended minimum).
 N, R, P = 2**14, 8, 1
@@ -41,8 +44,28 @@ def verify_password(password: str, stored: str | None) -> bool:
     return hmac.compare_digest(check.hex(), digest)
 
 
-def _token_hash(token: str) -> str:
+def token_hash(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
+
+
+def as_utc(value: dt.datetime) -> dt.datetime:
+    """SQLite drops the timezone; everything is stored in UTC."""
+    return value if value.tzinfo else value.replace(tzinfo=dt.timezone.utc)
+
+
+def is_locked(user: m.User) -> bool:
+    return user.locked_until is not None and as_utc(user.locked_until) > dt.datetime.now(dt.timezone.utc)
+
+
+def record_login(user: m.User, success: bool) -> None:
+    """Counts wrong passwords; too many in a row locks the account for a while."""
+    if success:
+        user.failed_logins, user.locked_until = 0, None
+        return
+    user.failed_logins = (user.failed_logins or 0) + 1
+    if user.failed_logins >= MAX_FAILED_LOGINS:
+        user.failed_logins = 0
+        user.locked_until = dt.datetime.now(dt.timezone.utc) + dt.timedelta(minutes=LOCK_MINUTES)
 
 
 def start_session(session: Session, user: m.User) -> str:
@@ -50,7 +73,7 @@ def start_session(session: Session, user: m.User) -> str:
     token = secrets.token_urlsafe(32)
     session.add(
         m.UserSession(
-            id=_token_hash(token),
+            id=token_hash(token),
             user_id=user.id,
             expires_at=dt.datetime.now(dt.timezone.utc) + dt.timedelta(days=SESSION_DAYS),
         )
@@ -60,18 +83,15 @@ def start_session(session: Session, user: m.User) -> str:
 
 def end_session(session: Session, token: str | None) -> None:
     if token:
-        record = session.get(m.UserSession, _token_hash(token))
+        record = session.get(m.UserSession, token_hash(token))
         if record:
             session.delete(record)
 
 
 def signed_in_user(request: Request, session: Session = Depends(get_session)) -> m.User:
     token = request.cookies.get(COOKIE)
-    record = session.get(m.UserSession, _token_hash(token)) if token else None
-    expires = record.expires_at if record else None
-    if expires is not None and expires.tzinfo is None:
-        expires = expires.replace(tzinfo=dt.timezone.utc)  # SQLite drops the timezone
-    if record is None or expires < dt.datetime.now(dt.timezone.utc):
+    record = session.get(m.UserSession, token_hash(token)) if token else None
+    if record is None or as_utc(record.expires_at) < dt.datetime.now(dt.timezone.utc):
         raise HTTPException(status_code=401, detail="Please sign in.")
     user = session.get(m.User, record.user_id)
     if user is None:
@@ -80,8 +100,14 @@ def signed_in_user(request: Request, session: Session = Depends(get_session)) ->
 
 
 def require_admin(user: m.User = Depends(signed_in_user)) -> m.User:
-    if user.role != "admin":
+    if user.role not in ("admin", "manager"):
         raise HTTPException(status_code=403, detail="This page is for program admins.")
+    return user
+
+
+def require_manager(user: m.User = Depends(signed_in_user)) -> m.User:
+    if user.role != "manager":
+        raise HTTPException(status_code=403, detail="Only a manager can do this.")
     return user
 
 

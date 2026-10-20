@@ -6,7 +6,6 @@ import { NativeSelect } from "@/components/native-select";
 import { EVENT_CATEGORY_LABELS, addDays } from "@/lib/events";
 import type { NewEvent } from "@/lib/store";
 import { EVENT_CATEGORIES, type EventCategory, type ProgramEvent } from "@/lib/types";
-import { cn } from "@/lib/utils";
 
 /** Form state for creating or editing one event; repeats are handled by the caller. */
 export interface EventFormValues {
@@ -111,26 +110,6 @@ export function EventFields({
                 </option>
               ))}
             </NativeSelect>
-          </div>
-          <div className="space-y-1.5">
-            <Label>Attendance</Label>
-            <div role="radiogroup" className="grid h-9 grid-cols-2 rounded-lg border p-0.5 text-sm">
-              {[true, false].map((required) => (
-                <button
-                  key={String(required)}
-                  type="button"
-                  role="radio"
-                  aria-checked={v.isRequired === required}
-                  onClick={() => set({ isRequired: required })}
-                  className={cn(
-                    "rounded-md text-muted-foreground",
-                    v.isRequired === required && "bg-muted font-medium text-foreground",
-                  )}
-                >
-                  {required ? "Required" : "Optional"}
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       </div>

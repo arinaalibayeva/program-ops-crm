@@ -30,7 +30,7 @@ def test_sample_has_the_planted_problems():
     data = load_sample()
     flagged = [e for e in data.enrollments if e.status == "active" and participant_status(data, e.id).status in ("at_risk", "missing")]
     teams = [t for t in data.teams if team_status(data, t).status in ("at_risk", "missing")]
-    assert (len(flagged), len(teams)) == (8, 7)
+    assert (len(flagged), len(teams)) == (6, 6)
 
 
 # ---- Small hand-built cases for each rule ----

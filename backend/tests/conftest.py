@@ -22,7 +22,7 @@ def session_factory():
     factory = sessionmaker(engine, expire_on_commit=False)
     with factory() as session:
         seed(session, load_sample())
-        session.add(m.User(id="user-admin", name="Test Admin", email="admin@example.edu", role="admin",
+        session.add(m.User(id="user-admin", name="Test Admin", email="admin@example.edu", role="manager",
                            password_hash=hash_password(PASSWORD)))
         session.add(m.User(id="user-p", name="Pat Participant", email="pat@example.edu", role="participant",
                            password_hash=hash_password(PASSWORD)))

@@ -1,16 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { CopyLinkButton } from "@/components/copy-link-button";
+import { Donut, type DonutSlice } from "@/components/charts/donut";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { currentTeamId, needsAttention } from "@/lib/requirements";
-import { EVENT_CATEGORY_LABELS, formatEventTime } from "@/lib/events";
 import { cohortWeek, formatDate } from "@/lib/format";
-import type { ProgramEvent, Status } from "@/lib/types";
+import { SAMPLE_MEETINGS, SAMPLE_REPORTS } from "@/lib/sample-metrics";
+import type { Status } from "@/lib/types";
 
 const SEVERITY: Record<Status, number> = { missing: 0, at_risk: 1, on_track: 2, met: 3 };
 
@@ -28,16 +26,6 @@ export default function DashboardPage() {
     .filter(({ status }) => needsAttention(status.status))
     .sort((a, b) => SEVERITY[a.status.status] - SEVERITY[b.status.status]);
 
-  const pastEvents = data.events.filter((e) => e.date < data.today);
-  const upcoming = data.events.filter((e) => e.date >= data.today).slice(0, 4);
-  const next = upcoming[0];
-  const attendanceRate = (eventId: string) => {
-    const count = data.attendance.filter(
-      (a) => a.eventId === eventId && active.some((e) => e.id === a.enrollmentId),
-    ).length;
-    return { count, pct: Math.round((count / active.length) * 100) };
-  };
-
   return (
     <>
       <PageHeader
@@ -45,9 +33,9 @@ export default function DashboardPage() {
         description={`Week ${cohortWeek(data.cohort.startDate, data.today)} · ${formatDate(data.today, { weekday: true })} · ${data.program.name}, ${data.cohort.name}`}
       />
 
-      {next && <NextEvent event={next} later={upcoming.slice(1)} />}
+      <ProgramCharts />
 
-      <div className="mt-12 grid gap-x-12 gap-y-12 lg:grid-cols-3">
+      <div className="mt-12 grid gap-x-12 gap-y-12 lg:grid-cols-2">
         <Section title="People to follow up with" count={flaggedPeople.length}>
           {flaggedPeople.length === 0 ? (
             <Empty text="Everyone is on track." />
@@ -111,35 +99,6 @@ export default function DashboardPage() {
             </ul>
           )}
         </Section>
-
-        <Section title="Attendance so far">
-          <div className="space-y-4">
-            {pastEvents.map((event) => {
-              const { count, pct } = attendanceRate(event.id);
-              return (
-                <Link key={event.id} href={`/admin/events/${event.id}`} className="group block">
-                  <div className="flex justify-between gap-2 text-sm">
-                    <span className="truncate group-hover:underline">
-                      {event.title}
-                      {!event.isRequired && (
-                        <span className="text-muted-foreground"> · optional</span>
-                      )}
-                    </span>
-                    <span className="text-muted-foreground tabular-nums">
-                      {count}/{active.length}
-                    </span>
-                  </div>
-                  <div className="mt-1.5 h-1 rounded-full bg-muted">
-                    <div
-                      className={`h-full rounded-full ${event.isRequired ? "bg-primary" : "bg-muted-foreground/40"}`}
-                      style={{ width: `${pct}%` }}
-                    />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </Section>
       </div>
     </>
   );
@@ -167,62 +126,93 @@ function Section({
   );
 }
 
-/** The one highlighted card on the page: what's happening next. */
-function NextEvent({ event, later }: { event: ProgramEvent; later: ProgramEvent[] }) {
-  const { data } = useCohort();
-  const days = Math.round((Date.parse(event.date) - Date.parse(data.today)) / 86_400_000);
-  const when = days === 0 ? "Today" : days === 1 ? "Tomorrow" : `In ${days} days`;
-  const intro = event.description?.split(/\n\s*\n/)[0];
+const ON_TRACK = { fill: "bg-chart-2", stroke: "stroke-chart-2" };
+const AT_RISK = { fill: "bg-amber-500", stroke: "stroke-amber-500" };
+const MISSING = { fill: "bg-red-600", stroke: "stroke-red-600" };
+
+function healthSlices(statuses: Status[]): DonutSlice[] {
+  const count = (...wanted: Status[]) => statuses.filter((s) => wanted.includes(s)).length;
+  return [
+    { label: "On track", value: count("on_track", "met"), ...ON_TRACK },
+    { label: "At risk", value: count("at_risk"), ...AT_RISK },
+    { label: "Missing", value: count("missing"), ...MISSING },
+  ];
+}
+
+function ChartPanel({
+  title,
+  href,
+  sample,
+  children,
+}: {
+  title: string;
+  href?: string;
+  sample?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <section>
+      <h2 className="mb-3 flex items-baseline justify-between gap-2 text-sm font-semibold">
+        {href ? (
+          <Link href={href} className="hover:underline">
+            {title}
+          </Link>
+        ) : (
+          title
+        )}
+        {sample && <span className="text-xs font-normal text-muted-foreground">Sample</span>}
+      </h2>
+      {children}
+    </section>
+  );
+}
+
+/** How the program is doing at a glance. */
+function ProgramCharts() {
+  const { participantStatuses, teamStatuses } = useCohort();
+  // The meeting figures are sample data, so their denominator must be too.
+  const teamCount = SAMPLE_REPORTS.onTime + SAMPLE_REPORTS.late + SAMPLE_REPORTS.missing;
+  const statusesOf = (map: Map<string, { status: Status }>) => [...map.values()].map((s) => s.status);
 
   return (
-    <Card>
-      <CardContent className="grid gap-8 lg:grid-cols-3">
-        <div className="space-y-3 lg:col-span-2">
-          <div className="text-sm font-medium text-primary">Next up · {when}</div>
-          <div>
-            <h2 className="text-2xl font-semibold">{event.title}</h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {[
-                formatDate(event.date, { weekday: true }),
-                formatEventTime(event),
-                event.location,
-                EVENT_CATEGORY_LABELS[event.category],
-                event.isRequired ? "Required" : "Optional",
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-            </p>
-          </div>
-          {intro && <p className="line-clamp-2 max-w-prose text-sm">{intro}</p>}
-          <div className="flex flex-wrap gap-2 pt-1">
-            <Link href={`/admin/events/${event.id}`} className={buttonVariants()}>
-              Open event
-            </Link>
-            <CopyLinkButton path={`/checkin/${event.checkinToken}`} />
-          </div>
+    <div className="grid gap-x-12 gap-y-10 sm:grid-cols-2 xl:grid-cols-4">
+      <ChartPanel title="Team health" href="/admin/teams">
+        <Donut slices={healthSlices(statusesOf(teamStatuses))} unit="teams" />
+      </ChartPanel>
+      <ChartPanel title="Participant health" href="/admin/participants">
+        <Donut slices={healthSlices(statusesOf(participantStatuses))} unit="people" />
+      </ChartPanel>
+      <ChartPanel title="October Meeting Reports" sample>
+        <Donut
+          unit="reports"
+          slices={[
+            { label: "On time", value: SAMPLE_REPORTS.onTime, ...ON_TRACK },
+            { label: "Late", value: SAMPLE_REPORTS.late, ...AT_RISK },
+            { label: "Missing", value: SAMPLE_REPORTS.missing, ...MISSING },
+          ]}
+        />
+      </ChartPanel>
+      <ChartPanel title="Required meetings this month" sample>
+        <div className="space-y-3.5">
+          {SAMPLE_MEETINGS.map((meeting) => (
+            <div key={meeting.label}>
+              <div className="flex justify-between gap-2 text-sm">
+                <span>{meeting.label}</span>
+                <span className="text-muted-foreground tabular-nums">
+                  {meeting.done}/{teamCount} teams
+                </span>
+              </div>
+              <div className="mt-1.5 h-2 rounded-full bg-muted">
+                <div
+                  className="h-full rounded-full bg-chart-2"
+                  style={{ width: `${(meeting.done / teamCount) * 100}%` }}
+                />
+              </div>
+            </div>
+          ))}
         </div>
-        {later.length > 0 && (
-          <div>
-            <div className="mb-2 text-sm font-medium text-muted-foreground">After that</div>
-            <ul className="space-y-2">
-              {later.map((e) => (
-                <li key={e.id}>
-                  <Link
-                    href={`/admin/events/${e.id}`}
-                    className="flex justify-between gap-3 text-sm hover:underline"
-                  >
-                    <span className="truncate">{e.title}</span>
-                    <span className="shrink-0 text-muted-foreground">
-                      {formatDate(e.date, { weekday: true })}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      </ChartPanel>
+    </div>
   );
 }
 

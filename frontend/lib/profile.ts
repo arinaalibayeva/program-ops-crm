@@ -12,6 +12,8 @@ export interface Profile {
   jobTitle?: string;
   pronouns?: string;
   phone?: string;
+  /** From the backend: manager, admin or participant. */
+  role?: string;
 }
 
 const KEY = "program-ops-crm:profile";

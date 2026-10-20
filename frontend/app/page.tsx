@@ -1,7 +1,9 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { USE_BACKEND } from "@/lib/api";
 
-// No login yet: send everyone to the admin side. Later this becomes the
-// login page, which redirects to /admin or /portal based on role.
-export default function Home() {
-  redirect("/admin");
+// The front door: sign in first, unless this browser is already signed in.
+export default async function Home() {
+  const signedIn = (await cookies()).has("session");
+  redirect(!USE_BACKEND || signedIn ? "/admin" : "/login");
 }

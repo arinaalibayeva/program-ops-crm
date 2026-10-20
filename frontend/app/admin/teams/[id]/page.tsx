@@ -2,19 +2,19 @@
 
 import Link from "next/link";
 import { use } from "react";
-import { ArrowLeft, MessageSquareText } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { TeamNotes } from "@/components/team-notes";
+import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { activeMembers } from "@/lib/requirements";
-import { formatDate } from "@/lib/format";
+import { partnerOfTeam } from "@/lib/partners";
 
 export default function TeamPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { data, teamStatuses, participantStatuses, toggleCompletion } = useCohort();
+  const { data, teamStatuses, participantStatuses } = useCohort();
   const { teamById, projectById, personFor } = usePeopleIndex();
 
   const team = teamById.get(id);
@@ -22,23 +22,8 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
 
   const status = teamStatuses.get(id)!;
   const project = team.projectId ? projectById.get(team.projectId) : undefined;
+  const partner = partnerOfTeam(data, team);
   const members = activeMembers(data, id);
-  const changes = data.memberships
-    .filter((m) => m.teamId === id && (m.startDate > data.cohort.startDate || m.endDate))
-    .flatMap((m) => {
-      const name = personFor(m.enrollmentId)?.name ?? "Unknown";
-      const items = [];
-      if (m.startDate > data.cohort.startDate) {
-        items.push({ date: m.startDate, text: `${name} joined` });
-      }
-      if (m.endDate) {
-        const withdrew =
-          data.enrollments.find((e) => e.id === m.enrollmentId)?.leftAt === m.endDate;
-        items.push({ date: m.endDate, text: `${name} ${withdrew ? "withdrew" : "left the team"}` });
-      }
-      return items;
-    })
-    .sort((a, b) => b.date.localeCompare(a.date));
 
   return (
     <>
@@ -55,7 +40,23 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
             <StatusBadge status={status.status} overall />
           </span>
         }
-        description={project ? `${project.title} · ${project.partner}` : "No project assigned"}
+        description={
+          project ? (
+            <>
+              {project.title}
+              {partner && (
+                <>
+                  {" · "}
+                  <Link href={`/admin/partners/${partner.id}`} className="hover:text-foreground hover:underline">
+                    {partner.name}
+                  </Link>
+                </>
+              )}
+            </>
+          ) : (
+            "No project assigned"
+          )
+        }
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -92,75 +93,13 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Team requirements</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {status.results.map((result) => {
-                const req = data.requirements.find((r) => r.id === result.requirementId)!;
-                return (
-                  <div
-                    key={req.id}
-                    className="flex items-center justify-between gap-4 rounded-lg border p-3"
-                  >
-                    <div>
-                      <div className="text-sm font-medium">{req.name}</div>
-                      <div className="text-xs text-muted-foreground">{result.reason}</div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      {req.type === "complete_by" && (
-                        <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                          <Checkbox
-                            checked={result.status === "met"}
-                            onCheckedChange={() => toggleCompletion(req.id, id)}
-                          />
-                          Done
-                        </label>
-                      )}
-                      <StatusBadge status={result.status} />
-                    </div>
-                  </div>
-                );
-              })}
-            </CardContent>
-          </Card>
+          <LinkedRecords target="team" id={id} />
         </div>
 
         <div className="space-y-6">
+          <TrackedNumbers on="team" id={id} />
+
           <TeamNotes teamId={id} />
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Membership changes</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {changes.length === 0 ? (
-                <p className="text-sm text-muted-foreground">No changes since the cohort started.</p>
-              ) : (
-                <ol className="space-y-2 border-l pl-3">
-                  {changes.map((c) => (
-                    <li key={c.date + c.text} className="text-xs">
-                      <div className="text-muted-foreground">{formatDate(c.date)}</div>
-                      <div>{c.text}</div>
-                    </li>
-                  ))}
-                </ol>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card className="border-dashed bg-transparent shadow-none">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-muted-foreground">
-                <MessageSquareText className="size-4" /> Weekly check-ins
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-xs text-muted-foreground">
-              Coming next: the team&apos;s weekly progress check-ins and a timeline of
-              this team&apos;s history.
-            </CardContent>
-          </Card>
         </div>
       </div>
     </>

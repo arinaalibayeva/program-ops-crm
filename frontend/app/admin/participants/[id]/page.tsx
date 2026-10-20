@@ -12,9 +12,11 @@ import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
 import { SectionBoard, type BoardLayout } from "@/components/section-board";
 import { StatusBadge } from "@/components/status-badge";
+import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
+import { incomingLinks } from "@/lib/records";
 import { useCohort } from "@/lib/store";
 import { currentTeamId, participantStatus } from "@/lib/requirements";
-import { EVENT_CATEGORY_LABELS } from "@/lib/events";
+import { EVENT_CATEGORY_LABELS, takesAttendance } from "@/lib/events";
 import { formatDate } from "@/lib/format";
 import { activeFields, formatFieldValue } from "@/lib/fields";
 import {
@@ -26,18 +28,19 @@ import {
 import { cn } from "@/lib/utils";
 import type { CohortData, Enrollment } from "@/lib/types";
 
-type SectionId = "requirements" | "attendance" | "profile" | "team" | "notes";
+type SectionId = "requirements" | "attendance" | "records" | "profile" | "team" | "notes";
 
 const SECTION_LABELS: Record<SectionId, string> = {
   requirements: "Requirements",
   attendance: "Attendance",
+  records: "Records",
   profile: "Profile",
   team: "Team",
   notes: "Notes",
 };
 
 const DEFAULT_LAYOUT: BoardLayout<SectionId> = {
-  left: ["requirements", "attendance"],
+  left: ["requirements", "attendance", "records"],
   right: ["profile", "team", "notes"],
 };
 
@@ -194,6 +197,8 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
               return <TeamSection {...section} />;
             case "notes":
               return <NotesSection />;
+            case "records":
+              return <RecordsSection enrollmentId={enrollment.id} />;
           }
         }}
       />
@@ -237,9 +242,10 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
   const attended = new Set(
     view.attendance.filter((a) => a.enrollmentId === enrollment.id).map((a) => a.eventId),
   );
-  const past = view.events.filter((e) => e.date < view.today);
+  const past = view.events.filter((e) => takesAttendance(e) && e.date < view.today);
   // Today's events can be recorded while editing; future ones can't.
-  const recordable = view.events.filter((e) => e.date <= view.today);
+  const events = view.events.filter(takesAttendance);
+  const recordable = events.filter((e) => e.date <= view.today);
 
   function toggle(eventId: string) {
     if (!draft) return;
@@ -268,22 +274,6 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
             >
               Select all
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                update({
-                  attendedEventIds: [
-                    ...new Set([
-                      ...draft.attendedEventIds,
-                      ...recordable.filter((e) => e.isRequired).map((e) => e.id),
-                    ]),
-                  ],
-                })
-              }
-            >
-              Add all required
-            </Button>
             <Button variant="ghost" size="sm" onClick={() => update({ attendedEventIds: [] })}>
               Clear
             </Button>
@@ -292,7 +282,7 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
       </CardHeader>
       <CardContent className="px-0">
         <ul className="divide-y">
-          {view.events.map((event) => {
+          {events.map((event) => {
             const isFuture = event.date > view.today;
             const isUpcoming = event.date >= view.today;
             const didAttend = attended.has(event.id);
@@ -301,7 +291,6 @@ function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
                 <div className="text-sm">{event.title}</div>
                 <div className="text-xs text-muted-foreground">
                   {formatDate(event.date, { weekday: true })} · {EVENT_CATEGORY_LABELS[event.category]}
-                  {event.isRequired ? " · required" : ""}
                 </div>
               </div>
             );
@@ -522,5 +511,31 @@ function TeamSection({ view, enrollment, draft, update }: SectionProps) {
         )}
       </CardContent>
     </Card>
+  );
+}
+
+/** Calculations on this participant, and records of each type that link to them. */
+function RecordsSection({ enrollmentId }: { enrollmentId: string }) {
+  const { data } = useCohort();
+  const empty =
+    incomingLinks(data, "participant").length === 0 && !data.calculations.some((c) => c.on === "participant");
+  if (empty) {
+    return (
+      <Card className="border-dashed bg-transparent shadow-none">
+        <CardContent className="text-xs text-muted-foreground">
+          No record types link to participants yet. Add a link field in{" "}
+          <Link href="/admin/customize" className="underline">
+            Customize
+          </Link>
+          .
+        </CardContent>
+      </Card>
+    );
+  }
+  return (
+    <div className="space-y-6">
+      <TrackedNumbers on="participant" id={enrollmentId} />
+      <LinkedRecords target="participant" id={enrollmentId} />
+    </div>
   );
 }
