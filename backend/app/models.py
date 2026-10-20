@@ -193,9 +193,12 @@ class User(Base):
     job_title: Mapped[str | None]
     pronouns: Mapped[str | None]
     phone: Mapped[str | None]
-    role: Mapped[str] = mapped_column(String, default="admin")  # admin | participant
+    # manager: everything, plus inviting people. admin: the whole CRM. participant: no CRM.
+    role: Mapped[str] = mapped_column(String, default="admin")
     # scrypt hash; None means the account can't sign in yet.
     password_hash: Mapped[str | None]
+    failed_logins: Mapped[int] = mapped_column(Integer, default=0, server_default="0")
+    locked_until: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
@@ -298,3 +301,15 @@ class RecordForm(Base):
     roster: Mapped[bool] = mapped_column(Boolean, default=True)
     is_open: Mapped[bool] = mapped_column(Boolean, default=True)
     position: Mapped[int] = mapped_column(Integer, default=0)
+
+
+class Invite(Base):
+    """A one-time link to set a password. The id is a hash of the link's token."""
+
+    __tablename__ = "invites"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    created_by: Mapped[str | None]  # the inviter's name, kept if they're removed
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
+    expires_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))

@@ -9,12 +9,25 @@ from sqlalchemy.orm import Session
 
 from . import models as m
 from . import schemas as s
-from .auth import COOKIE, SESSION_DAYS, end_session, find_user, require_admin, start_session, verify_password
+from .auth import (
+    COOKIE,
+    LOCK_MINUTES,
+    SESSION_DAYS,
+    end_session,
+    find_user,
+    is_locked,
+    record_login,
+    require_admin,
+    require_manager,
+    start_session,
+    verify_password,
+)
 from .config import settings
 from .db import get_session
 from .seed import reset
 from .services import actions
 from .services import records
+from .services import team
 from .services.requirements import participant_status, team_status
 from .snapshot import build_snapshot, current_cohort, event_schema
 
@@ -222,10 +235,22 @@ def update_me(body: s.ProfileIn, session: Session = Depends(get_session), user: 
 @app.post("/api/auth/login", response_model=s.Profile, **api)
 def login(body: s.LoginRequest, response: Response, session: Session = Depends(get_session)):
     user = find_user(session, body.email)
+    if user is not None and is_locked(user):
+        raise HTTPException(
+            status_code=429, detail=f"Too many tries. Wait {LOCK_MINUTES} minutes, or ask your manager for a new link."
+        )
+    correct = user is not None and verify_password(body.password, user.password_hash)
+    if user is not None:
+        record_login(user, correct)
     # Same message whether the email or the password is wrong, so it can't be
     # used to find out who has an account.
-    if user is None or not verify_password(body.password, user.password_hash):
+    if not correct:
+        session.commit()
         raise HTTPException(status_code=401, detail="Email or password is incorrect.")
+    return signed_in(session, response, user)
+
+
+def signed_in(session: Session, response: Response, user: m.User) -> s.Profile:
     token = start_session(session, user)
     session.commit()
     response.set_cookie(
@@ -245,6 +270,64 @@ def logout(request: Request, response: Response, session: Session = Depends(get_
     end_session(session, request.cookies.get(COOKIE))
     session.commit()
     response.delete_cookie(COOKIE, path="/")
+
+
+# ---- Invitations (public: the token in the link is the proof) ----
+
+
+@app.get("/api/invites/{token}", response_model=s.InviteInfo, **api)
+def invite_info(token: str, session: Session = Depends(get_session)):
+    cohort = current_cohort(session)
+    program = session.get(m.Program, cohort.program_id) if cohort else None
+    return team.invite_info(session, token, program.name if program else None)
+
+
+@app.post("/api/invites/{token}", response_model=s.Profile, **api)
+def accept_invite(token: str, body: s.SetPassword, response: Response, session: Session = Depends(get_session)):
+    return signed_in(session, response, team.accept(session, token, body.password))
+
+
+# ---- Team access (managers only, except seeing who's on it) ----
+
+
+@admin.get("/api/team", response_model=list[s.TeamMember], **api)
+def get_team(session: Session = Depends(get_session)):
+    return team.members(session)
+
+
+@admin.post("/api/team/invites", response_model=s.InviteLink, **api)
+def invite_member(
+    body: s.InviteCreate, session: Session = Depends(get_session), manager: m.User = Depends(require_manager)
+):
+    link = team.invite(session, manager, body)
+    session.commit()
+    return link
+
+
+@admin.post("/api/team/{user_id}/link", response_model=s.InviteLink, **api)
+def new_member_link(
+    user_id: str, session: Session = Depends(get_session), manager: m.User = Depends(require_manager)
+):
+    link = team.new_link(session, manager, user_id)
+    session.commit()
+    return link
+
+
+@admin.patch("/api/team/{user_id}", response_model=list[s.TeamMember], **api)
+def change_member_role(
+    user_id: str, body: s.RoleChange, session: Session = Depends(get_session),
+    manager: m.User = Depends(require_manager),
+):
+    team.change_role(session, manager, user_id, body.role)
+    session.commit()
+    return team.members(session)
+
+
+@admin.delete("/api/team/{user_id}", response_model=list[s.TeamMember], **api)
+def remove_member(user_id: str, session: Session = Depends(get_session), manager: m.User = Depends(require_manager)):
+    team.remove(session, manager, user_id)
+    session.commit()
+    return team.members(session)
 
 
 # ---- Demo data ----

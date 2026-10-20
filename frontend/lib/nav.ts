@@ -1,6 +1,5 @@
 import {
   CalendarDays,
-  CircleUserRound,
   Handshake,
   Layers,
   Rows3,
@@ -29,7 +28,7 @@ const DOCK_ITEMS: DockItem[] = [
     label: "People",
     icon: Users,
     stack: [
-      { href: "/admin/participants", label: "People", icon: Users },
+      { href: "/admin/participants", label: "Participants", icon: Users },
       { href: "/admin/teams", label: "Teams", icon: UsersRound },
       { href: "/admin/import", label: "Import", icon: Upload },
     ],
@@ -37,7 +36,6 @@ const DOCK_ITEMS: DockItem[] = [
   { href: "/admin/events", label: "Calendar", icon: CalendarDays },
   { href: "/admin/partners", label: "Partners", icon: Handshake },
   { href: "/admin/records", label: "Records", icon: Layers, stack: [] },
-  { href: "/admin/profile", label: "Profile", icon: CircleUserRound },
 ];
 
 /** The dock for this program: its own record types go in the Records stack. */

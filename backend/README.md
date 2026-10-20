@@ -10,7 +10,7 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/alembic upgrade head     # create the tables
 .venv/bin/python -m app.seed       # load the sample cohort
-.venv/bin/python -m app.create_user you@example.edu --name "Your Name"
+.venv/bin/python -m app.create_user you@example.edu --name "Your Name" --role manager
 .venv/bin/uvicorn app.main:app --reload --port 8000
 ```
 

@@ -164,7 +164,7 @@ def test_reset_restores_sample(client):
 
 def test_profile_read_and_update(client):
     me = client.get("/api/me").json()
-    assert me["name"] == "Test Admin" and me["role"] == "admin"
+    assert me["name"] == "Test Admin" and me["role"] == "manager"
     updated = client.put("/api/me", json={"name": "Arina A", "email": "arina@example.edu", "pronouns": "she/her", "jobTitle": " "}).json()
     assert updated["name"] == "Arina A" and updated["pronouns"] == "she/her" and "jobTitle" not in updated
     assert client.put("/api/me", json={"name": "", "email": "a@b.co"}).status_code == 400

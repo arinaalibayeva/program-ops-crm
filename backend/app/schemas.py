@@ -8,7 +8,7 @@ from pydantic.alias_generators import to_camel
 
 EventCategory = Literal[
     "workshop", "talk", "panel", "meeting", "all-hands", "office-hours", "mentoring",
-    "orientation", "showcase", "partner", "networking", "social", "other",
+    "orientation", "showcase", "partner", "networking", "social", "deadline", "other",
 ]
 FieldType = Literal["text", "long_text", "number", "date", "select", "multi_select", "checkbox", "url"]
 FieldValue = str | int | float | bool | list[str]
@@ -465,6 +465,46 @@ class ProfileIn(CamelModel):
 class Profile(ProfileIn):
     id: str
     role: str
+
+
+TeamRole = Literal["manager", "admin"]
+
+
+class TeamMember(CamelModel):
+    id: str
+    name: str
+    email: str
+    role: str
+    status: Literal["active", "invited", "expired"]
+
+
+class InviteCreate(CamelModel):
+    name: str
+    email: str
+    role: TeamRole = "admin"
+
+
+class InviteLink(CamelModel):
+    """The token is only ever returned here; the database keeps a hash."""
+
+    member: TeamMember
+    token: str
+
+
+class RoleChange(CamelModel):
+    role: TeamRole
+
+
+class InviteInfo(CamelModel):
+    name: str
+    email: str
+    program_name: str | None = None
+    is_reset: bool
+    invited_by: str | None = None
+
+
+class SetPassword(CamelModel):
+    password: str
 
 
 class LoginRequest(CamelModel):
