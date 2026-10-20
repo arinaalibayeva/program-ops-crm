@@ -12,6 +12,7 @@ import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { activeMembers } from "@/lib/requirements";
 import { formatDate } from "@/lib/format";
+import { partnerOfTeam } from "@/lib/partners";
 
 export default function TeamPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -23,6 +24,7 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
 
   const status = teamStatuses.get(id)!;
   const project = team.projectId ? projectById.get(team.projectId) : undefined;
+  const partner = partnerOfTeam(data, team);
   const members = activeMembers(data, id);
   const changes = data.memberships
     .filter((m) => m.teamId === id && (m.startDate > data.cohort.startDate || m.endDate))
@@ -56,7 +58,23 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
             <StatusBadge status={status.status} overall />
           </span>
         }
-        description={project ? `${project.title} · ${project.partner}` : "No project assigned"}
+        description={
+          project ? (
+            <>
+              {project.title}
+              {partner && (
+                <>
+                  {" · "}
+                  <Link href={`/admin/partners/${partner.id}`} className="hover:text-foreground hover:underline">
+                    {partner.name}
+                  </Link>
+                </>
+              )}
+            </>
+          ) : (
+            "No project assigned"
+          )
+        }
       />
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -126,6 +144,7 @@ export default function TeamPage({ params }: { params: Promise<{ id: string }> }
               })}
             </CardContent>
           </Card>
+
           <LinkedRecords target="team" id={id} />
         </div>
 
