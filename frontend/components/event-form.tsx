@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/native-select";
 import { EVENT_CATEGORY_LABELS, addDays } from "@/lib/events";
-import type { NewEvent } from "@/lib/store";
+import { partnersOf } from "@/lib/partners";
+import { useCohort, type NewEvent } from "@/lib/store";
 import { EVENT_CATEGORIES, type EventCategory, type ProgramEvent } from "@/lib/types";
 
 /** Form state for creating or editing one event; repeats are handled by the caller. */
@@ -20,6 +21,7 @@ export interface EventFormValues {
   endDate: string;
   location: string;
   host: string;
+  partnerId: string;
   description: string;
 }
 
@@ -36,6 +38,7 @@ export function eventFormValues(today: string, event?: ProgramEvent): EventFormV
     endDate: event?.endDate ?? addDays(event?.date ?? today, 1),
     location: event?.location ?? "",
     host: event?.host ?? "",
+    partnerId: event?.partnerId ?? "",
     description: event?.description ?? "",
   };
 }
@@ -70,6 +73,7 @@ export function eventFromForm(v: EventFormValues, start = v.date): NewEvent {
     endTime: v.allDay || !v.endTime ? undefined : v.endTime,
     location: text(v.location),
     host: text(v.host),
+    partnerId: v.partnerId || undefined,
     description: text(v.description),
   };
 }
@@ -81,6 +85,7 @@ export function EventFields({
   values: EventFormValues;
   onChange: (values: EventFormValues) => void;
 }) {
+  const { data } = useCohort();
   const set = (patch: Partial<EventFormValues>) => onChange({ ...v, ...patch });
 
   return (
@@ -204,6 +209,24 @@ export function EventFields({
               placeholder="Facilitator, speaker or partner"
             />
           </div>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="event-partner">
+            Partner <span className="font-normal text-muted-foreground">(optional)</span>
+          </Label>
+          <NativeSelect
+            id="event-partner"
+            value={v.partnerId}
+            onChange={(e) => set({ partnerId: e.target.value })}
+            className="h-9 w-full"
+          >
+            <option value="">{v.category === "partner" ? "All partners" : "None"}</option>
+            {partnersOf(data).map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
+          </NativeSelect>
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="description">Description</Label>

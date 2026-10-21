@@ -10,6 +10,8 @@ import type {
   CustomRecord,
   Enrollment,
   FieldDefinition,
+  Note,
+  Partner,
   Person,
   ProgramEvent,
   Project,
@@ -17,6 +19,7 @@ import type {
   RecordType,
   Requirement,
   Rule,
+  StaffMember,
   Team,
   TeamMembership,
 } from "./types";
@@ -67,6 +70,58 @@ const PROJECTS: { title: string; partner: string }[] = [
   { title: "Immigrant legal clinic intake", partner: "San Jose Legal Access" },
   { title: "Veteran benefits navigator", partner: "Marin Veterans Hub" },
 ];
+
+/** The four interns who look after the teams and their partners. */
+const INTERNS: StaffMember[] = [
+  { id: "staff-maya", name: "Maya Lindgren", email: "maya.lindgren@example.org", role: "admin", jobTitle: "Intern" },
+  { id: "staff-theo", name: "Theo Okonkwo", email: "theo.okonkwo@example.org", role: "admin", jobTitle: "Intern" },
+  { id: "staff-lucia", name: "Lucia Ferrante", email: "lucia.ferrante@example.org", role: "admin", jobTitle: "Intern" },
+  { id: "staff-jonah", name: "Jonah Reyes", email: "jonah.reyes@example.org", role: "admin", jobTitle: "Intern" },
+];
+
+/** Sample staff. With the backend on, the manager is whoever signed in. */
+const STAFF: StaffMember[] = [
+  { id: "staff-demo", name: "Demo Admin", email: "admin@demo.test", role: "manager", jobTitle: "Program coordinator" },
+  ...INTERNS,
+];
+
+/** An even but shuffled split, the same on every load: index in PROJECTS -> intern. */
+function internForEachTeam(count: number): StaffMember[] {
+  const rand = mulberry32(7);
+  const assigned = Array.from({ length: count }, (_, i) => INTERNS[i % INTERNS.length]);
+  for (let i = assigned.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [assigned[i], assigned[j]] = [assigned[j], assigned[i]];
+  }
+  return assigned;
+}
+
+const CONTACT_NAMES = [
+  "Maya Torres", "Daniel Osei", "Ruth Lindholm", "Imran Qureshi", "Lena Fischer",
+  "Carlos Mendes", "Grace Adeyemi", "Hannah Cohen", "Minh Tran", "Sara Novak",
+];
+
+function buildPartners(interns: StaffMember[]): Partner[] {
+  return PROJECTS.map((p, i) => {
+    const slug = p.partner.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const name = CONTACT_NAMES[i % CONTACT_NAMES.length];
+    return {
+      id: `partner-${slug}`,
+      programId: "prog-civic",
+      name: p.partner,
+      website: `https://${slug}.example.org`,
+      ownerId: interns[i].id,
+      contacts: [
+        {
+          id: `contact-${i + 1}`,
+          name,
+          title: "Program director",
+          email: `${name.split(" ")[0].toLowerCase()}@${slug}.example.org`,
+        },
+      ],
+    };
+  });
+}
 
 const TEAM_SIZE = 6; // 20 teams, 120 participants
 
@@ -153,11 +208,13 @@ export function buildMockCohort(): CohortData {
   const cohortId = "c-fall-2026";
   const startDate = "2026-09-07"; // Monday of Week 1
 
+  const interns = internForEachTeam(PROJECTS.length);
+  const partners = buildPartners(interns);
   const projects: Project[] = PROJECTS.map((p, i) => ({
     id: `proj-${i + 1}`,
     cohortId,
     title: p.title,
-    partner: p.partner,
+    partnerId: partners[i].id,
   }));
 
   const teams: Team[] = TEAM_NAMES.map((name, i) => ({
@@ -165,6 +222,7 @@ export function buildMockCohort(): CohortData {
     cohortId,
     name,
     projectId: projects[i].id,
+    ownerId: interns[i].id,
   }));
 
   const people: Person[] = [];
@@ -469,6 +527,13 @@ export function buildMockCohort(): CohortData {
       type: "complete_by",
       params: { dueDate: "2026-10-23" },
     },
+    {
+      id: "req-7",
+      name: "September Meeting Report",
+      scope: "team",
+      type: "record_by",
+      params: { typeId: "rt-reports", viaFieldId: "rf-r-team", minCount: 1, dueDate: "2026-10-05", dateFieldId: "rf-r-date" },
+    },
   ];
 
   const seatsTaken = new Map<string, number>();
@@ -523,13 +588,49 @@ export function buildMockCohort(): CohortData {
     completions,
     exemptions: [],
     fields: FIELDS.map((f) => ({ ...f })),
-    teamNotes: [],
+    partners,
+    staff: STAFF.map((s) => ({ ...s })),
+    notes: sampleNotes(teams, enrollments, partners),
     ...sampleRecords(cohortId, teams, memberships),
   };
 }
 
+/** A few notes with follow-ups, some already overdue on the demo's "today". */
+function sampleNotes(teams: Team[], enrollments: Enrollment[], partners: Partner[]): Note[] {
+  const note = (
+    id: string,
+    subjectType: Note["subjectType"],
+    subjectId: string,
+    createdAt: string,
+    author: string,
+    body: string,
+    followUpDate?: string,
+  ): Note => ({
+    id: `note-${id}`,
+    subjectType,
+    subjectId,
+    body,
+    author,
+    followUpDate,
+    followUpDone: false,
+    createdAt: `${createdAt}T16:00:00.000Z`,
+  });
+  return [
+    note("1", "team", teams[PLANTED.teamMissingBrief].id, "2026-10-16", "Maya Lindgren",
+      "Brief is late. They said the partner hasn't confirmed scope yet, so ask again on Monday.", "2026-10-19"),
+    note("2", "participant", enrollments[PLANTED.missedTwoWorkshops[0]].id, "2026-10-15", "Demo Admin",
+      "Missed two workshops. Emailed to ask if something's going on.", "2026-10-21"),
+    note("3", "partner", partners[RECORD_PLANTED.teamOpenIssue].id, "2026-10-14", "Theo Okonkwo",
+      "Main contact is leaving. Find out who takes over before the midpoint showcase.", "2026-10-16"),
+    note("4", "team", teams[RECORD_PLANTED.teamNoMeetings].id, "2026-10-12", "Demo Admin",
+      "No partner meetings logged yet. Check whether they're meeting and not logging it.", "2026-10-23"),
+    note("5", "partner", partners[0].id, "2026-10-08", "Theo Okonkwo",
+      "Happy with the team so far. Interested in taking another team next cohort."),
+  ].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+}
+
 // ---- Custom record types ----
-// Two example types, set up the way an admin would through Customize, so the
+// Three example types, set up the way an admin would through Customize, so the
 // demo shows links, calculations, rules and a form working together.
 
 export const RECORD_PLANTED = {
@@ -539,6 +640,10 @@ export const RECORD_PLANTED = {
   teamNoMeetings: 11,
   /** Has an open issue. */
   teamOpenIssue: 4,
+  /** September report came in after the due date. */
+  teamsLateReports: [6, 12, 17],
+  /** Never sent the September report. */
+  teamsMissingReports: [9, 15],
 };
 
 const RECORD_TYPES: RecordType[] = [
@@ -551,6 +656,7 @@ const RECORD_TYPES: RecordType[] = [
       { id: "rf-m-summary", label: "Summary", type: "text", required: true },
       { id: "rf-m-date", label: "Date", type: "date", required: true },
       { id: "rf-m-team", label: "Team", type: "link", linkTo: "team", required: true },
+      { id: "rf-m-event", label: "Event", type: "link", linkTo: "event", required: false },
       { id: "rf-m-attended", label: "Attended by", type: "link", linkTo: "participant", multiple: true, required: false },
       { id: "rf-m-partner", label: "Partner attended", type: "checkbox", required: false },
       { id: "rf-m-notes", label: "Notes", type: "long_text", required: false },
@@ -570,6 +676,18 @@ const RECORD_TYPES: RecordType[] = [
       { id: "rf-i-people", label: "People involved", type: "link", linkTo: "participant", multiple: true, required: false },
       { id: "rf-i-opened", label: "Opened on", type: "date", required: false },
       { id: "rf-i-details", label: "Details", type: "long_text", required: false },
+    ],
+  },
+  {
+    id: "rt-reports",
+    programId: "prog-civic",
+    name: "Meeting reports",
+    singular: "Meeting report",
+    fields: [
+      { id: "rf-r-title", label: "Title", type: "text", required: true },
+      { id: "rf-r-date", label: "Submitted on", type: "date", required: true },
+      { id: "rf-r-team", label: "Team", type: "link", linkTo: "team", required: true },
+      { id: "rf-r-link", label: "Report link", type: "url", required: false },
     ],
   },
 ];
@@ -595,6 +713,16 @@ const FORMS: RecordForm[] = [
     description: "Fill this in after every meeting with your partner. It takes a minute.",
     fieldIds: ["rf-m-summary", "rf-m-date", "rf-m-partner", "rf-m-notes", "rf-m-next"],
     token: "log-meeting-demo",
+    roster: true,
+    isOpen: true,
+  },
+  {
+    id: "form-report",
+    typeId: "rt-reports",
+    title: "Submit a meeting report",
+    description: "One per team, each month. Submitting it completes your team's report requirement.",
+    fieldIds: ["rf-r-title", "rf-r-date", "rf-r-link"],
+    token: "submit-report-demo",
     roster: true,
     isOpen: true,
   },
@@ -649,6 +777,17 @@ function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembers
     "rf-i-team": teams[1].id,
     "rf-i-opened": "2026-10-02",
     "rf-i-details": "Resolved after a meeting with the partner on Oct 6.",
+  });
+
+  teams.forEach((team, i) => {
+    if (RECORD_PLANTED.teamsMissingReports.includes(i)) return;
+    const late = RECORD_PLANTED.teamsLateReports.includes(i);
+    const date = late ? addDays("2026-10-07", i % 3) : addDays("2026-10-01", i % 4);
+    add("rt-reports", date, {
+      "rf-r-title": "September meeting report",
+      "rf-r-date": date,
+      "rf-r-team": team.id,
+    });
   });
 
   return {

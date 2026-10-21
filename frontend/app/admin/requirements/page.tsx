@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
+import { describeRule, ruleMatches, targetName } from "@/lib/records";
 import { useCohort } from "@/lib/store";
 import { describeRequirement } from "@/lib/requirements";
 import { EVENT_CATEGORY_LABELS } from "@/lib/events";
@@ -28,17 +30,39 @@ import {
   type Status,
 } from "@/lib/types";
 
-const COUNT_STYLES: { status: Status[]; label: string; className: string; bar: string }[] = [
-  { status: ["met", "on_track"], label: "on track", className: "text-primary", bar: "bg-primary" },
-  { status: ["at_risk"], label: "at risk", className: "text-amber-700 dark:text-amber-400", bar: "bg-amber-500" },
-  { status: ["missing"], label: "missing", className: "text-red-700 dark:text-red-400", bar: "bg-red-500" },
+const COUNT_STYLES: {
+  status: Status[];
+  label: string;
+  className: string;
+  bar: string;
+}[] = [
+  {
+    status: ["met", "on_track"],
+    label: "on track",
+    className: "text-primary",
+    bar: "bg-primary",
+  },
+  {
+    status: ["at_risk"],
+    label: "at risk",
+    className: "text-amber-700 dark:text-amber-400",
+    bar: "bg-amber-500",
+  },
+  {
+    status: ["missing"],
+    label: "missing",
+    className: "text-red-700 dark:text-red-400",
+    bar: "bg-red-500",
+  },
 ];
 
 export default function RequirementsPage() {
-  const { data, participantStatuses, teamStatuses, deleteRequirement } = useCohort();
+  const { data, participantStatuses, teamStatuses, deleteRequirement } =
+    useCohort();
 
   function counts(req: Requirement) {
-    const source = req.scope === "participant" ? participantStatuses : teamStatuses;
+    const source =
+      req.scope === "participant" ? participantStatuses : teamStatuses;
     const statuses: Status[] = [];
     for (const s of source.values()) {
       const r = s.results.find((x) => x.requirementId === req.id);
@@ -51,7 +75,7 @@ export default function RequirementsPage() {
     <>
       <PageHeader
         title="Requirements"
-        description="Define the rules once. Status is calculated automatically from attendance and completions."
+        description="Define the rules once. Status is calculated automatically from attendance, completions and logged records."
         actions={<NewRequirementDialog />}
       />
       <div className="grid gap-4 md:grid-cols-2">
@@ -62,9 +86,14 @@ export default function RequirementsPage() {
               <CardContent className="space-y-3">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <div className="font-semibold">{req.name}</div>
+                    <Link
+                      href={`/admin/requirements/${req.id}`}
+                      className="font-semibold hover:underline"
+                    >
+                      {req.name}
+                    </Link>
                     <div className="text-sm text-muted-foreground">
-                      {describeRequirement(req)}
+                      {describeRequirement(req, data)}
                     </div>
                   </div>
                   <div className="flex items-center gap-1">
@@ -76,7 +105,8 @@ export default function RequirementsPage() {
                       size="icon-sm"
                       aria-label={`Delete ${req.name}`}
                       onClick={() => {
-                        if (confirm(`Delete "${req.name}"?`)) deleteRequirement(req.id);
+                        if (confirm(`Delete "${req.name}"?`))
+                          deleteRequirement(req.id);
                       }}
                     >
                       <Trash2 />
@@ -90,7 +120,9 @@ export default function RequirementsPage() {
                       <div
                         key={status.join()}
                         className={bar}
-                        style={{ width: `${(n / Math.max(statuses.length, 1)) * 100}%` }}
+                        style={{
+                          width: `${(n / Math.max(statuses.length, 1)) * 100}%`,
+                        }}
                       />
                     );
                   })}
@@ -110,27 +142,86 @@ export default function RequirementsPage() {
           );
         })}
       </div>
+
+      <section className="mt-12">
+        <h2 className="text-lg font-semibold">Flags</h2>
+        <p className="mt-1 mb-4 text-sm text-muted-foreground">
+          Warnings worked out from your records. They count towards status just
+          like requirements. Set them up in{" "}
+          <Link href="/admin/customize" className="underline">
+            Customize
+          </Link>
+          .
+        </p>
+        {data.rules.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No flags yet.</p>
+        ) : (
+          <ul className="grid gap-3 md:grid-cols-2">
+            {data.rules.map((rule) => {
+              const calc = data.calculations.find(
+                (c) => c.id === rule.calculationId,
+              );
+              const flagged = ruleMatches(data, rule).length;
+              return (
+                <li key={rule.id}>
+                  <Link
+                    href={`/admin/requirements/${rule.id}`}
+                    className="group flex h-full items-start justify-between gap-3 rounded-xl border p-4 transition-colors hover:bg-muted/40"
+                  >
+                    <div className="min-w-0">
+                      <div className="font-medium">{rule.message}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {describeRule(rule, calc)}
+                      </div>
+                      <div className="mt-2 text-xs">
+                        <span className="font-semibold tabular-nums">
+                          {flagged}
+                        </span>{" "}
+                        {calc
+                          ? targetName(
+                              data,
+                              calc.on,
+                              flagged === 1,
+                            ).toLowerCase()
+                          : "records"}{" "}
+                        flagged
+                      </div>
+                    </div>
+                    <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
     </>
   );
 }
 
-const TYPE_OPTIONS: { value: RequirementType; label: string; hint: string }[] = [
-  {
-    value: "attendance_min",
-    label: "Attend a minimum number of events",
-    hint: 'e.g. "attend at least 3 workshops"',
-  },
-  {
-    value: "complete_by",
-    label: "Complete something by a date",
-    hint: 'e.g. "project brief by Week 4" or "final report by Dec 11"',
-  },
-  {
-    value: "team_min_size",
-    label: "Team keeps a minimum size",
-    hint: 'e.g. "every team has at least 3 active members"',
-  },
-];
+const TYPE_OPTIONS: { value: RequirementType; label: string; hint: string }[] =
+  [
+    {
+      value: "attendance_min",
+      label: "Attend a minimum number of events",
+      hint: 'e.g. "attend at least 3 workshops"',
+    },
+    {
+      value: "complete_by",
+      label: "Complete something by a date",
+      hint: 'e.g. "project brief by Week 4" or "final report by Dec 11"',
+    },
+    {
+      value: "team_min_size",
+      label: "Team keeps a minimum size",
+      hint: 'e.g. "every team has at least 3 active members"',
+    },
+    {
+      value: "record_by",
+      label: "Log records by a date",
+      hint: 'e.g. "one meeting report per team by Oct 31". Logging the record meets it, with no box to tick.',
+    },
+  ];
 
 function NewRequirementDialog() {
   const { data, addRequirement } = useCohort();
@@ -142,8 +233,20 @@ function NewRequirementDialog() {
   const [scope, setScope] = useState<"participant" | "team">("participant");
   const [dueDate, setDueDate] = useState(data.today);
   const [minActive, setMinActive] = useState(3);
+  const [recordTypeId, setRecordTypeId] = useState("");
+  const [minRecords, setMinRecords] = useState(1);
+  const [error, setError] = useState<string>();
 
-  const categoryTotal = data.events.filter((e) => e.category === category).length;
+  // Only record types that link to what the requirement applies to can count.
+  const recordTypes = data.recordTypes.filter((t) =>
+    t.fields.some((f) => f.type === "link" && f.linkTo === scope),
+  );
+  const recordType =
+    recordTypes.find((t) => t.id === recordTypeId) ?? recordTypes[0];
+
+  const categoryTotal = data.events.filter(
+    (e) => e.category === category,
+  ).length;
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -157,11 +260,35 @@ function NewRequirementDialog() {
       });
     } else if (type === "complete_by") {
       addRequirement({ name: name.trim(), scope, type, params: { dueDate } });
+    } else if (type === "record_by") {
+      const via = recordType?.fields.find(
+        (f) => f.type === "link" && f.linkTo === scope,
+      );
+      if (!recordType || !via)
+        return setError(`No record type links to each ${scope} yet.`);
+      addRequirement({
+        name: name.trim(),
+        scope,
+        type,
+        params: {
+          typeId: recordType.id,
+          viaFieldId: via.id,
+          minCount: minRecords,
+          dueDate,
+          dateFieldId: recordType.fields.find((f) => f.type === "date")?.id,
+        },
+      });
     } else {
-      addRequirement({ name: name.trim(), scope: "team", type, params: { minActive } });
+      addRequirement({
+        name: name.trim(),
+        scope: "team",
+        type,
+        params: { minActive },
+      });
     }
     setOpen(false);
     setName("");
+    setError(undefined);
   }
 
   return (
@@ -238,14 +365,16 @@ function NewRequirementDialog() {
             </div>
           )}
 
-          {type === "complete_by" && (
+          {(type === "complete_by" || type === "record_by") && (
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label htmlFor="scope">Applies to</Label>
                 <NativeSelect
                   id="scope"
                   value={scope}
-                  onChange={(e) => setScope(e.target.value as "participant" | "team")}
+                  onChange={(e) =>
+                    setScope(e.target.value as "participant" | "team")
+                  }
                   className="w-full"
                 >
                   <option value="participant">Each participant</option>
@@ -263,6 +392,41 @@ function NewRequirementDialog() {
               </div>
             </div>
           )}
+
+          {type === "record_by" && (
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label htmlFor="record-type">Records</Label>
+                <NativeSelect
+                  id="record-type"
+                  value={recordType?.id ?? ""}
+                  onChange={(e) => setRecordTypeId(e.target.value)}
+                  className="w-full"
+                >
+                  {recordTypes.length === 0 && (
+                    <option value="">None link here</option>
+                  )}
+                  {recordTypes.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                    </option>
+                  ))}
+                </NativeSelect>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="min-records">At least</Label>
+                <Input
+                  id="min-records"
+                  type="number"
+                  min={1}
+                  value={minRecords}
+                  onChange={(e) => setMinRecords(Number(e.target.value))}
+                />
+              </div>
+            </div>
+          )}
+
+          {error && <p className="text-sm text-destructive">{error}</p>}
 
           {type === "team_min_size" && (
             <div className="space-y-1.5">

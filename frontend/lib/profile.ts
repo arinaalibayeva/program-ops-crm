@@ -7,6 +7,8 @@ import { useCallback, useEffect, useState } from "react";
 import { USE_BACKEND, api } from "./api";
 
 export interface Profile {
+  /** The staff member this is, so pages can show what's yours. */
+  id?: string;
   name: string;
   email: string;
   jobTitle?: string;
@@ -17,7 +19,7 @@ export interface Profile {
 }
 
 const KEY = "program-ops-crm:profile";
-const DEMO: Profile = { name: "Demo Admin", email: "admin@demo.test", jobTitle: "Program coordinator" };
+const DEMO: Profile = { id: "staff-demo", name: "Demo Admin", email: "admin@demo.test", jobTitle: "Program coordinator" };
 
 export function useProfile() {
   const [profile, setProfile] = useState<Profile>();
@@ -29,7 +31,7 @@ export function useProfile() {
     }
     try {
       const saved = localStorage.getItem(KEY);
-      setProfile(saved ? JSON.parse(saved) : DEMO);
+      setProfile(saved ? { ...DEMO, ...JSON.parse(saved) } : DEMO);
     } catch {
       setProfile(DEMO);
     }

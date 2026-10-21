@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
 import { Plus, Search, SlidersHorizontal, Upload } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -27,10 +26,13 @@ import {
 import { FieldInput } from "@/components/field-input";
 import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
+import { ParticipantPanel } from "@/components/participant-panel";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort, usePeopleIndex } from "@/lib/store";
-import { currentTeamId } from "@/lib/requirements";
+import { attendanceSummary, currentTeamId, worstStatus } from "@/lib/requirements";
+import { participantOwner, staffName } from "@/lib/staff";
 import { activeFields, formatFieldValue, validateFields } from "@/lib/fields";
+import { useUrlParam } from "@/lib/url-param";
 import { cn } from "@/lib/utils";
 import type { FieldValue, Status } from "@/lib/types";
 
@@ -43,12 +45,21 @@ const FILTERS: { value: "all" | Status | "attention"; label: string }[] = [
 ];
 
 export default function ParticipantsPage() {
-  const router = useRouter();
   const { data, participantStatuses } = useCohort();
   const { personFor, teamById } = usePeopleIndex();
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<(typeof FILTERS)[number]["value"]>("all");
   const [teamFilter, setTeamFilter] = useState("all");
+  const [openId, setOpenId] = useState<string>();
+  const closePanel = useCallback(() => setOpenId(undefined), []);
+
+  useUrlParam(
+    "status",
+    useCallback((value) => {
+      const found = FILTERS.find((f) => f.value === value);
+      if (found) setFilter(found.value);
+    }, []),
+  );
   // Filters for pick-one / pick-several columns, keyed by field id.
   const [fieldFilters, setFieldFilters] = useState<Record<string, string>>({});
 
@@ -98,10 +109,12 @@ export default function ParticipantsPage() {
     fieldFilters,
   ]);
 
-  const participantReqs = data.requirements.filter((r) => r.scope === "participant");
+  // Attendance requirements share one column; anything else keeps its own.
+  const attendanceIds = new Set(data.requirements.filter((r) => r.type === "attendance_min").map((r) => r.id));
+  const participantReqs = data.requirements.filter((r) => r.scope === "participant" && !attendanceIds.has(r.id));
 
   return (
-    <>
+    <div className="max-w-6xl">
       <PageHeader
         title="Participants"
         description={`${data.enrollments.filter((e) => e.status === "active").length} active in ${data.cohort.name}`}
@@ -179,9 +192,11 @@ export default function ParticipantsPage() {
             <TableRow>
               <TableHead className="pl-4">Name</TableHead>
               <TableHead>Team</TableHead>
+              <TableHead>Assigned to</TableHead>
               {columns.map((f) => (
                 <TableHead key={f.id}>{f.label}</TableHead>
               ))}
+              <TableHead>Attendance</TableHead>
               {participantReqs.map((r) => (
                 <TableHead key={r.id}>{r.name}</TableHead>
               ))}
@@ -192,19 +207,43 @@ export default function ParticipantsPage() {
             {rows.map(({ enrollment, person, teamId, status }) => (
               <TableRow
                 key={enrollment.id}
-                onClick={() => router.push(`/admin/participants/${enrollment.id}`)}
+                onClick={() => setOpenId(enrollment.id)}
+                data-state={openId === enrollment.id ? "selected" : undefined}
                 className="cursor-pointer"
               >
                 <TableCell className="pl-4">
-                  <div className="font-medium">{person.name}</div>
+                  <button type="button" className="text-left font-medium hover:underline">
+                    {person.name}
+                  </button>
                   <div className="text-xs text-muted-foreground">{person.email}</div>
                 </TableCell>
-                <TableCell>{teamId ? teamById.get(teamId)?.name : "—"}</TableCell>
+                <TableCell>
+                  {teamId ? (
+                    <Link
+                      href={`/admin/teams/${teamId}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="hover:underline"
+                    >
+                      {teamById.get(teamId)?.name}
+                    </Link>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
+                <TableCell>{staffName(data, participantOwner(data, enrollment.id))}</TableCell>
                 {columns.map((f) => (
                   <TableCell key={f.id} className="max-w-48 truncate">
                     {formatFieldValue(f, enrollment.fields?.[f.id])}
                   </TableCell>
                 ))}
+                <TableCell>
+                  <AttendanceCell
+                    {...attendanceSummary(data, enrollment.id)}
+                    status={worstStatus(
+                      (status?.results ?? []).filter((r) => attendanceIds.has(r.requirementId)).map((r) => r.status),
+                    )}
+                  />
+                </TableCell>
                 {participantReqs.map((r) => {
                   const result = status?.results.find((x) => x.requirementId === r.id);
                   return (
@@ -221,7 +260,7 @@ export default function ParticipantsPage() {
             {rows.length === 0 && (
               <TableRow>
                 <TableCell
-                  colSpan={3 + columns.length + participantReqs.length}
+                  colSpan={5 + columns.length + participantReqs.length}
                   className="py-8 text-center text-muted-foreground"
                 >
                   No participants match these filters.
@@ -231,7 +270,22 @@ export default function ParticipantsPage() {
           </TableBody>
         </Table>
       </Card>
-    </>
+
+      {openId && <ParticipantPanel enrollmentId={openId} onClose={closePanel} />}
+    </div>
+  );
+}
+
+/** Events attended so far, with a dot when it's putting a requirement at risk. */
+function AttendanceCell({ attended, total, status }: { attended: number; total: number; status: Status }) {
+  const flagged = status === "at_risk" || status === "missing";
+  return (
+    <span className="inline-flex items-center gap-2 whitespace-nowrap">
+      <span className="tabular-nums">
+        {attended}/{total}
+      </span>
+      {flagged && <StatusBadge status={status} />}
+    </span>
   );
 }
 

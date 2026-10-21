@@ -1,87 +1,23 @@
-// Prototype: sample staff for the profile page's Your team section. Nothing here is
-// saved yet; the signed-in admin is the "you" node, with their own details.
+// The people who run the program, and what each of them looks after.
 
-export interface StaffMember {
-  id: string;
-  name: string;
-  title: string;
-  /** What they look after, in a few words. */
-  focus: string;
-  email?: string;
-  managerId?: string;
+import { currentTeamId } from "./requirements";
+import type { CohortData, Note } from "./types";
+
+export const UNASSIGNED = "Unassigned";
+
+export function staffName(data: CohortData, id: string | undefined): string {
+  return data.staff.find((s) => s.id === id)?.name ?? UNASSIGNED;
 }
 
-export const YOU = "you";
+/** Who looks after a participant: the owner of their team. */
+export function participantOwner(data: CohortData, enrollmentId: string): string | undefined {
+  const teamId = currentTeamId(data, enrollmentId);
+  return data.teams.find((t) => t.id === teamId)?.ownerId;
+}
 
-export const SAMPLE_STAFF: StaffMember[] = [
-  {
-    id: "dana",
-    name: "Dana Whitfield",
-    title: "Executive director",
-    focus: "Strategy, funding and the board",
-    email: "dana@example.org",
-  },
-  {
-    id: "marcus",
-    name: "Marcus Lee",
-    title: "Director of programs",
-    focus: "All cohort programs and their outcomes",
-    email: "marcus@example.org",
-    managerId: "dana",
-  },
-  {
-    id: "jordan",
-    name: "Jordan Ellis",
-    title: "Partnerships manager",
-    focus: "Partner organizations and project scoping",
-    email: "jordan@example.org",
-    managerId: "dana",
-  },
-  {
-    id: "sam",
-    name: "Sam Okoye",
-    title: "Operations lead",
-    focus: "Rooms, budgets and tools",
-    email: "sam@example.org",
-    managerId: "dana",
-  },
-  {
-    id: YOU,
-    name: "",
-    title: "Program manager, Civic Projects",
-    focus: "Runs the Civic Projects cohort",
-    managerId: "marcus",
-  },
-  {
-    id: "sofia",
-    name: "Sofia Alvarez",
-    title: "Program manager, Data Fellows",
-    focus: "Runs the Data Fellows cohort",
-    email: "sofia@example.org",
-    managerId: "marcus",
-  },
-  {
-    id: "priya",
-    name: "Priya Nair",
-    title: "Program coordinator",
-    focus: "Events, check-ins and attendance",
-    email: "priya@example.org",
-    managerId: YOU,
-  },
-  {
-    id: "tom",
-    name: "Tom Becker",
-    title: "Program coordinator",
-    focus: "Onboarding and participant support",
-    email: "tom@example.org",
-    managerId: YOU,
-  },
-  {
-    id: "yuki",
-    name: "Yuki Tanaka",
-    title: "Mentor lead",
-    focus: "Matches mentors with teams",
-    email: "yuki@example.org",
-    managerId: YOU,
-  },
-];
+/** Who should act on a note: whoever looks after what it's about. */
+export function noteOwner(data: CohortData, note: Note): string | undefined {
+  if (note.subjectType === "participant") return participantOwner(data, note.subjectId);
+  if (note.subjectType === "team") return data.teams.find((t) => t.id === note.subjectId)?.ownerId;
+  return data.partners.find((p) => p.id === note.subjectId)?.ownerId;
+}

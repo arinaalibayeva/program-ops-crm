@@ -2,33 +2,32 @@
 
 import Link from "next/link";
 import { use, useEffect, useMemo, useState } from "react";
-import { ArrowLeft, Mail, MessageSquareText, Pencil } from "lucide-react";
+import { ArrowLeft, Mail, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { FieldInput } from "@/components/field-input";
-import { NativeSelect } from "@/components/native-select";
+import { Notes } from "@/components/notes";
+import {
+  AttendanceSection,
+  ProfileSection,
+  RecordsSection,
+  RequirementsSection,
+  TeamSection,
+  fullStatus,
+} from "@/components/participant-sections";
 import { PageHeader } from "@/components/page-header";
 import { SectionBoard, type BoardLayout } from "@/components/section-board";
 import { StatusBadge } from "@/components/status-badge";
-import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
-import { incomingLinks } from "@/lib/records";
+import { Timeline } from "@/components/timeline";
 import { useCohort } from "@/lib/store";
-import { currentTeamId, participantStatus } from "@/lib/requirements";
-import { EVENT_CATEGORY_LABELS, takesAttendance } from "@/lib/events";
-import { formatDate } from "@/lib/format";
-import { activeFields, formatFieldValue } from "@/lib/fields";
+import { activeFields } from "@/lib/fields";
 import {
   applyDraft,
   draftFrom,
   validateDraft,
   type ParticipantDraft,
 } from "@/lib/participant-draft";
-import { cn } from "@/lib/utils";
-import type { CohortData, Enrollment } from "@/lib/types";
+import { participantTimeline } from "@/lib/timeline";
 
-type SectionId = "requirements" | "attendance" | "records" | "profile" | "team" | "notes";
+type SectionId = "requirements" | "attendance" | "records" | "profile" | "team" | "notes" | "timeline";
 
 const SECTION_LABELS: Record<SectionId, string> = {
   requirements: "Requirements",
@@ -37,11 +36,12 @@ const SECTION_LABELS: Record<SectionId, string> = {
   profile: "Profile",
   team: "Team",
   notes: "Notes",
+  timeline: "Timeline",
 };
 
 const DEFAULT_LAYOUT: BoardLayout<SectionId> = {
   left: ["requirements", "attendance", "records"],
-  right: ["profile", "team", "notes"],
+  right: ["profile", "team", "notes", "timeline"],
 };
 
 // The arrangement is a per-admin preference shared by every participant page,
@@ -58,14 +58,6 @@ function loadLayout(): BoardLayout<SectionId> {
     // Unreadable storage: use the default.
   }
   return DEFAULT_LAYOUT;
-}
-
-/** What each section needs. `draft` is only set in edit mode. */
-interface SectionProps {
-  view: CohortData;
-  enrollment: Enrollment;
-  draft?: ParticipantDraft;
-  update: (patch: Partial<ParticipantDraft>) => void;
 }
 
 export default function ParticipantPage({ params }: { params: Promise<{ id: string }> }) {
@@ -89,7 +81,7 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
     return <p className="text-muted-foreground">Participant not found.</p>;
   }
 
-  const status = enrollment.status === "active" ? participantStatus(view, id) : undefined;
+  const status = enrollment.status === "active" ? fullStatus(view, id) : undefined;
   const update = (patch: Partial<ParticipantDraft>) =>
     setDraft((d) => (d ? { ...d, ...patch } : d));
 
@@ -188,7 +180,7 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
         render={(sectionId) => {
           switch (sectionId) {
             case "requirements":
-              return <RequirementsSection />;
+              return <RequirementsSection {...section} />;
             case "attendance":
               return <AttendanceSection {...section} />;
             case "profile":
@@ -196,346 +188,14 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
             case "team":
               return <TeamSection {...section} />;
             case "notes":
-              return <NotesSection />;
+              return <Notes subjectType="participant" subjectId={enrollment.id} />;
+            case "timeline":
+              return <Timeline entries={participantTimeline(view, enrollment.id)} />;
             case "records":
               return <RecordsSection enrollmentId={enrollment.id} />;
           }
         }}
       />
     </>
-  );
-}
-
-function NotesSection() {
-  return (
-    <Card className="border-dashed bg-transparent shadow-none">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-muted-foreground">
-          <MessageSquareText className="size-4" /> Notes &amp; activity
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="text-xs text-muted-foreground">
-        Coming next: meeting notes, follow-ups and a timeline of everything that happened
-        with this participant, across cohorts.
-      </CardContent>
-    </Card>
-  );
-}
-
-// Placeholder until requirements are designed properly; statuses are still
-// calculated in lib/requirements.ts.
-function RequirementsSection() {
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Requirements</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground">Coming soon.</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
-  const { toggleAttendance } = useCohort();
-  const attended = new Set(
-    view.attendance.filter((a) => a.enrollmentId === enrollment.id).map((a) => a.eventId),
-  );
-  const past = view.events.filter((e) => takesAttendance(e) && e.date < view.today);
-  // Today's events can be recorded while editing; future ones can't.
-  const events = view.events.filter(takesAttendance);
-  const recordable = events.filter((e) => e.date <= view.today);
-
-  function toggle(eventId: string) {
-    if (!draft) return;
-    const ids = new Set(draft.attendedEventIds);
-    if (ids.has(eventId)) ids.delete(eventId);
-    else ids.add(eventId);
-    update({ attendedEventIds: [...ids] });
-  }
-
-  return (
-    <Card>
-      <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2">
-        <div>
-          <CardTitle>Attendance</CardTitle>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Attended {past.filter((e) => attended.has(e.id)).length} of {past.length} events so
-            far
-          </p>
-        </div>
-        {draft && (
-          <div className="flex gap-1">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => update({ attendedEventIds: recordable.map((e) => e.id) })}
-            >
-              Select all
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => update({ attendedEventIds: [] })}>
-              Clear
-            </Button>
-          </div>
-        )}
-      </CardHeader>
-      <CardContent className="px-0">
-        <ul className="divide-y">
-          {events.map((event) => {
-            const isFuture = event.date > view.today;
-            const isUpcoming = event.date >= view.today;
-            const didAttend = attended.has(event.id);
-            const details = (
-              <div className="min-w-0 flex-1">
-                <div className="text-sm">{event.title}</div>
-                <div className="text-xs text-muted-foreground">
-                  {formatDate(event.date, { weekday: true })} · {EVENT_CATEGORY_LABELS[event.category]}
-                </div>
-              </div>
-            );
-
-            if (draft) {
-              return (
-                <li key={event.id}>
-                  <label
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-2.5",
-                      isFuture ? "opacity-50" : "cursor-pointer hover:bg-muted/50",
-                    )}
-                  >
-                    <Checkbox
-                      checked={didAttend}
-                      disabled={isFuture}
-                      onCheckedChange={() => toggle(event.id)}
-                    />
-                    {details}
-                    {isFuture && (
-                      <span className="text-xs text-muted-foreground">Hasn&apos;t happened yet</span>
-                    )}
-                  </label>
-                </li>
-              );
-            }
-
-            return (
-              <li
-                key={event.id}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-2.5",
-                  isUpcoming && "text-muted-foreground",
-                )}
-              >
-                {details}
-                {isUpcoming ? (
-                  <span className="text-xs">Upcoming</span>
-                ) : (
-                  // Quick edit outside edit mode: saved as soon as it's clicked.
-                  <div
-                    role="radiogroup"
-                    aria-label={`Attendance for ${event.title}`}
-                    className="inline-flex rounded-md border p-0.5 text-xs"
-                  >
-                    {[true, false].map((present) => {
-                      const selected = present === didAttend;
-                      return (
-                        <button
-                          key={String(present)}
-                          type="button"
-                          role="radio"
-                          aria-checked={selected}
-                          onClick={() => !selected && toggleAttendance(event.id, enrollment.id)}
-                          className={cn(
-                            "inline-flex items-center gap-1.5 rounded px-2 py-0.5 transition-colors",
-                            selected
-                              ? "bg-muted font-medium text-foreground"
-                              : "text-muted-foreground hover:text-foreground",
-                          )}
-                        >
-                          {!present && selected && (
-                            <span className="size-1.5 rounded-full bg-red-500" />
-                          )}
-                          {present ? "Present" : "Absent"}
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      </CardContent>
-    </Card>
-  );
-}
-
-function ProfileSection({ view, enrollment, draft, update }: SectionProps) {
-  const fields = activeFields(view);
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Profile</CardTitle>
-      </CardHeader>
-      <CardContent>
-        {draft ? (
-          <div className="space-y-3">
-            <div className="space-y-1">
-              <label htmlFor="profile-name" className="text-xs text-muted-foreground">
-                Name *
-              </label>
-              <Input
-                id="profile-name"
-                value={draft.name}
-                onChange={(e) => update({ name: e.target.value })}
-              />
-            </div>
-            <div className="space-y-1">
-              <label htmlFor="profile-email" className="text-xs text-muted-foreground">
-                Email *
-              </label>
-              <Input
-                id="profile-email"
-                type="email"
-                value={draft.email}
-                onChange={(e) => update({ email: e.target.value })}
-              />
-            </div>
-            {fields.map((f) => (
-              <div key={f.id} className="space-y-1">
-                <label htmlFor={`profile-${f.id}`} className="text-xs text-muted-foreground">
-                  {f.label}
-                  {f.required && " *"}
-                </label>
-                <FieldInput
-                  id={`profile-${f.id}`}
-                  field={f}
-                  value={draft.fields[f.id]}
-                  onChange={(v) => update({ fields: { ...draft.fields, [f.id]: v } })}
-                />
-              </div>
-            ))}
-          </div>
-        ) : fields.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            No profile fields yet.{" "}
-            <Link href="/admin/participants/fields" className="underline">
-              Add fields
-            </Link>
-          </p>
-        ) : (
-          <dl className="space-y-2.5">
-            {fields.map((f) => {
-              const value = enrollment.fields?.[f.id];
-              return (
-                <div key={f.id}>
-                  <dt className="text-xs text-muted-foreground">{f.label}</dt>
-                  <dd className="text-sm break-words whitespace-pre-wrap">
-                    {/* Only link http(s) so a pasted "javascript:" value can't run. */}
-                    {f.type === "url" && typeof value === "string" && /^https?:\/\//i.test(value) ? (
-                      <a href={value} target="_blank" rel="noreferrer" className="underline">
-                        {value}
-                      </a>
-                    ) : (
-                      formatFieldValue(f, value)
-                    )}
-                  </dd>
-                </div>
-              );
-            })}
-          </dl>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-function TeamSection({ view, enrollment, draft, update }: SectionProps) {
-  const teamId = currentTeamId(view, enrollment.id);
-  const team = view.teams.find((t) => t.id === teamId);
-  const project = view.projects.find((p) => p.id === team?.projectId);
-  const history = view.memberships
-    .filter((m) => m.enrollmentId === enrollment.id)
-    .sort((a, b) => b.startDate.localeCompare(a.startDate));
-
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Team</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        {draft && enrollment.status === "active" ? (
-          <NativeSelect
-            aria-label="Team"
-            value={draft.teamId ?? ""}
-            onChange={(e) => update({ teamId: e.target.value || undefined })}
-            className="w-full"
-          >
-            <option value="">No team</option>
-            {view.teams.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name}
-              </option>
-            ))}
-          </NativeSelect>
-        ) : team ? (
-          <div>
-            <Link href={`/admin/teams/${team.id}`} className="font-medium hover:underline">
-              Team {team.name}
-            </Link>
-            {project && (
-              <div className="text-xs text-muted-foreground">
-                {project.title} · {project.partner}
-              </div>
-            )}
-          </div>
-        ) : (
-          <p className="text-sm text-muted-foreground">Not on a team.</p>
-        )}
-        {history.length > 0 && (
-          <div>
-            <div className="mb-1.5 text-xs text-muted-foreground">Team history</div>
-            <ol className="space-y-1.5 border-l pl-3">
-              {history.map((m) => (
-                <li key={m.teamId + m.startDate} className="text-xs">
-                  <span className="font-medium">
-                    {view.teams.find((t) => t.id === m.teamId)?.name}
-                  </span>{" "}
-                  <span className="text-muted-foreground">
-                    {formatDate(m.startDate)} – {m.endDate ? formatDate(m.endDate) : "now"}
-                  </span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        )}
-      </CardContent>
-    </Card>
-  );
-}
-
-/** Calculations on this participant, and records of each type that link to them. */
-function RecordsSection({ enrollmentId }: { enrollmentId: string }) {
-  const { data } = useCohort();
-  const empty =
-    incomingLinks(data, "participant").length === 0 && !data.calculations.some((c) => c.on === "participant");
-  if (empty) {
-    return (
-      <Card className="border-dashed bg-transparent shadow-none">
-        <CardContent className="text-xs text-muted-foreground">
-          No record types link to participants yet. Add a link field in{" "}
-          <Link href="/admin/customize" className="underline">
-            Customize
-          </Link>
-          .
-        </CardContent>
-      </Card>
-    );
-  }
-  return (
-    <div className="space-y-6">
-      <TrackedNumbers on="participant" id={enrollmentId} />
-      <LinkedRecords target="participant" id={enrollmentId} />
-    </div>
   );
 }

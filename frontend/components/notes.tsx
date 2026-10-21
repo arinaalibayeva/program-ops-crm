@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { useCohort } from "@/lib/store";
-import { formatDateTime } from "@/lib/format";
-import type { TeamNote } from "@/lib/types";
+import { formatDate, formatDateTime } from "@/lib/format";
+import type { Note, NoteSubject } from "@/lib/types";
 
 const textarea =
   "w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50";
@@ -18,16 +20,18 @@ function savesOn(e: React.KeyboardEvent, save: () => void) {
   }
 }
 
-/** Free-form notes about a team, newest first, so they're there next time. */
-export function TeamNotes({ teamId }: { teamId: string }) {
-  const { data, addTeamNote } = useCohort();
+/** Free-form notes about a person, team or partner, newest first, so they're there next time. */
+export function Notes({ subjectType, subjectId }: { subjectType: NoteSubject; subjectId: string }) {
+  const { data, addNote } = useCohort();
   const [draft, setDraft] = useState("");
-  const notes = data.teamNotes.filter((n) => n.teamId === teamId);
+  const [followUp, setFollowUp] = useState("");
+  const notes = data.notes.filter((n) => n.subjectType === subjectType && n.subjectId === subjectId);
 
   function save() {
     if (!draft.trim()) return;
-    addTeamNote(teamId, draft);
+    addNote(subjectType, subjectId, draft, followUp || undefined);
     setDraft("");
+    setFollowUp("");
   }
 
   return (
@@ -44,11 +48,20 @@ export function TeamNotes({ teamId }: { teamId: string }) {
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => savesOn(e, save)}
-            placeholder="What happened with this team? Meetings, concerns, decisions…"
+            placeholder="What happened? Meetings, concerns, decisions…"
             className={textarea}
           />
-          <div className="flex items-center justify-between gap-2">
-            <span className="text-xs text-muted-foreground">⌘↵ to save</span>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <label className="flex items-center gap-2 text-xs text-muted-foreground">
+              Follow up by
+              <Input
+                type="date"
+                aria-label="Follow up by"
+                value={followUp}
+                onChange={(e) => setFollowUp(e.target.value)}
+                className="h-8 w-36"
+              />
+            </label>
             <Button size="sm" onClick={save} disabled={!draft.trim()}>
               Save note
             </Button>
@@ -68,18 +81,19 @@ export function TeamNotes({ teamId }: { teamId: string }) {
   );
 }
 
-function NoteItem({ note }: { note: TeamNote }) {
-  const { updateTeamNote, deleteTeamNote } = useCohort();
+function NoteItem({ note }: { note: Note }) {
+  const { data, updateNote, deleteNote } = useCohort();
   const [editing, setEditing] = useState<string>();
   const [confirming, setConfirming] = useState(false);
 
   function save() {
     if (!editing?.trim()) return;
-    if (editing.trim() !== note.body) updateTeamNote(note.id, editing);
+    if (editing.trim() !== note.body) updateNote(note.id, { body: editing });
     setEditing(undefined);
   }
 
   const action = "text-muted-foreground hover:text-foreground";
+  const overdue = !note.followUpDone && !!note.followUpDate && note.followUpDate < data.today;
 
   return (
     <li className="group space-y-1">
@@ -94,7 +108,7 @@ function NoteItem({ note }: { note: TeamNote }) {
           <span className="flex shrink-0 gap-2 transition-opacity [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-focus-within:opacity-100 [@media(hover:hover)]:group-hover:opacity-100">
             {confirming ? (
               <>
-                <button type="button" className="font-medium text-destructive" onClick={() => deleteTeamNote(note.id)}>
+                <button type="button" className="font-medium text-destructive" onClick={() => deleteNote(note.id)}>
                   Delete
                 </button>
                 <button type="button" className={action} onClick={() => setConfirming(false)}>
@@ -140,6 +154,20 @@ function NoteItem({ note }: { note: TeamNote }) {
             </Button>
           </div>
         </div>
+      )}
+      {note.followUpDate && (
+        <label className="flex items-center gap-2 pt-1 text-xs text-muted-foreground">
+          <Checkbox
+            checked={note.followUpDone}
+            onCheckedChange={() => updateNote(note.id, { followUpDone: !note.followUpDone })}
+            aria-label={`Follow-up done, due ${formatDate(note.followUpDate)}`}
+          />
+          <span className={overdue ? "font-medium text-foreground" : undefined}>
+            Follow up by {formatDate(note.followUpDate)}
+            {overdue && " · overdue"}
+            {note.followUpDone && " · done"}
+          </span>
+        </label>
       )}
     </li>
   );

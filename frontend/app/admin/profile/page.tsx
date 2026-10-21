@@ -7,7 +7,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { PageHeader } from "@/components/page-header";
-import { YourTeam, staffWithYou } from "@/components/your-team";
+import { YourTeam } from "@/components/your-team";
 import { USE_BACKEND, signOut } from "@/lib/api";
 import { initials } from "@/lib/format";
 import { useProfile, type Profile } from "@/lib/profile";
@@ -44,7 +44,6 @@ export default function ProfilePage() {
   if (!draft) return <p className="text-sm text-muted-foreground">Loading…</p>;
 
   const changed = JSON.stringify(draft) !== JSON.stringify(profile);
-  const staff = staffWithYou(profile ?? draft);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -67,7 +66,7 @@ export default function ProfilePage() {
     <>
       <PageHeader
         title="Profile"
-        description="Your account details and the people you work with."
+        description="Your account details and who runs this program with you."
       />
       <div className="grid gap-x-16 gap-y-10 lg:grid-cols-[minmax(0,28rem)_minmax(0,32rem)]">
         <div className="space-y-8">
@@ -116,7 +115,7 @@ export default function ProfilePage() {
 
           {USE_BACKEND && (
             <div className="flex flex-wrap gap-2 border-t pt-6">
-              <Link href="/admin/team" className={buttonVariants({ variant: "outline" })}>
+              <Link href="/admin/access" className={buttonVariants({ variant: "outline" })}>
                 <KeyRound />
                 Team access
               </Link>
@@ -129,9 +128,8 @@ export default function ProfilePage() {
         </div>
 
         <section className="space-y-4">
-          <h2 className="text-base font-semibold">Your team</h2>
-          <p className="text-sm text-muted-foreground">Sample organization for this prototype.</p>
-          <YourTeam staff={staff} />
+          <h2 className="text-base font-semibold">Program staff</h2>
+          <YourTeam you={profile?.id} />
         </section>
       </div>
     </>
