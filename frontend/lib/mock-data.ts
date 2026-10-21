@@ -151,15 +151,6 @@ const GROUP_ROLES = [
 
 const FIELDS: FieldDefinition[] = [
   {
-    id: "field-phone",
-    label: "Phone",
-    type: "text",
-    placeholder: "+1 555 010 0000",
-    required: false,
-    showInList: false,
-    visibleToParticipant: true,
-  },
-  {
     id: "field-role",
     label: "Role",
     type: "select",
@@ -537,13 +528,12 @@ export function buildMockCohort(): CohortData {
   ];
 
   const seatsTaken = new Map<string, number>();
-  enrollments.forEach((enr, i) => {
+  enrollments.forEach((enr) => {
     const teamId = memberships.find((m) => m.enrollmentId === enr.id && !m.endDate)!.teamId;
     const teamName = teams.find((t) => t.id === teamId)!.name;
     const seat = seatsTaken.get(teamId) ?? 0;
     seatsTaken.set(teamId, seat + 1);
     enr.fields = {
-      "field-phone": `+1 555 010 ${String(i + 1).padStart(4, "0")}`,
       "field-role": GROUP_ROLES[seat],
       "field-location": TEAM_LOCATIONS[teamName] ?? "San Francisco",
     };

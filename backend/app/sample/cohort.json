@@ -621,7 +621,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0001",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -633,7 +632,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0002",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -645,7 +643,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0003",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -657,7 +654,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0004",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -669,7 +665,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0005",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -681,7 +676,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0006",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -693,7 +687,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0007",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -705,7 +698,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0008",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -717,7 +709,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0009",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -729,7 +720,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0010",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -741,7 +731,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0011",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -753,7 +742,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0012",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -765,7 +753,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0013",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -777,7 +764,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0014",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -789,7 +775,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0015",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -801,7 +786,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0016",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -813,7 +797,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0017",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -825,7 +808,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0018",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -837,7 +819,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0019",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -849,7 +830,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0020",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -861,7 +841,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0021",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -873,7 +852,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0022",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -885,7 +863,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0023",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -897,7 +874,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0024",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -909,7 +885,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0025",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -921,7 +896,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0026",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -933,7 +907,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0027",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -945,7 +918,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0028",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -957,7 +929,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0029",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -969,7 +940,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0030",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -981,7 +951,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0031",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -993,7 +962,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0032",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1005,7 +973,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0033",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1017,7 +984,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0034",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1029,7 +995,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0035",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1041,7 +1006,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0036",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1053,7 +1017,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0037",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1065,7 +1028,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0038",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1077,7 +1039,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0039",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1089,7 +1050,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0040",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1101,7 +1061,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0041",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1113,7 +1072,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0042",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1125,7 +1083,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0043",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1137,7 +1094,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0044",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1149,7 +1105,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0045",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1161,7 +1116,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0046",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1173,7 +1127,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0047",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1185,7 +1138,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0048",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1197,7 +1149,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0049",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1209,7 +1160,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0050",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1221,7 +1171,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0051",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1233,7 +1182,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0052",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1245,7 +1193,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0053",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1257,7 +1204,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0054",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1269,7 +1215,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0055",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1281,7 +1226,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0056",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1293,7 +1237,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0057",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1305,7 +1248,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0058",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1317,7 +1259,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0059",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1329,7 +1270,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0060",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1341,7 +1281,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0061",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1353,7 +1292,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0062",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1365,7 +1303,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0063",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1377,7 +1314,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0064",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1389,7 +1325,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0065",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1401,7 +1336,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0066",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1413,7 +1347,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0067",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1425,7 +1358,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0068",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1437,7 +1369,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0069",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1449,7 +1380,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0070",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1461,7 +1391,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0071",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1473,7 +1402,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0072",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1485,7 +1413,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0073",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1497,7 +1424,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0074",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1509,7 +1435,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0075",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1521,7 +1446,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0076",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1533,7 +1457,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0077",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1545,7 +1468,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0078",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1557,7 +1479,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0079",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1569,7 +1490,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0080",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1581,7 +1501,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0081",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1593,7 +1512,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0082",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1605,7 +1523,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0083",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1617,7 +1534,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0084",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1629,7 +1545,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0085",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1641,7 +1556,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0086",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1653,7 +1567,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0087",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1665,7 +1578,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0088",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1677,7 +1589,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0089",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1689,7 +1600,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0090",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1701,7 +1611,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0091",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1713,7 +1622,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0092",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1725,7 +1633,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0093",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1737,7 +1644,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0094",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1749,7 +1655,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0095",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1761,7 +1666,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0096",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1773,7 +1677,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0097",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1785,7 +1688,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0098",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1797,7 +1699,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0099",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1809,7 +1710,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0100",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1821,7 +1721,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0101",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1833,7 +1732,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0102",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1845,7 +1743,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0103",
         "field-role": "Communication Manager",
         "field-location": "Buenos Aires"
       }
@@ -1857,7 +1754,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0104",
         "field-role": "Schedule Manager",
         "field-location": "Buenos Aires"
       }
@@ -1869,7 +1765,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0105",
         "field-role": "Project Timeline Manager",
         "field-location": "Buenos Aires"
       }
@@ -1881,7 +1776,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0106",
         "field-role": "Production Manager",
         "field-location": "Buenos Aires"
       }
@@ -1893,7 +1787,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0107",
         "field-role": "Team Manager",
         "field-location": "Buenos Aires"
       }
@@ -1905,7 +1798,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0108",
         "field-role": "Documentation Manager",
         "field-location": "Buenos Aires"
       }
@@ -1917,7 +1809,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0109",
         "field-role": "Communication Manager",
         "field-location": "Buenos Aires"
       }
@@ -1929,7 +1820,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0110",
         "field-role": "Schedule Manager",
         "field-location": "Buenos Aires"
       }
@@ -1941,7 +1831,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0111",
         "field-role": "Project Timeline Manager",
         "field-location": "Buenos Aires"
       }
@@ -1953,7 +1842,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0112",
         "field-role": "Production Manager",
         "field-location": "Buenos Aires"
       }
@@ -1965,7 +1853,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0113",
         "field-role": "Team Manager",
         "field-location": "Buenos Aires"
       }
@@ -1977,7 +1864,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0114",
         "field-role": "Documentation Manager",
         "field-location": "Buenos Aires"
       }
@@ -1989,7 +1875,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0115",
         "field-role": "Communication Manager",
         "field-location": "VSY"
       }
@@ -2001,7 +1886,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0116",
         "field-role": "Schedule Manager",
         "field-location": "VSY"
       }
@@ -2013,7 +1897,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0117",
         "field-role": "Project Timeline Manager",
         "field-location": "VSY"
       }
@@ -2025,7 +1908,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0118",
         "field-role": "Production Manager",
         "field-location": "VSY"
       }
@@ -2037,7 +1919,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0119",
         "field-role": "Team Manager",
         "field-location": "VSY"
       }
@@ -2049,7 +1930,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0120",
         "field-role": "Documentation Manager",
         "field-location": "VSY"
       }
@@ -6662,15 +6542,6 @@
   ],
   "exemptions": [],
   "fields": [
-    {
-      "id": "field-phone",
-      "label": "Phone",
-      "type": "text",
-      "placeholder": "+1 555 010 0000",
-      "required": false,
-      "showInList": false,
-      "visibleToParticipant": true
-    },
     {
       "id": "field-role",
       "label": "Role",

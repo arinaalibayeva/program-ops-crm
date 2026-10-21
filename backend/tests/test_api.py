@@ -158,8 +158,8 @@ def test_fields_add_move_delete(client):
     assert new["label"] == "Pronouns"
     data = client.post(f"/api/fields/{new['id']}/move", json={"toIndex": 0}).json()
     assert data["fields"][0]["id"] == new["id"]
-    data = client.delete("/api/fields/field-phone").json()
-    assert all("field-phone" not in e.get("fields", {}) for e in data["enrollments"])
+    data = client.delete("/api/fields/field-location").json()
+    assert all("field-location" not in e.get("fields", {}) for e in data["enrollments"])
 
 
 def test_delete_requirement_removes_its_records(client):
