@@ -113,8 +113,19 @@ export default function ParticipantsPage() {
   const attendanceIds = new Set(data.requirements.filter((r) => r.type === "attendance_min").map((r) => r.id));
   const participantReqs = data.requirements.filter((r) => r.scope === "participant" && !attendanceIds.has(r.id));
 
+  // With a profile open there's only room for the columns that identify someone.
+  const narrow = openId ? "xl:max-[110rem]:hidden" : undefined;
+  const narrowField = (id: string) => (id !== "field-role" ? narrow : openId ? "xl:max-[90rem]:hidden" : undefined);
+
   return (
-    <div className="max-w-6xl">
+    // Centered in the page. On wide screens it slides left when a profile opens,
+    // into the space beside the panel (40rem wide).
+    <div
+      className={cn(
+        "ml-[max(0px,calc((100%-72rem)/2))] max-w-6xl transition-[margin,max-width] duration-200 ease-out motion-reduce:transition-none",
+        openId && "xl:ml-0 xl:max-w-[calc(100%-41.5rem)]",
+      )}
+    >
       <PageHeader
         title="Participants"
         description={`${data.enrollments.filter((e) => e.status === "active").length} active in ${data.cohort.name}`}
@@ -192,13 +203,17 @@ export default function ParticipantsPage() {
             <TableRow>
               <TableHead className="pl-4">Name</TableHead>
               <TableHead>Team</TableHead>
-              <TableHead>Assigned to</TableHead>
+              <TableHead className={narrow}>Assigned to</TableHead>
               {columns.map((f) => (
-                <TableHead key={f.id}>{f.label}</TableHead>
+                <TableHead key={f.id} className={narrowField(f.id)}>
+                  {f.label}
+                </TableHead>
               ))}
-              <TableHead>Attendance</TableHead>
+              <TableHead className={narrow}>Attendance</TableHead>
               {participantReqs.map((r) => (
-                <TableHead key={r.id}>{r.name}</TableHead>
+                <TableHead key={r.id} className={narrow}>
+                  {r.name}
+                </TableHead>
               ))}
               <TableHead className="pr-4">Status</TableHead>
             </TableRow>
@@ -230,13 +245,13 @@ export default function ParticipantsPage() {
                     "—"
                   )}
                 </TableCell>
-                <TableCell>{staffName(data, participantOwner(data, enrollment.id))}</TableCell>
+                <TableCell className={narrow}>{staffName(data, participantOwner(data, enrollment.id))}</TableCell>
                 {columns.map((f) => (
-                  <TableCell key={f.id} className="max-w-48 truncate">
+                  <TableCell key={f.id} className={cn("max-w-48 truncate", narrowField(f.id))}>
                     {formatFieldValue(f, enrollment.fields?.[f.id])}
                   </TableCell>
                 ))}
-                <TableCell>
+                <TableCell className={narrow}>
                   <AttendanceCell
                     {...attendanceSummary(data, enrollment.id)}
                     status={worstStatus(
@@ -247,7 +262,7 @@ export default function ParticipantsPage() {
                 {participantReqs.map((r) => {
                   const result = status?.results.find((x) => x.requirementId === r.id);
                   return (
-                    <TableCell key={r.id}>
+                    <TableCell key={r.id} className={narrow}>
                       {result ? <StatusBadge status={result.status} /> : "—"}
                     </TableCell>
                   );
