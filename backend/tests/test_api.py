@@ -13,7 +13,7 @@ def by_key(rows, *keys):
 
 def test_cohort_matches_the_frontend_sample(client):
     data = client.get("/api/cohort").json()
-    for key in ("program", "cohort", "today", "people", "enrollments", "projects", "teams", "memberships",
+    for key in ("program", "cohort", "today", "people", "enrollments", "projects", "teams", "partners", "memberships",
                 "events", "attendance", "requirements", "fields"):
         assert data[key] == SAMPLE[key], key
     assert by_key(data["completions"], "requirementId", "subjectId") == by_key(
@@ -183,30 +183,8 @@ def test_profile_read_and_update(client):
     assert client.put("/api/me", json={"name": "", "email": "a@b.co"}).status_code == 400
 
 
-# ---- Team notes ----
-
-
-def test_team_notes(client):
-    team = SAMPLE["teams"][0]["id"]
-    notes = client.post(f"/api/teams/{team}/notes", json={"body": "  Met with their partner.  "}).json()["teamNotes"]
-    assert [(n["teamId"], n["body"]) for n in notes] == [(team, "Met with their partner.")]
-    note = notes[0]
-    assert note["author"] and "updatedAt" not in note
-
-    edited = client.patch(f"/api/team-notes/{note['id']}", json={"body": "Met with the partner."}).json()
-    assert edited["teamNotes"][0]["body"] == "Met with the partner."
-    assert edited["teamNotes"][0]["updatedAt"]
-
-    assert client.delete(f"/api/team-notes/{note['id']}").json()["teamNotes"] == []
-
-
-def test_team_note_validation(client):
-    team = SAMPLE["teams"][0]["id"]
-    assert client.post(f"/api/teams/{team}/notes", json={"body": "   "}).status_code == 400
-    assert client.post("/api/teams/nope/notes", json={"body": "Hi"}).status_code == 404
-    assert client.patch("/api/team-notes/nope", json={"body": "Hi"}).status_code == 404
-
-
-def test_team_notes_need_sign_in(anonymous):
-    team = SAMPLE["teams"][0]["id"]
-    assert anonymous.post(f"/api/teams/{team}/notes", json={"body": "Hi"}).status_code == 401
+def test_delete_event_removes_attendance(client):
+    data = client.delete("/api/events/ev-1").json()
+    assert not any(e["id"] == "ev-1" for e in data["events"])
+    assert not any(a["eventId"] == "ev-1" for a in data["attendance"])
+    assert client.delete("/api/events/ev-1").status_code == 404

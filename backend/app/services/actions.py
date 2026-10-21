@@ -13,8 +13,19 @@ from .. import models as m
 from .. import schemas as s
 
 
+# Ids the browser picks so it can link to new things before the server answers.
+CLIENT_ID = re.compile(r"^[a-z]+-[a-z0-9]{6,32}$")
+
+
 def new_id(prefix: str) -> str:
     return f"{prefix}-{secrets.token_hex(4)}"
+
+
+def given_id(session: Session, model: type, wanted: str | None, prefix: str) -> str:
+    """The browser's id when it's well formed and unused, else a new one."""
+    if wanted and CLIENT_ID.match(wanted) and session.get(model, wanted) is None:
+        return wanted
+    return new_id(prefix)
 
 
 def bad_request(message: str) -> HTTPException:
@@ -128,18 +139,37 @@ def toggle_completion(
         session.add(m.Completion(requirement_id=requirement_id, subject_id=subject_id, completed_at=today))
 
 
-def _validate_requirement(req: s.RequirementIn) -> None:
+def _validate_record_requirement(session: Session, cohort: m.Cohort, req: s.RequirementIn) -> None:
+    p = req.params
+    type_ = session.get(m.RecordType, p.get("typeId") or "")
+    if type_ is None or type_.program_id != cohort.program_id:
+        raise bad_request("Choose which records count.")
+    via = session.get(m.RecordField, p.get("viaFieldId") or "")
+    if via is None or via.type_id != type_.id or via.type != "link" or via.link_to != req.scope:
+        raise bad_request(f"Choose the field that links these records to each {req.scope}.")
+    date_field = p.get("dateFieldId")
+    if date_field is not None:
+        f = session.get(m.RecordField, date_field)
+        if f is None or f.type_id != type_.id or f.type != "date":
+            raise bad_request("The date to check must be a date field on these records.")
+    if not isinstance(p.get("minCount"), int) or p["minCount"] < 1:
+        raise bad_request("Record requirements need a minimum of at least 1.")
+
+
+def _validate_requirement(session: Session, cohort: m.Cohort, req: s.RequirementIn) -> None:
     p = req.params
     if req.type == "attendance_min":
         if req.scope != "participant":
             raise bad_request("Attendance requirements apply to participants.")
         if not isinstance(p.get("category"), str) or not isinstance(p.get("minCount"), int) or p["minCount"] < 1:
             raise bad_request("Attendance requirements need a category and a minimum of at least 1.")
-    elif req.type == "complete_by":
+    elif req.type in ("complete_by", "record_by"):
         try:
             dt.date.fromisoformat(p.get("dueDate", ""))
         except (TypeError, ValueError):
             raise bad_request("Deadline requirements need a due date.") from None
+        if req.type == "record_by":
+            _validate_record_requirement(session, cohort, req)
     elif req.type == "team_min_size":
         if req.scope != "team":
             raise bad_request("Team size requirements apply to teams.")
@@ -150,7 +180,7 @@ def _validate_requirement(req: s.RequirementIn) -> None:
 def add_requirement(session: Session, cohort: m.Cohort, req: s.RequirementIn) -> None:
     if not req.name.strip():
         raise bad_request("Enter a name.")
-    _validate_requirement(req)
+    _validate_requirement(session, cohort, req)
     position = session.scalar(
         select(func.coalesce(func.max(m.Requirement.position), -1)).where(m.Requirement.cohort_id == cohort.id)
     )
@@ -169,7 +199,7 @@ def delete_requirement(session: Session, cohort: m.Cohort, requirement_id: str) 
     session.delete(req)
 
 
-# ---- Team notes ----
+# ---- Notes ----
 
 
 def _note_body(body: str) -> str:
@@ -181,29 +211,149 @@ def _note_body(body: str) -> str:
     return body
 
 
-def _team_note(session: Session, cohort: m.Cohort, note_id: str) -> m.TeamNote:
-    note = session.get(m.TeamNote, note_id)
-    team = note and session.get(m.Team, note.team_id)
-    if not team or team.cohort_id != cohort.id:
-        raise HTTPException(status_code=404, detail="Note not found.")
+def _subject_exists(session: Session, cohort: m.Cohort, subject_type: str, subject_id: str) -> bool:
+    if subject_type == "participant":
+        e = session.get(m.Enrollment, subject_id)
+        return e is not None and e.cohort_id == cohort.id
+    if subject_type == "team":
+        t = session.get(m.Team, subject_id)
+        return t is not None and t.cohort_id == cohort.id
+    p = session.get(m.Partner, subject_id)
+    return p is not None and p.program_id == cohort.program_id
+
+
+def _note(session: Session, cohort: m.Cohort, note_id: str) -> m.Note:
+    note = session.get(m.Note, note_id)
+    if note is None or not _subject_exists(session, cohort, note.subject_type, note.subject_id):
+        raise not_found("Note")
     return note
 
 
-def add_team_note(session: Session, cohort: m.Cohort, team_id: str, body: str, author: str) -> None:
+def add_note(session: Session, cohort: m.Cohort, body: s.NoteCreate, author: str) -> None:
+    if not _subject_exists(session, cohort, body.subject_type, body.subject_id):
+        raise not_found(body.subject_type.capitalize())
+    session.add(
+        m.Note(
+            id=given_id(session, m.Note, body.id, "note"), subject_type=body.subject_type,
+            subject_id=body.subject_id, body=_note_body(body.body), author=author,
+            follow_up_date=body.follow_up_date,
+        )
+    )
+
+
+def update_note(session: Session, cohort: m.Cohort, note_id: str, patch: s.NotePatch) -> None:
+    note = _note(session, cohort, note_id)
+    if patch.body is not None:
+        note.body = _note_body(patch.body)
+        note.updated_at = m.now()
+    if "follow_up_date" in patch.model_fields_set:
+        note.follow_up_date = patch.follow_up_date
+    if patch.follow_up_done is not None:
+        note.follow_up_done = patch.follow_up_done
+
+
+def delete_note(session: Session, cohort: m.Cohort, note_id: str) -> None:
+    session.delete(_note(session, cohort, note_id))
+
+
+# ---- Partners ----
+
+
+def _partner(session: Session, cohort: m.Cohort, partner_id: str) -> m.Partner:
+    p = session.get(m.Partner, partner_id)
+    if p is None or p.program_id != cohort.program_id:
+        raise not_found("Partner")
+    return p
+
+
+def _staff_id(session: Session, owner_id: str | None) -> str | None:
+    """Only people who can sign in to the CRM can look after something."""
+    if owner_id is None:
+        return None
+    user = session.get(m.User, owner_id)
+    if user is None or user.role == "participant":
+        raise not_found("Staff member")
+    return user.id
+
+
+def _website(url: str | None) -> str | None:
+    url = (url or "").strip()
+    # It's shown as a link, so a pasted "javascript:" value must not get through.
+    if url and not re.match(r"^https?://\S+$", url, re.IGNORECASE):
+        raise bad_request("Websites must start with http:// or https://.")
+    return url or None
+
+
+def add_partner(session: Session, cohort: m.Cohort, body: s.PartnerCreate) -> None:
+    name = body.name.strip()
+    if not name:
+        raise bad_request("Enter a name.")
+    taken = session.scalars(
+        select(m.Partner).where(m.Partner.program_id == cohort.program_id, func.lower(m.Partner.name) == name.lower())
+    ).first()
+    if taken:
+        raise bad_request("There's already a partner with this name.")
+    session.add(
+        m.Partner(
+            id=given_id(session, m.Partner, body.id, "partner"), program_id=cohort.program_id, name=name,
+            website=_website(body.website), description=(body.description or "").strip() or None,
+            owner_id=_staff_id(session, body.owner_id),
+        )
+    )
+
+
+def update_partner(session: Session, cohort: m.Cohort, partner_id: str, patch: s.PartnerPatch) -> None:
+    p = _partner(session, cohort, partner_id)
+    fields = patch.model_fields_set
+    if "name" in fields:
+        name = (patch.name or "").strip()
+        if not name:
+            raise bad_request("Enter a name.")
+        p.name = name
+    if "website" in fields:
+        p.website = _website(patch.website)
+    if "description" in fields:
+        p.description = (patch.description or "").strip() or None
+    if "owner_id" in fields:
+        p.owner_id = _staff_id(session, patch.owner_id)
+
+
+def add_contact(session: Session, cohort: m.Cohort, partner_id: str, body: s.PartnerContactCreate) -> None:
+    p = _partner(session, cohort, partner_id)
+    name = body.name.strip()
+    email = (body.email or "").strip()
+    if not name:
+        raise bad_request("Enter their name.")
+    if email and not EMAIL.match(email):
+        raise bad_request("Enter a valid email.")
+    session.add(
+        m.PartnerContact(
+            id=given_id(session, m.PartnerContact, body.id, "contact"), partner_id=p.id, name=name,
+            title=(body.title or "").strip() or None, email=email or None, phone=(body.phone or "").strip() or None,
+        )
+    )
+
+
+def delete_contact(session: Session, cohort: m.Cohort, contact_id: str) -> None:
+    c = session.get(m.PartnerContact, contact_id)
+    if c is None:
+        raise not_found("Contact")
+    _partner(session, cohort, c.partner_id)
+    session.delete(c)
+
+
+def set_project_partner(session: Session, cohort: m.Cohort, project_id: str, partner_id: str | None) -> None:
+    project = session.get(m.Project, project_id)
+    if project is None or project.cohort_id != cohort.id:
+        raise not_found("Project")
+    project.partner_id = _partner(session, cohort, partner_id).id if partner_id else None
+
+
+def set_team_owner(session: Session, cohort: m.Cohort, team_id: str, owner_id: str | None) -> None:
     team = session.get(m.Team, team_id)
-    if not team or team.cohort_id != cohort.id:
-        raise HTTPException(status_code=404, detail="Team not found.")
-    session.add(m.TeamNote(id=new_id("note"), team_id=team.id, body=_note_body(body), author=author))
-
-
-def update_team_note(session: Session, cohort: m.Cohort, note_id: str, body: str) -> None:
-    note = _team_note(session, cohort, note_id)
-    note.body = _note_body(body)
-    note.updated_at = m.now()
-
-
-def delete_team_note(session: Session, cohort: m.Cohort, note_id: str) -> None:
-    session.delete(_team_note(session, cohort, note_id))
+    if team is None or team.cohort_id != cohort.id:
+        raise not_found("Team")
+    team.owner_id = _staff_id(session, owner_id)
 
 
 # ---- Participants ----
@@ -352,6 +502,8 @@ def add_event(session: Session, cohort: m.Cohort, event: s.EventIn) -> m.Event:
     values["links"] = [link.model_dump() for link in event.links] if event.links else None
     record = m.Event(id=new_id("ev"), cohort_id=cohort.id, checkin_token=f"chk-{secrets.token_urlsafe(9)}", **values)
     record.title = record.title.strip()
+    if record.partner_id:
+        _partner(session, cohort, record.partner_id)
     _validate_event(record)
     session.add(record)
     return record
@@ -366,8 +518,31 @@ def update_event(session: Session, cohort: m.Cohort, event_id: str, patch: s.Eve
             raise bad_request(f"{name} can't be empty.")
         if name == "links":
             value = [link.model_dump() for link in value] if value else None
+        if name == "partner_id" and value:
+            _partner(session, cohort, value)
         setattr(record, name, value)
     _validate_event(record)
+
+
+def delete_event(session: Session, cohort: m.Cohort, event_id: str) -> None:
+    """Also removes its attendance, and unlinks records that point at it."""
+    record = _event(session, cohort, event_id)
+    session.execute(delete(m.Attendance).where(m.Attendance.event_id == record.id))
+    links = set(
+        session.scalars(select(m.RecordField.id).where(m.RecordField.type == "link", m.RecordField.link_to == "event"))
+    )
+    if links:
+        for other in session.scalars(select(m.CustomRecord).where(m.CustomRecord.cohort_id == cohort.id)):
+            values = dict(other.values)
+            for key in links & values.keys():
+                value = values[key]
+                if isinstance(value, list) and record.id in value:
+                    values[key] = [x for x in value if x != record.id]
+                elif value == record.id:
+                    del values[key]
+            if values != other.values:
+                other.values = values
+    session.delete(record)
 
 
 # ---- Custom fields ----

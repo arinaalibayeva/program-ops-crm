@@ -70,7 +70,57 @@ class Project(CamelModel):
     id: str
     cohort_id: str
     title: str
-    partner: str | None = None
+    partner_id: str | None = None
+
+
+class PartnerContactIn(CamelModel):
+    name: str
+    title: str | None = None
+    email: str | None = None
+    phone: str | None = None
+
+
+class PartnerContactCreate(PartnerContactIn):
+    id: str | None = None
+
+
+class PartnerContact(PartnerContactIn):
+    id: str
+
+
+class PartnerCreate(CamelModel):
+    id: str | None = None
+    name: str
+    website: str | None = None
+    description: str | None = None
+    owner_id: str | None = None
+
+
+class PartnerPatch(CamelModel):
+    """Only the fields sent are changed; send null to clear one."""
+
+    name: str | None = None
+    website: str | None = None
+    description: str | None = None
+    owner_id: str | None = None
+
+
+class Partner(CamelModel):
+    id: str
+    program_id: str
+    name: str
+    website: str | None = None
+    description: str | None = None
+    owner_id: str | None = None
+    contacts: list[PartnerContact] = []
+
+
+class ProjectPartner(CamelModel):
+    partner_id: str | None = None
+
+
+class TeamOwner(CamelModel):
+    owner_id: str | None = None
 
 
 class Team(CamelModel):
@@ -78,6 +128,7 @@ class Team(CamelModel):
     cohort_id: str
     name: str
     project_id: str | None = None
+    owner_id: str | None = None
 
 
 class TeamMembership(CamelModel):
@@ -104,6 +155,7 @@ class EventIn(CamelModel):
     description: str | None = None
     links: list[EventLink] | None = None
     is_required: bool = True
+    partner_id: str | None = None
 
 
 class EventPatch(CamelModel):
@@ -120,6 +172,7 @@ class EventPatch(CamelModel):
     description: str | None = None
     links: list[EventLink] | None = None
     is_required: bool | None = None
+    partner_id: str | None = None
 
 
 class ProgramEvent(EventIn):
@@ -137,7 +190,7 @@ class Attendance(CamelModel):
 class RequirementIn(CamelModel):
     name: str
     scope: Literal["participant", "team"]
-    type: Literal["attendance_min", "complete_by", "team_min_size"]
+    type: Literal["attendance_min", "complete_by", "team_min_size", "record_by"]
     params: dict[str, Any]
 
 
@@ -157,17 +210,35 @@ class Exemption(CamelModel):
     reason: str | None = None
 
 
-class TeamNote(CamelModel):
+NoteSubject = Literal["participant", "team", "partner"]
+
+
+class Note(CamelModel):
     id: str
-    team_id: str
+    subject_type: NoteSubject
+    subject_id: str
     body: str
     author: str | None = None
+    follow_up_date: dt.date | None = None
+    follow_up_done: bool = False
     created_at: dt.datetime
     updated_at: dt.datetime | None = None
 
 
-class TeamNoteIn(CamelModel):
+class NoteCreate(CamelModel):
+    id: str | None = None
+    subject_type: NoteSubject
+    subject_id: str
     body: str
+    follow_up_date: dt.date | None = None
+
+
+class NotePatch(CamelModel):
+    """Only the fields sent are changed; send a null followUpDate to clear it."""
+
+    body: str | None = None
+    follow_up_date: dt.date | None = None
+    follow_up_done: bool | None = None
 
 
 # ---- Custom record types ----
@@ -330,6 +401,16 @@ class FormResult(CamelModel):
     name: str | None = None
 
 
+class StaffMember(CamelModel):
+    """Someone who can sign in to the CRM and look after teams and partners."""
+
+    id: str
+    name: str
+    email: str
+    role: str
+    job_title: str | None = None
+
+
 class CohortData(CamelModel):
     program: Program
     cohort: Cohort
@@ -345,7 +426,9 @@ class CohortData(CamelModel):
     completions: list[Completion]
     exemptions: list[Exemption]
     fields: list[FieldDefinition]
-    team_notes: list[TeamNote] = []
+    partners: list[Partner] = []
+    staff: list[StaffMember] = []
+    notes: list[Note] = []
     record_types: list[RecordType] = []
     records: list[CustomRecord] = []
     calculations: list[Calculation] = []
@@ -363,9 +446,16 @@ class RequirementResult(CamelModel):
     excused: bool | None = None
 
 
+class RuleResult(CamelModel):
+    rule_id: str
+    status: Status
+    reason: str
+
+
 class SubjectStatus(CamelModel):
     status: Status
     results: list[RequirementResult]
+    rule_results: list[RuleResult] | None = None
     flags: list[str]
 
 

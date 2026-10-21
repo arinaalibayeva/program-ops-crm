@@ -1,7 +1,7 @@
 """Custom record types: definitions, records, calculations, rules and forms.
 
 Mirrors frontend/lib/record-actions.ts, including what each delete cleans up.
-Calculations and rules are worked out by the frontend (frontend/lib/records.ts).
+Working out calculations and rules lives with the statuses, in requirements.py.
 """
 
 import re
@@ -13,20 +13,12 @@ from sqlalchemy.orm import Session
 
 from .. import models as m
 from .. import schemas as s
-from .actions import EMAIL, bad_request, new_id, not_found
+from .actions import EMAIL, bad_request, delete_requirement, new_id, not_found
+from .actions import given_id as _id
 
 BUILT_IN_TARGETS = ("participant", "team", "event")
-# Ids the browser picks so it can link to new things before the server answers.
-CLIENT_ID = re.compile(r"^[a-z]+-[a-z0-9]{6,32}$")
 TOKEN = re.compile(r"^[A-Za-z0-9_-]{16,64}$")
 DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-
-
-def _id(session: Session, model: type, wanted: str | None, prefix: str) -> str:
-    """The browser's id when it's well formed and unused, else a new one."""
-    if wanted and CLIENT_ID.match(wanted) and session.get(model, wanted) is None:
-        return wanted
-    return new_id(prefix)
 
 
 def _clean(text: str, what: str) -> str:
@@ -108,6 +100,12 @@ def _link_exists(session: Session, cohort: m.Cohort, target: str, record_id: str
 # ---- Record types and fields ----
 
 
+def _record_requirements(session: Session, cohort: m.Cohort) -> list[m.Requirement]:
+    return list(
+        session.scalars(select(m.Requirement).where(m.Requirement.cohort_id == cohort.id, m.Requirement.type == "record_by"))
+    )
+
+
 def add_type(session: Session, cohort: m.Cohort, body: s.RecordTypeCreate) -> None:
     position = session.scalar(
         select(func.coalesce(func.max(m.RecordType.position), -1)).where(m.RecordType.program_id == cohort.program_id)
@@ -145,6 +143,9 @@ def delete_type(session: Session, cohort: m.Cohort, type_id: str) -> None:
             (m.Calculation.source_type_id == t.id) | (m.Calculation.on == t.id),
         ),
     )
+    for req in _record_requirements(session, cohort):
+        if req.params.get("typeId") == t.id:
+            delete_requirement(session, cohort, req.id)
     session.execute(delete(m.RecordForm).where(m.RecordForm.type_id == t.id))
     session.execute(delete(m.CustomRecord).where(m.CustomRecord.type_id == t.id))
     session.execute(delete(m.RecordField).where(m.RecordField.type_id == t.id))
@@ -202,6 +203,11 @@ def delete_field(session: Session, cohort: m.Cohort, field_id: str) -> None:
     for c in session.scalars(select(m.Calculation).where(m.Calculation.source_type_id == f.type_id)):
         if c.filter and c.filter.get("fieldId") == f.id:
             _drop_calculations(session, select(m.Calculation.id).where(m.Calculation.id == c.id))
+    for req in _record_requirements(session, cohort):
+        if req.params.get("viaFieldId") == f.id:
+            delete_requirement(session, cohort, req.id)
+        elif req.params.get("dateFieldId") == f.id:
+            req.params = {k: v for k, v in req.params.items() if k != "dateFieldId"}
     for r in session.scalars(select(m.CustomRecord).where(m.CustomRecord.type_id == f.type_id)):
         if f.id in r.values:
             r.values = {k: v for k, v in r.values.items() if k != f.id}

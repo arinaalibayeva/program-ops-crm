@@ -2,7 +2,7 @@
 
 import datetime as dt
 
-from sqlalchemy import JSON, Boolean, Date, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, Boolean, Date, DateTime, ForeignKey, Integer, String, Text, false
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .db import Base
@@ -82,7 +82,34 @@ class Project(Base):
     id: Mapped[str] = mapped_column(String, primary_key=True)
     cohort_id: Mapped[str] = mapped_column(ForeignKey("cohorts.id"), index=True)
     title: Mapped[str]
-    partner: Mapped[str | None]
+    partner_id: Mapped[str | None] = mapped_column(ForeignKey("partners.id"), index=True)
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+class Partner(Base):
+    """An organization that gives teams projects. Belongs to the program, so it outlasts a cohort."""
+
+    __tablename__ = "partners"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    program_id: Mapped[str] = mapped_column(ForeignKey("programs.id"), index=True)
+    name: Mapped[str]
+    website: Mapped[str | None]
+    description: Mapped[str | None] = mapped_column(Text)
+    # The staff member who looks after this relationship.
+    owner_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), index=True)
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+class PartnerContact(Base):
+    __tablename__ = "partner_contacts"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    partner_id: Mapped[str] = mapped_column(ForeignKey("partners.id"), index=True)
+    name: Mapped[str]
+    title: Mapped[str | None]
+    email: Mapped[str | None]
+    phone: Mapped[str | None]
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
@@ -93,19 +120,25 @@ class Team(Base):
     cohort_id: Mapped[str] = mapped_column(ForeignKey("cohorts.id"), index=True)
     name: Mapped[str]
     project_id: Mapped[str | None] = mapped_column(ForeignKey("projects.id"))
+    # The staff member who looks after this team.
+    owner_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), index=True)
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
-class TeamNote(Base):
-    """A note an admin wrote about a team, like what came up in a meeting."""
+class Note(Base):
+    """A note an admin wrote about a participant, team or partner."""
 
-    __tablename__ = "team_notes"
+    __tablename__ = "notes"
 
     id: Mapped[str] = mapped_column(String, primary_key=True)
-    team_id: Mapped[str] = mapped_column(ForeignKey("teams.id"), index=True)
+    subject_type: Mapped[str] = mapped_column(String, index=True)  # participant | team | partner
+    subject_id: Mapped[str] = mapped_column(String, index=True)  # enrollment, team or partner id
     body: Mapped[str] = mapped_column(Text)
     # Kept as a name so a note still shows who wrote it if the account goes away.
     author: Mapped[str | None]
+    # Set to ask someone to come back to this by a date. It shows on Today until it's done.
+    follow_up_date: Mapped[dt.date | None] = mapped_column(Date)
+    follow_up_done: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
     updated_at: Mapped[dt.datetime | None] = mapped_column(DateTime(timezone=True))
 
@@ -138,6 +171,8 @@ class Event(Base):
     description: Mapped[str | None] = mapped_column(Text)
     links: Mapped[list | None] = mapped_column(JSON)  # [{label, url}]
     is_required: Mapped[bool] = mapped_column(Boolean, default=True)
+    # The one partner this event is with. Empty partner sessions are for every partner.
+    partner_id: Mapped[str | None] = mapped_column(ForeignKey("partners.id"), index=True)
     checkin_token: Mapped[str] = mapped_column(String, unique=True, index=True)
 
 
@@ -157,7 +192,7 @@ class Requirement(Base):
     cohort_id: Mapped[str] = mapped_column(ForeignKey("cohorts.id"), index=True)
     name: Mapped[str]
     scope: Mapped[str]  # participant | team
-    type: Mapped[str]  # attendance_min | complete_by | team_min_size
+    type: Mapped[str]  # attendance_min | complete_by | team_min_size | record_by
     params: Mapped[dict] = mapped_column(JSON)
     position: Mapped[int] = mapped_column(Integer, default=0)
 

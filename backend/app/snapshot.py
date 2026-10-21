@@ -2,7 +2,7 @@
 
 import datetime as dt
 
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 from sqlalchemy.orm import Session
 
 from . import models as m
@@ -40,6 +40,18 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
         .order_by(m.Requirement.position, m.Requirement.id)
     ).all()
     requirement_ids = [r.id for r in requirements]
+    partners = session.scalars(
+        select(m.Partner)
+        .where(m.Partner.program_id == cohort.program_id)
+        .order_by(m.Partner.created_at, m.Partner.id)
+    ).all()
+    contacts: dict[str, list[s.PartnerContact]] = {p.id: [] for p in partners}
+    for c in session.scalars(
+        select(m.PartnerContact)
+        .where(m.PartnerContact.partner_id.in_(contacts.keys()))
+        .order_by(m.PartnerContact.created_at, m.PartnerContact.id)
+    ):
+        contacts[c.partner_id].append(s.PartnerContact(id=c.id, name=c.name, title=c.title, email=c.email, phone=c.phone))
 
     return s.CohortData(
         program=s.Program(id=program.id, name=program.name),
@@ -65,14 +77,17 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
             for e in enrollments
         ],
         projects=[
-            s.Project(id=p.id, cohort_id=p.cohort_id, title=p.title, partner=p.partner)
+            s.Project(id=p.id, cohort_id=p.cohort_id, title=p.title, partner_id=p.partner_id)
             for p in session.scalars(
                 select(m.Project)
                 .where(m.Project.cohort_id == cohort.id)
                 .order_by(m.Project.created_at, m.Project.id)
             )
         ],
-        teams=[s.Team(id=t.id, cohort_id=t.cohort_id, name=t.name, project_id=t.project_id) for t in teams],
+        teams=[
+            s.Team(id=t.id, cohort_id=t.cohort_id, name=t.name, project_id=t.project_id, owner_id=t.owner_id)
+            for t in teams
+        ],
         memberships=[
             s.TeamMembership(
                 enrollment_id=x.enrollment_id, team_id=x.team_id, start_date=x.start_date, end_date=x.end_date
@@ -103,15 +118,35 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
             s.Exemption(requirement_id=x.requirement_id, subject_id=x.subject_id, reason=x.reason)
             for x in session.scalars(select(m.Exemption).where(m.Exemption.requirement_id.in_(requirement_ids)))
         ],
-        team_notes=[
-            s.TeamNote(
-                id=n.id, team_id=n.team_id, body=n.body, author=n.author,
+        partners=[
+            s.Partner(
+                id=p.id, program_id=p.program_id, name=p.name, website=p.website, description=p.description,
+                owner_id=p.owner_id, contacts=contacts[p.id],
+            )
+            for p in partners
+        ],
+        staff=[
+            s.StaffMember(id=u.id, name=u.name, email=u.email, role=u.role, job_title=u.job_title)
+            for u in session.scalars(
+                select(m.User).where(m.User.role != "participant").order_by(m.User.created_at, m.User.id)
+            )
+        ],
+        notes=[
+            s.Note(
+                id=n.id, subject_type=n.subject_type, subject_id=n.subject_id, body=n.body, author=n.author,
+                follow_up_date=n.follow_up_date, follow_up_done=n.follow_up_done,
                 created_at=as_utc(n.created_at), updated_at=as_utc(n.updated_at) if n.updated_at else None,
             )
             for n in session.scalars(
-                select(m.TeamNote)
-                .where(m.TeamNote.team_id.in_([t.id for t in teams]))
-                .order_by(m.TeamNote.created_at.desc(), m.TeamNote.id)
+                select(m.Note)
+                .where(
+                    or_(
+                        and_(m.Note.subject_type == "participant", m.Note.subject_id.in_(enrollment_ids)),
+                        and_(m.Note.subject_type == "team", m.Note.subject_id.in_([t.id for t in teams])),
+                        and_(m.Note.subject_type == "partner", m.Note.subject_id.in_([p.id for p in partners])),
+                    )
+                )
+                .order_by(m.Note.created_at.desc(), m.Note.id)
             )
         ],
         **record_snapshot(session, cohort),
@@ -156,6 +191,7 @@ def event_schema(e: m.Event) -> s.ProgramEvent:
         description=e.description,
         links=e.links,
         is_required=e.is_required,
+        partner_id=e.partner_id,
         checkin_token=e.checkin_token,
     )
 
