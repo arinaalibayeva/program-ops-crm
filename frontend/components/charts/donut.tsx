@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export interface DonutSlice {
@@ -9,6 +10,8 @@ export interface DonutSlice {
   /** A fill class for the legend swatch and a stroke class for the ring. */
   fill: string;
   stroke: string;
+  /** Opens whatever is behind this slice. */
+  href?: string;
 }
 
 const SIZE = 136;
@@ -77,19 +80,35 @@ export function Donut({ slices, unit }: { slices: DonutSlice[]; unit: string }) 
         {slices.map((slice) => (
           <li
             key={slice.label}
-            tabIndex={0}
             onMouseEnter={() => setActive(slice.label)}
             onMouseLeave={() => setActive(undefined)}
             onFocus={() => setActive(slice.label)}
             onBlur={() => setActive(undefined)}
-            className="flex items-center gap-2 rounded text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
           >
-            <span className={cn("size-2.5 shrink-0 rounded-[3px]", slice.fill)} aria-hidden />
-            <span className="min-w-0 flex-1 truncate">{slice.label}</span>
-            <span className="font-medium tabular-nums">{slice.value}</span>
+            <LegendRow slice={slice} />
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+function LegendRow({ slice }: { slice: DonutSlice }) {
+  const row = "flex items-center gap-2 rounded text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50";
+  const content = (
+    <>
+      <span className={cn("size-2.5 shrink-0 rounded-[3px]", slice.fill)} aria-hidden />
+      <span className="min-w-0 flex-1 truncate">{slice.label}</span>
+      <span className="font-medium tabular-nums">{slice.value}</span>
+    </>
+  );
+  return slice.href ? (
+    <Link href={slice.href} className={cn(row, "hover:underline")}>
+      {content}
+    </Link>
+  ) : (
+    <div tabIndex={0} className={row}>
+      {content}
     </div>
   );
 }
