@@ -27,6 +27,7 @@ from .db import get_session
 from .seed import reset
 from .services import actions
 from .services import records
+from .services import personal
 from .services import team
 from .services.requirements import participant_summary, team_summary
 from .snapshot import build_snapshot, current_cohort, event_schema
@@ -272,6 +273,37 @@ def profile_schema(user: m.User) -> s.Profile:
         id=user.id, name=user.name, email=user.email, job_title=user.job_title,
         pronouns=user.pronouns, phone=user.phone, role=user.role,
     )
+
+
+@admin.get("/api/me/items", response_model=list[s.PersonalItem], **api)
+def get_my_items(session: Session = Depends(get_session), user: m.User = Depends(require_admin)):
+    return personal.items(session, user)
+
+
+@admin.post("/api/me/items", response_model=list[s.PersonalItem], **api)
+def add_my_item(
+    body: s.PersonalItemIn, session: Session = Depends(get_session), user: m.User = Depends(require_admin)
+):
+    personal.add(session, user, body)
+    session.commit()
+    return personal.items(session, user)
+
+
+@admin.patch("/api/me/items/{item_id}", response_model=list[s.PersonalItem], **api)
+def update_my_item(
+    item_id: str, body: s.PersonalItemPatch, session: Session = Depends(get_session),
+    user: m.User = Depends(require_admin),
+):
+    personal.update(session, user, item_id, body)
+    session.commit()
+    return personal.items(session, user)
+
+
+@admin.delete("/api/me/items/{item_id}", response_model=list[s.PersonalItem], **api)
+def delete_my_item(item_id: str, session: Session = Depends(get_session), user: m.User = Depends(require_admin)):
+    personal.remove(session, user, item_id)
+    session.commit()
+    return personal.items(session, user)
 
 
 @admin.get("/api/me", response_model=s.Profile, **api)

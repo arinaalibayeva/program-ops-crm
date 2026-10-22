@@ -87,9 +87,13 @@ def test_team_needs_sign_in(anonymous):
 def test_removing_someone_signs_them_out(client, session_factory):
     link = invite(client)
     assert client.delete("/api/team/user-admin").json()["detail"] == "You can't remove yourself."
+    with session_factory() as session:
+        session.add(m.PersonalItem(id="item-abcdef12", user_id=link["member"]["id"], kind="todo", body="x"))
+        session.commit()
     client.delete(f"/api/team/{link['member']['id']}")
     with session_factory() as session:
         assert session.get(m.User, link["member"]["id"]) is None
+        assert session.get(m.PersonalItem, "item-abcdef12") is None
         assert session.query(m.Invite).count() == 0
 
 

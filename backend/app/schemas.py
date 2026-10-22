@@ -557,6 +557,28 @@ class Profile(ProfileIn):
     role: str
 
 
+class PersonalItem(CamelModel):
+    id: str
+    kind: Literal["todo", "note"]
+    body: str
+    description: str | None = None
+    done: bool
+    created_at: dt.datetime
+
+
+class PersonalItemIn(CamelModel):
+    id: str | None = None
+    kind: Literal["todo", "note"]
+    body: str
+    description: str | None = None
+
+
+class PersonalItemPatch(CamelModel):
+    body: str | None = None
+    description: str | None = None
+    done: bool | None = None
+
+
 TeamRole = Literal["manager", "admin"]
 
 

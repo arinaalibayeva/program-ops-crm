@@ -348,3 +348,17 @@ class Invite(Base):
     created_by: Mapped[str | None]  # the inviter's name, kept if they're removed
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
     expires_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True))
+
+
+class PersonalItem(Base):
+    """Someone's own to-do or quick note on Today. Only they can see it."""
+
+    __tablename__ = "personal_items"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    kind: Mapped[str]  # todo | note
+    body: Mapped[str] = mapped_column(Text)
+    description: Mapped[str | None] = mapped_column(Text)
+    done: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
