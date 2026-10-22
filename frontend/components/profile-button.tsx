@@ -16,7 +16,7 @@ export function ProfileButton() {
       aria-label="Your profile"
       aria-current={active ? "page" : undefined}
       className={cn(
-        "absolute top-3 right-4 z-30 flex size-10 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground shadow-sm transition-transform hover:scale-105 sm:right-6 lg:right-10",
+        "absolute top-3 right-4 z-30 flex size-12 items-center justify-center rounded-full bg-primary text-base font-semibold text-primary-foreground shadow-sm transition-transform hover:scale-105 sm:right-6 lg:right-10",
         active && "ring-2 ring-primary/30 ring-offset-2 ring-offset-transparent",
       )}
     >

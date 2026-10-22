@@ -18,6 +18,16 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-ocean-50: #eef5fd;
+  --color-ocean-100: #dceafa;
+  --color-ocean-200: #bed7f4;
+  --color-ocean-300: #91bceb;
+  --color-ocean-400: #5f9ade;
+  --color-ocean-500: #3a7bc8;
+  --color-ocean-600: #2a62a8;
+  --color-ocean-700: #1d4580;
+  --color-ocean-800: #163a6d;
+  --color-ocean-900: #122848;
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -49,34 +59,34 @@
 }
 
 :root {
-  /* Soft gray page, white surfaces, and dark blue as the only accent. */
+  /* A blue scale from pale sky to deep navy, with white surfaces. */
   --background: #ffffff;
-  --foreground: #161f2c;
+  --foreground: #122848;
   --card: #ffffff;
-  --card-foreground: #161f2c;
+  --card-foreground: #122848;
   --popover: #ffffff;
-  --popover-foreground: #161f2c;
-  --primary: #1b3a66;
+  --popover-foreground: #122848;
+  --primary: #1d4580;
   --primary-foreground: #ffffff;
-  --secondary: #e8ebf0;
-  --secondary-foreground: #2a3648;
-  --muted: #e6e9ee;
-  --muted-foreground: #5f6b7c;
-  --accent: #e3e7ed;
-  --accent-foreground: #161f2c;
+  --secondary: #dceafa;
+  --secondary-foreground: #1f4c8a;
+  --muted: #e6eff9;
+  --muted-foreground: #4f6585;
+  --accent: #d3e4f8;
+  --accent-foreground: #163a6d;
   --destructive: oklch(0.5 0.18 25);
-  --border: #dde1e7;
-  --input: #d5dae1;
-  --ring: #5f7fa8;
+  --border: #d4e1f0;
+  --input: #c5d7eb;
+  --ring: #3a7bc8;
   --chart-1: oklch(0.3 0.085 258);
-  --chart-2: #2f6fa8;
+  --chart-2: #3a7bc8;
   --chart-3: oklch(0.68 0.06 235);
   --chart-4: oklch(0.82 0.05 85);
   --chart-5: oklch(0.22 0.06 258);
   /* The page behind everything, and the sky on the sign-in page. */
-  --page: #eff1f4;
-  --canvas: #eff1f4;
-  --dusk: #132b4f;
+  --page: #e4eefa;
+  --canvas: #e4eefa;
+  --dusk: linear-gradient(160deg, #122848 0%, #1d4580 52%, #3a7bc8 100%);
   /* Fine film grain, so gradients don't look flat or banded. */
   --grain: none;
   /* Components derive their corner radius from this. */
