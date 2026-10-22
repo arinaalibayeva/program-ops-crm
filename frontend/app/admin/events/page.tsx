@@ -51,13 +51,13 @@ type View = "list" | "calendar";
 
 export default function EventsPage() {
   const { data } = useCohort();
-  const [view, setView] = useState<View>("list");
+  const [view, setView] = useState<View>("calendar");
 
   useEffect(() => {
     try {
-      if (localStorage.getItem(VIEW_KEY) === "calendar") setView("calendar");
+      if (localStorage.getItem(VIEW_KEY) === "list") setView("list");
     } catch {
-      // Storage unavailable: start on the list.
+      // Storage unavailable: start on the calendar.
     }
   }, []);
 
