@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
-import { addDays, formatEventTime, takesAttendance } from "@/lib/events";
+import { EventPopover } from "@/components/event-popover";
+import {
+  EVENT_CATEGORY_COLORS,
+  EVENT_CATEGORY_LABELS,
+  addDays,
+  formatEventTime,
+  takesAttendance,
+} from "@/lib/events";
 import { formatDate, initials } from "@/lib/format";
+import { useCohort } from "@/lib/store";
 import type { ProgramEvent } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -15,16 +23,18 @@ const VIEWS: { id: View; label: string }[] = [
   { id: "week", label: "Week" },
   { id: "month", label: "Month" },
 ];
-const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+export const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 const HOUR_HEIGHT = 64; // px
 const MIN_BLOCK_HEIGHT = 48; // px, enough for a title and a time
 
+type OpenEvent = (e: React.MouseEvent<HTMLElement>, event: ProgramEvent) => void;
+
 /** "2026-10" for any date in October 2026. */
-function monthOf(iso: string): string {
+export function monthOf(iso: string): string {
   return iso.slice(0, 7);
 }
 
-function shiftMonth(month: string, by: number): string {
+export function shiftMonth(month: string, by: number): string {
   const [y, m] = month.split("-").map(Number);
   return new Date(Date.UTC(y, m - 1 + by, 1)).toISOString().slice(0, 7);
 }
@@ -34,14 +44,14 @@ function mondayOf(iso: string): string {
 }
 
 /** Every day shown for the month, from the Monday before the 1st to the Sunday after the last day. */
-function gridDays(month: string): string[] {
+export function gridDays(month: string): string[] {
   const last = addDays(`${shiftMonth(month, 1)}-01`, -1);
   const days: string[] = [];
   for (let d = mondayOf(`${month}-01`); d <= last || days.length % 7 !== 0; d = addDays(d, 1)) days.push(d);
   return days;
 }
 
-function monthLabel(month: string): string {
+export function monthLabel(month: string): string {
   return new Date(`${month}-01T00:00:00Z`).toLocaleDateString("en-US", {
     timeZone: "UTC",
     month: "long",
@@ -49,7 +59,7 @@ function monthLabel(month: string): string {
   });
 }
 
-function onDay(event: ProgramEvent, day: string): boolean {
+export function onDay(event: ProgramEvent, day: string): boolean {
   return event.date <= day && day <= (event.endDate ?? event.date);
 }
 
@@ -82,6 +92,15 @@ function rangeLabel(view: View, anchor: string): string {
 export function EventCalendar({ events, today }: { events: ProgramEvent[]; today: string }) {
   const [view, setView] = useState<View>("week");
   const [anchor, setAnchor] = useState(today);
+  const [opened, setOpened] = useState<{ event: ProgramEvent; element: HTMLElement }>();
+  const closeEvent = useCallback(() => setOpened(undefined), []);
+
+  /** A plain click shows the quick look; ⌘, ctrl, shift or middle clicks still open the page. */
+  const openEvent: OpenEvent = (e, event) => {
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    setOpened({ event, element: e.currentTarget });
+  };
 
   function move(by: number) {
     if (view === "day") setAnchor(addDays(anchor, by));
@@ -97,10 +116,15 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
 
   const thisWeek = mondayOf(today);
   const eventsThisWeek = events.filter((e) => e.date >= thisWeek && e.date <= addDays(thisWeek, 6)).length;
-  const nextDeadline = events.find((e) => !takesAttendance(e) && e.date >= today);
+  const nextDeadline = events.find((e) => !takesAttendance(e) && !e.completed && e.date >= today);
+  // Only what's on screen, so the key stays short and always matches.
+  const visible = view === "month"
+    ? events.filter((e) => gridDays(monthOf(anchor)).some((d) => onDay(e, d)))
+    : events.filter((e) => days.some((d) => onDay(e, d)));
+  const categories = [...new Set(visible.map((e) => e.category))];
 
   return (
-    <div className="rounded-3xl bg-gradient-to-br from-[#6677b0] to-[#4a5b94] p-4 text-white shadow-[0_24px_60px_-34px_rgb(30_45_90/0.8)] sm:p-6">
+    <div className="rounded-3xl border border-primary/10 bg-gradient-to-br from-ocean-100 to-ocean-200 p-4 text-foreground shadow-sm sm:p-6">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
         <div role="radiogroup" aria-label="Calendar view" className="flex gap-1.5">
           {VIEWS.map(({ id, label }) => (
@@ -112,7 +136,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
               onClick={() => setView(id)}
               className={cn(
                 "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                view === id ? "bg-[#1b2b57] text-white" : "bg-white/15 text-white/85 hover:bg-white/25",
+                view === id ? "bg-primary text-primary-foreground" : "bg-white/60 text-secondary-foreground hover:bg-white/90",
               )}
             >
               {label}
@@ -121,12 +145,12 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
         </div>
         <dl className="flex gap-8">
           <div>
-            <dt className="text-xs text-white/75">Events this week</dt>
+            <dt className="text-xs text-secondary-foreground">Events this week</dt>
             <dd className="text-2xl font-semibold tabular-nums">{eventsThisWeek}</dd>
           </div>
           {nextDeadline && (
-            <div className="border-l border-white/25 pl-8">
-              <dt className="text-xs text-white/75">Next deadline</dt>
+            <div className="border-l border-primary/15 pl-8">
+              <dt className="text-xs text-secondary-foreground">Next deadline</dt>
               <dd className="text-2xl font-semibold tabular-nums">
                 {daysUntil(today, nextDeadline.date)}{" "}
                 <span className="text-sm font-medium">days</span>
@@ -140,17 +164,17 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
         <aside className="order-2 space-y-4 lg:order-1">
           <MiniMonth anchor={anchor} today={today} view={view} events={events} onPick={setAnchor} />
           <ComingUp events={events} today={today} />
-          <Deadlines events={events} today={today} />
+          <Deadlines events={events} />
         </aside>
 
-        <section className="order-1 min-w-0 rounded-2xl bg-white/15 p-2 sm:p-3 lg:order-2">
+        <section className="order-1 min-w-0 rounded-2xl bg-white/55 p-2 sm:p-3 lg:order-2">
           <div className="flex items-center justify-between gap-2 px-2 pt-1 pb-3">
             <h2 className="font-semibold">{rangeLabel(view, anchor)}</h2>
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => setAnchor(today)}
-                className="rounded-md px-2 py-0.5 text-sm font-medium underline underline-offset-4 hover:bg-white/15"
+                className="rounded-md px-2 py-0.5 text-sm font-medium underline underline-offset-4 hover:bg-white/70"
               >
                 Today
               </button>
@@ -158,7 +182,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
                 type="button"
                 aria-label="Previous"
                 onClick={() => move(-1)}
-                className="flex size-7 items-center justify-center rounded-full bg-white/20 hover:bg-white/30"
+                className="flex size-7 items-center justify-center rounded-full bg-white/70 hover:bg-white"
               >
                 <ChevronLeft className="size-4" />
               </button>
@@ -166,7 +190,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
                 type="button"
                 aria-label="Next"
                 onClick={() => move(1)}
-                className="flex size-7 items-center justify-center rounded-full bg-white/20 hover:bg-white/30"
+                className="flex size-7 items-center justify-center rounded-full bg-white/70 hover:bg-white"
               >
                 <ChevronRight className="size-4" />
               </button>
@@ -174,13 +198,25 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
           </div>
           <div className="overflow-x-auto rounded-xl bg-card text-card-foreground">
             {view === "month" ? (
-              <MonthGrid month={monthOf(anchor)} events={events} today={today} />
+              <MonthGrid month={monthOf(anchor)} events={events} today={today} onOpen={openEvent} />
             ) : (
-              <TimeGrid days={days} events={events} today={today} />
+              <TimeGrid days={days} events={events} today={today} onOpen={openEvent} />
             )}
           </div>
+          {categories.length > 0 && (
+            <ul className="flex flex-wrap gap-x-4 gap-y-1 px-2 pt-3 text-xs text-secondary-foreground">
+              {categories.map((category) => (
+                <li key={category} className="flex items-center gap-1.5">
+                  <span className={cn("size-2 rounded-full", EVENT_CATEGORY_COLORS[category].dot)} aria-hidden />
+                  {EVENT_CATEGORY_LABELS[category]}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       </div>
+
+      <EventPopover event={opened?.event} anchor={opened?.element} onClose={closeEvent} />
     </div>
   );
 }
@@ -208,7 +244,7 @@ function MiniMonth({
   const selectedWeek = mondayOf(anchor);
 
   return (
-    <div className="rounded-2xl bg-white/15 p-3.5">
+    <div className="rounded-2xl bg-white/55 p-3.5">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-sm font-semibold">{monthLabel(month)}</span>
         <div className="flex gap-1">
@@ -216,7 +252,7 @@ function MiniMonth({
             type="button"
             aria-label="Previous month"
             onClick={() => setMonth(shiftMonth(month, -1))}
-            className="flex size-6 items-center justify-center rounded-full bg-white/20 hover:bg-white/30"
+            className="flex size-6 items-center justify-center rounded-full bg-white/70 hover:bg-white"
           >
             <ChevronLeft className="size-3.5" />
           </button>
@@ -224,13 +260,13 @@ function MiniMonth({
             type="button"
             aria-label="Next month"
             onClick={() => setMonth(shiftMonth(month, 1))}
-            className="flex size-6 items-center justify-center rounded-full bg-white/20 hover:bg-white/30"
+            className="flex size-6 items-center justify-center rounded-full bg-white/70 hover:bg-white"
           >
             <ChevronRight className="size-3.5" />
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-7 text-center text-[11px] font-medium text-white/75">
+      <div className="grid grid-cols-7 text-center text-[11px] font-medium text-secondary-foreground">
         {WEEKDAYS.map((d) => (
           <div key={d} className="py-1">
             {d.slice(0, 2)}
@@ -250,24 +286,24 @@ function MiniMonth({
               aria-current={day === today ? "date" : undefined}
               onClick={() => onPick(day)}
               className={cn(
-                "relative flex h-7 items-center justify-center tabular-nums hover:bg-white/20",
-                inWeek || picked ? "bg-white/20" : "rounded-full",
+                "relative flex h-7 items-center justify-center tabular-nums hover:bg-white/80",
+                inWeek || picked ? "bg-white/80" : "rounded-full",
                 inWeek && day === selectedWeek && "rounded-l-full",
                 inWeek && day === addDays(selectedWeek, 6) && "rounded-r-full",
                 picked && "rounded-full",
-                monthOf(day) !== month && "text-white/50",
+                monthOf(day) !== month && "text-muted-foreground",
               )}
             >
               <span
                 className={cn(
                   "flex size-6 items-center justify-center rounded-full",
-                  day === today && "bg-white font-semibold text-[#1b2b57]",
+                  day === today && "bg-primary font-semibold text-primary-foreground",
                 )}
               >
                 {Number(day.slice(8))}
               </span>
               {hasEvent && day !== today && (
-                <span className="absolute bottom-0.5 size-1 rounded-full bg-white/90" aria-hidden />
+                <span className="absolute bottom-0.5 size-1 rounded-full bg-primary" aria-hidden />
               )}
             </button>
           );
@@ -288,15 +324,24 @@ function SideList({ title, editHref, children }: { title: string; editHref?: str
           </Link>
         )}
       </h3>
-      <ul className="divide-y">{children}</ul>
+      {children}
     </div>
   );
 }
 
-function ComingUp({ events, today }: { events: ProgramEvent[]; today: string }) {
-  const coming = events.filter((e) => takesAttendance(e) && e.date >= today).slice(0, 3);
+export function ComingUp({ events, today }: { events: ProgramEvent[]; today: string }) {
   return (
     <SideList title="Coming up">
+      <ComingUpList events={events} today={today} />
+    </SideList>
+  );
+}
+
+/** The next three events people attend. */
+export function ComingUpList({ events, today }: { events: ProgramEvent[]; today: string }) {
+  const coming = events.filter((e) => takesAttendance(e) && e.date >= today).slice(0, 3);
+  return (
+    <ul className="divide-y">
       {coming.map((event) => (
         <li key={event.id}>
           <Link href={`/admin/events/${event.id}`} className="group block py-2 text-sm">
@@ -308,45 +353,54 @@ function ComingUp({ events, today }: { events: ProgramEvent[]; today: string }) 
         </li>
       ))}
       {coming.length === 0 && <li className="py-2 text-sm text-muted-foreground">Nothing scheduled.</li>}
+    </ul>
+  );
+}
+
+export function Deadlines({ events }: { events: ProgramEvent[] }) {
+  return (
+    <SideList title="Deadlines" editHref="/admin/deadlines">
+      <DeadlineChecklist events={events} />
     </SideList>
   );
 }
 
-/** Every deadline in order; ones that have passed are ticked and crossed out. */
-function Deadlines({ events, today }: { events: ProgramEvent[]; today: string }) {
+/** Every deadline in order. Ticking one crosses it off; it stays in the list. */
+export function DeadlineChecklist({ events }: { events: ProgramEvent[] }) {
+  const { updateEvent } = useCohort();
   return (
-    <SideList title="Deadlines" editHref="/admin/deadlines">
+    <ul className="divide-y">
       {events
         .filter((e) => !takesAttendance(e))
         .map((event) => {
-          const passed = event.date < today;
+          const done = !!event.completed;
           return (
-            <li key={event.id}>
-              <Link href={`/admin/events/${event.id}`} className="group flex items-center gap-2.5 py-2 text-sm">
-                <span
-                  className={cn(
-                    "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2",
-                    passed ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40",
-                  )}
-                >
-                  {passed && <Check className="size-3" strokeWidth={3} />}
+            <li key={event.id} className="flex items-center gap-2.5 py-2 text-sm">
+              <button
+                type="button"
+                role="checkbox"
+                aria-checked={done}
+                aria-label={`Mark ${event.title} ${done ? "not done" : "done"}`}
+                onClick={() => updateEvent(event.id, { completed: !done })}
+                className={cn(
+                  "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                  done
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-muted-foreground/40 hover:border-primary",
+                )}
+              >
+                {done && <Check className="size-3" strokeWidth={3} />}
+              </button>
+              <Link href={`/admin/events/${event.id}`} className="group min-w-0 flex-1">
+                <span className={cn("line-clamp-2 group-hover:underline", done && "text-muted-foreground line-through")}>
+                  {event.title}
                 </span>
-                <span className="min-w-0 flex-1">
-                  <span
-                    className={cn(
-                      "line-clamp-2 group-hover:underline",
-                      passed && "text-muted-foreground line-through",
-                    )}
-                  >
-                    {event.title}
-                  </span>
-                  <span className="block text-xs text-muted-foreground">{formatDate(event.date)}</span>
-                </span>
+                <span className="block text-xs text-muted-foreground">{formatDate(event.date)}</span>
               </Link>
             </li>
           );
         })}
-    </SideList>
+    </ul>
   );
 }
 
@@ -368,7 +422,7 @@ function People({ event }: { event: ProgramEvent }) {
         <span
           key={name}
           title={name}
-          className="flex size-6 items-center justify-center rounded-full bg-card text-[10px] font-semibold text-card-foreground ring-2 ring-primary"
+          className="flex size-6 items-center justify-center rounded-full bg-card text-[10px] font-semibold text-card-foreground ring-2 ring-white"
         >
           {initials(name)}
         </span>
@@ -391,7 +445,17 @@ function withLanes(events: ProgramEvent[]) {
   return placed.map((p) => ({ ...p, lanes: laneEnds.length }));
 }
 
-function TimeGrid({ days, events, today }: { days: string[]; events: ProgramEvent[]; today: string }) {
+function TimeGrid({
+  days,
+  events,
+  today,
+  onOpen,
+}: {
+  days: string[];
+  events: ProgramEvent[];
+  today: string;
+  onOpen: OpenEvent;
+}) {
   const [now, setNow] = useState<number>();
 
   useEffect(() => {
@@ -444,7 +508,11 @@ function TimeGrid({ days, events, today }: { days: string[]; events: ProgramEven
                     key={event.id}
                     href={`/admin/events/${event.id}`}
                     title={event.title}
-                    className="block truncate rounded-lg bg-primary px-2 py-1.5 text-xs font-semibold text-primary-foreground hover:bg-primary/85"
+                    onClick={(e) => onOpen(e, event)}
+                    className={cn(
+                      "block truncate rounded-lg border-l-4 px-2 py-1.5 text-xs font-semibold transition-colors",
+                      EVENT_CATEGORY_COLORS[event.category].tile,
+                    )}
                   >
                     {event.title}
                   </Link>
@@ -474,27 +542,31 @@ function TimeGrid({ days, events, today }: { days: string[]; events: ProgramEven
                   key={event.id}
                   href={`/admin/events/${event.id}`}
                   title={event.title}
+                  onClick={(e) => onOpen(e, event)}
                   style={{
                     top: ((start - firstHour * 60) / 60) * HOUR_HEIGHT + 2,
                     height: Math.max(((end - start) / 60) * HOUR_HEIGHT - 4, MIN_BLOCK_HEIGHT),
                     left: `calc(${(lane / lanes) * 100}% + 3px)`,
                     width: `calc(${100 / lanes}% - 6px)`,
                   }}
-                  className="absolute overflow-hidden rounded-xl bg-primary px-2 py-1.5 text-primary-foreground transition-colors hover:bg-primary/85"
+                  className={cn(
+                    "absolute overflow-hidden rounded-xl border-l-4 px-2 py-1.5 transition-colors",
+                    EVENT_CATEGORY_COLORS[event.category].tile,
+                  )}
                 >
                   <span className="flex items-start justify-between gap-1">
                     <span className="line-clamp-2 min-w-0 text-xs leading-snug font-semibold">{event.title}</span>
                     <People event={event} />
                   </span>
-                  <span className="mt-0.5 block truncate text-[11px] text-primary-foreground/80">
+                  <span className="mt-0.5 block truncate text-[11px] opacity-80">
                     {formatEventTime(event)}
                   </span>
                 </Link>
               );
             })}
             {day === today && nowTop !== undefined && (
-              <div className="pointer-events-none absolute inset-x-0 z-10 border-t-2 border-[#4a5b94]" style={{ top: nowTop }}>
-                <span className="absolute -top-[5px] -left-[5px] size-2 rounded-full bg-[#4a5b94]" />
+              <div className="pointer-events-none absolute inset-x-0 z-10 border-t-2 border-chart-2" style={{ top: nowTop }}>
+                <span className="absolute -top-[5px] -left-[5px] size-2 rounded-full bg-chart-2" />
               </div>
             )}
           </div>
@@ -504,7 +576,17 @@ function TimeGrid({ days, events, today }: { days: string[]; events: ProgramEven
   );
 }
 
-function MonthGrid({ month, events, today }: { month: string; events: ProgramEvent[]; today: string }) {
+function MonthGrid({
+  month,
+  events,
+  today,
+  onOpen,
+}: {
+  month: string;
+  events: ProgramEvent[];
+  today: string;
+  onOpen: OpenEvent;
+}) {
   return (
     <div className="min-w-[46rem]">
       <div className="grid grid-cols-7 border-b text-xs font-medium">
@@ -537,7 +619,11 @@ function MonthGrid({ month, events, today }: { month: string; events: ProgramEve
                     key={event.id}
                     href={`/admin/events/${event.id}`}
                     title={event.title}
-                    className="flex items-center justify-between gap-1 rounded-lg bg-primary px-2 py-1.5 text-primary-foreground hover:bg-primary/85"
+                    onClick={(e) => onOpen(e, event)}
+                    className={cn(
+                      "flex items-center justify-between gap-1 rounded-lg border-l-4 px-2 py-1.5 transition-colors",
+                      EVENT_CATEGORY_COLORS[event.category].tile,
+                    )}
                   >
                     <span className="line-clamp-3 min-w-0 text-xs leading-snug font-semibold break-words">
                       {event.title}
