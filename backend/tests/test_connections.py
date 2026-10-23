@@ -122,6 +122,17 @@ def test_event_can_belong_to_a_partner(client):
     assert client.patch(f"/api/events/{event}", json={"partnerId": "nope"}).status_code == 404
 
 
+def test_a_deadline_can_be_crossed_off_and_back(client):
+    deadline = next(e for e in SAMPLE["events"] if e["category"] == "deadline")["id"]
+
+    def event(data):
+        return next(e for e in data["events"] if e["id"] == deadline)
+
+    assert event(client.patch(f"/api/events/{deadline}", json={"completed": True}).json())["completed"] is True
+    assert event(client.get("/api/cohort").json())["completed"] is True
+    assert "completed" not in event(client.patch(f"/api/events/{deadline}", json={"completed": False}).json())
+
+
 # ---- Owners ----
 
 

@@ -192,6 +192,7 @@ def event_schema(e: m.Event) -> s.ProgramEvent:
         links=e.links,
         is_required=e.is_required,
         partner_id=e.partner_id,
+        completed=e.completed or None,
         checkin_token=e.checkin_token,
     )
 

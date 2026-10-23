@@ -514,7 +514,7 @@ def update_event(session: Session, cohort: m.Cohort, event_id: str, patch: s.Eve
     record = _event(session, cohort, event_id)
     for name in patch.model_fields_set:
         value = getattr(patch, name)
-        if name in ("title", "category", "date", "is_required") and value is None:
+        if name in ("title", "category", "date", "is_required", "completed") and value is None:
             raise bad_request(f"{name} can't be empty.")
         if name == "links":
             value = [link.model_dump() for link in value] if value else None

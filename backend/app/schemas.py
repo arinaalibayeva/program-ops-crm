@@ -173,12 +173,14 @@ class EventPatch(CamelModel):
     links: list[EventLink] | None = None
     is_required: bool | None = None
     partner_id: str | None = None
+    completed: bool | None = None
 
 
 class ProgramEvent(EventIn):
     id: str
     cohort_id: str
     checkin_token: str
+    completed: bool | None = None
 
 
 class Attendance(CamelModel):

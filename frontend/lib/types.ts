@@ -295,6 +295,8 @@ export interface ProgramEvent {
   isRequired: boolean;
   /** The one partner this event is with. Partner sessions without one are for every partner. */
   partnerId?: string;
+  /** Crossed off on the calendar. Mainly for deadlines. */
+  completed?: boolean;
   checkinToken: string;
 }
 

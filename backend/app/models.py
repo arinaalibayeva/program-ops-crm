@@ -173,6 +173,8 @@ class Event(Base):
     is_required: Mapped[bool] = mapped_column(Boolean, default=True)
     # The one partner this event is with. Empty partner sessions are for every partner.
     partner_id: Mapped[str | None] = mapped_column(ForeignKey("partners.id"), index=True)
+    # Crossed off on the calendar. Mainly for deadlines.
+    completed: Mapped[bool] = mapped_column(Boolean, default=False, server_default=false())
     checkin_token: Mapped[str] = mapped_column(String, unique=True, index=True)
 
 
