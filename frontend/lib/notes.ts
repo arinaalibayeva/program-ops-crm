@@ -17,9 +17,9 @@ export function noteSubject(data: CohortData, note: Note): { label: string; href
   };
 }
 
-/** Follow-ups still to do, soonest first. */
-export function openFollowUps(data: CohortData): (Note & { followUpDate: string })[] {
+/** Every follow-up, soonest first. Done ones stay, crossed off. */
+export function followUpsOf(data: CohortData): (Note & { followUpDate: string })[] {
   return data.notes
-    .filter((n): n is Note & { followUpDate: string } => !!n.followUpDate && !n.followUpDone)
+    .filter((n): n is Note & { followUpDate: string } => !!n.followUpDate)
     .sort((a, b) => a.followUpDate.localeCompare(b.followUpDate));
 }
