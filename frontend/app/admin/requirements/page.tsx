@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
-import { describeRule, ruleMatches, targetName } from "@/lib/records";
 import { useCohort } from "@/lib/store";
 import { describeRequirement } from "@/lib/requirements";
 import { EVENT_CATEGORY_LABELS } from "@/lib/events";
@@ -142,59 +141,6 @@ export default function RequirementsPage() {
           );
         })}
       </div>
-
-      <section className="mt-12">
-        <h2 className="text-lg font-semibold">Flags</h2>
-        <p className="mt-1 mb-4 text-sm text-muted-foreground">
-          Warnings worked out from your records. They count towards status just
-          like requirements. Set them up in{" "}
-          <Link href="/admin/customize" className="underline">
-            Customize
-          </Link>
-          .
-        </p>
-        {data.rules.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No flags yet.</p>
-        ) : (
-          <ul className="grid gap-3 md:grid-cols-2">
-            {data.rules.map((rule) => {
-              const calc = data.calculations.find(
-                (c) => c.id === rule.calculationId,
-              );
-              const flagged = ruleMatches(data, rule).length;
-              return (
-                <li key={rule.id}>
-                  <Link
-                    href={`/admin/requirements/${rule.id}`}
-                    className="group flex h-full items-start justify-between gap-3 rounded-xl border p-4 transition-colors hover:bg-muted/40"
-                  >
-                    <div className="min-w-0">
-                      <div className="font-medium">{rule.message}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {describeRule(rule, calc)}
-                      </div>
-                      <div className="mt-2 text-xs">
-                        <span className="font-semibold tabular-nums">
-                          {flagged}
-                        </span>{" "}
-                        {calc
-                          ? targetName(
-                              data,
-                              calc.on,
-                              flagged === 1,
-                            ).toLowerCase()
-                          : "records"}{" "}
-                        flagged
-                      </div>
-                    </div>
-                    <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-      </section>
     </>
   );
 }
