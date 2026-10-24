@@ -2,9 +2,10 @@
 // so this logic can be ported 1:1 to backend/app/services/requirements.py
 // and unit tested there.
 
-import { categoryPlural } from "./events";
+import { categoryPlural, takesAttendance } from "./events";
 import type {
   CohortData,
+  CustomRecord,
   Enrollment,
   Requirement,
   RequirementResult,
@@ -58,6 +59,18 @@ export function activeMembers(data: CohortData, teamId: string): Enrollment[] {
       .map((m) => m.enrollmentId),
   );
   return data.enrollments.filter((e) => ids.has(e.id) && e.status === "active");
+}
+
+/** Attendance across every event so far, whatever its category. */
+export function attendanceSummary(
+  data: CohortData,
+  enrollmentId: string,
+): { attended: number; total: number } {
+  const past = data.events.filter((e) => takesAttendance(e) && e.date < data.today);
+  const attended = past.filter((e) =>
+    data.attendance.some((a) => a.eventId === e.id && a.enrollmentId === enrollmentId),
+  ).length;
+  return { attended, total: past.length };
 }
 
 // ---- Evaluators ----
@@ -140,6 +153,66 @@ function evaluateCompleteBy(
   };
 }
 
+type RecordRequirement = Extract<Requirement, { type: "record_by" }>;
+
+function linkedRecords(
+  data: CohortData,
+  req: RecordRequirement,
+  subjectId: string,
+): CustomRecord[] {
+  const { typeId, viaFieldId } = req.params;
+  return data.records.filter((r) => {
+    if (r.typeId !== typeId) return false;
+    const value = r.values[viaFieldId];
+    return Array.isArray(value) ? value.includes(subjectId) : value === subjectId;
+  });
+}
+
+export type RecordProgress = "on_time" | "late" | "missing" | "pending";
+
+/** "missing" is past due without enough records; "pending" still has time. */
+export function recordProgress(
+  data: CohortData,
+  req: RecordRequirement,
+  subjectId: string,
+): RecordProgress {
+  const { minCount, dueDate, dateFieldId } = req.params;
+  const records = linkedRecords(data, req, subjectId);
+  if (records.length < minCount) {
+    return daysBetween(data.today, dueDate) < 0 ? "missing" : "pending";
+  }
+  const dates = dateFieldId
+    ? records
+        .map((r) => r.values[dateFieldId])
+        .filter((v): v is string => typeof v === "string" && v !== "")
+        .sort()
+    : [];
+  // Late when the record that met the minimum came after the due date.
+  return dates.length >= minCount && dates[minCount - 1] > dueDate ? "late" : "on_time";
+}
+
+function evaluateRecordBy(
+  data: CohortData,
+  req: RecordRequirement,
+  subjectId: string,
+): RequirementResult {
+  const { minCount, dueDate } = req.params;
+  const count = linkedRecords(data, req, subjectId).length;
+  const logged = `${count} of ${minCount} logged`;
+  const progress = recordProgress(data, req, subjectId);
+  const daysLeft = daysBetween(data.today, dueDate);
+  const result = (status: Status, reason: string): RequirementResult => ({
+    requirementId: req.id,
+    status,
+    reason,
+  });
+  if (progress === "on_time") return result("met", `${req.name} logged (${count})`);
+  if (progress === "late") return result("met", `${req.name} logged late, after ${dueDate}`);
+  if (progress === "missing") return result("missing", `${req.name} overdue by ${-daysLeft} days, ${logged}`);
+  if (daysLeft <= DUE_SOON_DAYS) return result("at_risk", `${req.name} due in ${daysLeft} days, ${logged}`);
+  return result("on_track", `${req.name} due ${dueDate}, ${logged}`);
+}
+
 function evaluateTeamMinSize(
   data: CohortData,
   req: Extract<Requirement, { type: "team_min_size" }>,
@@ -201,6 +274,8 @@ export function participantStatus(
       results.push(evaluateAttendanceMin(data, req, enrollmentId));
     } else if (req.type === "complete_by") {
       results.push(evaluateCompleteBy(data, req, enrollmentId));
+    } else if (req.type === "record_by") {
+      results.push(evaluateRecordBy(data, req, enrollmentId));
     }
   }
   return summarize(results);
@@ -221,6 +296,8 @@ export function teamStatus(data: CohortData, team: Team): SubjectStatus {
       results.push(evaluateTeamMinSize(data, req, team.id));
     } else if (req.type === "complete_by") {
       results.push(evaluateCompleteBy(data, req, team.id));
+    } else if (req.type === "record_by") {
+      results.push(evaluateRecordBy(data, req, team.id));
     }
   }
   const summary = summarize(results);
@@ -237,7 +314,7 @@ export function teamStatus(data: CohortData, team: Team): SubjectStatus {
   return summary;
 }
 
-export function describeRequirement(req: Requirement): string {
+export function describeRequirement(req: Requirement, data: CohortData): string {
   switch (req.type) {
     case "attendance_min":
       return `Attend at least ${req.params.minCount} ${categoryPlural(req.params.category)}`;
@@ -245,5 +322,10 @@ export function describeRequirement(req: Requirement): string {
       return `Complete by ${req.params.dueDate}`;
     case "team_min_size":
       return `Team keeps at least ${req.params.minActive} active members`;
+    case "record_by": {
+      const type = data.recordTypes.find((t) => t.id === req.params.typeId);
+      const name = req.params.minCount === 1 ? type?.singular : type?.name;
+      return `At least ${req.params.minCount} ${name?.toLowerCase() ?? "records"} by ${req.params.dueDate}`;
+    }
   }
 }

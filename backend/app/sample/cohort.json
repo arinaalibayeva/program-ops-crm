@@ -621,7 +621,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0001",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -633,7 +632,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0002",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -645,7 +643,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0003",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -657,7 +654,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0004",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -669,7 +665,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0005",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -681,7 +676,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0006",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -693,7 +687,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0007",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -705,7 +698,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0008",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -717,7 +709,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0009",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -729,7 +720,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0010",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -741,7 +731,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0011",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -753,7 +742,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0012",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -765,7 +753,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0013",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -777,7 +764,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0014",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -789,7 +775,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0015",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -801,7 +786,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0016",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -813,7 +797,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0017",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -825,7 +808,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0018",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -837,7 +819,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0019",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -849,7 +830,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0020",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -861,7 +841,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0021",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -873,7 +852,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0022",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -885,7 +863,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0023",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -897,7 +874,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0024",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -909,7 +885,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0025",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -921,7 +896,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0026",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -933,7 +907,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0027",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -945,7 +918,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0028",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -957,7 +929,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0029",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -969,7 +940,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0030",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -981,7 +951,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0031",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -993,7 +962,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0032",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1005,7 +973,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0033",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1017,7 +984,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0034",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1029,7 +995,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0035",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1041,7 +1006,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0036",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1053,7 +1017,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0037",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1065,7 +1028,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0038",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1077,7 +1039,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0039",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1089,7 +1050,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0040",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1101,7 +1061,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0041",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1113,7 +1072,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0042",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1125,7 +1083,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0043",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1137,7 +1094,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0044",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1149,7 +1105,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0045",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1161,7 +1116,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0046",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1173,7 +1127,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0047",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1185,7 +1138,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0048",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1197,7 +1149,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0049",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1209,7 +1160,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0050",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1221,7 +1171,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0051",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1233,7 +1182,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0052",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1245,7 +1193,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0053",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1257,7 +1204,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0054",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1269,7 +1215,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0055",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1281,7 +1226,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0056",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1293,7 +1237,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0057",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1305,7 +1248,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0058",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1317,7 +1259,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0059",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1329,7 +1270,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0060",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1341,7 +1281,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0061",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1353,7 +1292,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0062",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1365,7 +1303,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0063",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1377,7 +1314,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0064",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1389,7 +1325,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0065",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1401,7 +1336,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0066",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1413,7 +1347,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0067",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1425,7 +1358,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0068",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1437,7 +1369,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0069",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1449,7 +1380,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0070",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1461,7 +1391,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0071",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1473,7 +1402,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0072",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1485,7 +1413,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0073",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1497,7 +1424,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0074",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1509,7 +1435,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0075",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1521,7 +1446,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0076",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1533,7 +1457,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0077",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1545,7 +1468,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0078",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1557,7 +1479,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0079",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1569,7 +1490,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0080",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1581,7 +1501,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0081",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1593,7 +1512,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0082",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1605,7 +1523,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0083",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1617,7 +1534,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0084",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1629,7 +1545,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0085",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1641,7 +1556,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0086",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1653,7 +1567,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0087",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1665,7 +1578,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0088",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1677,7 +1589,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0089",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1689,7 +1600,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0090",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1701,7 +1611,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0091",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1713,7 +1622,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0092",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1725,7 +1633,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0093",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1737,7 +1644,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0094",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1749,7 +1655,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0095",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1761,7 +1666,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0096",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1773,7 +1677,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0097",
         "field-role": "Communication Manager",
         "field-location": "San Francisco"
       }
@@ -1785,7 +1688,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0098",
         "field-role": "Schedule Manager",
         "field-location": "San Francisco"
       }
@@ -1797,7 +1699,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0099",
         "field-role": "Project Timeline Manager",
         "field-location": "San Francisco"
       }
@@ -1809,7 +1710,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0100",
         "field-role": "Production Manager",
         "field-location": "San Francisco"
       }
@@ -1821,7 +1721,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0101",
         "field-role": "Team Manager",
         "field-location": "San Francisco"
       }
@@ -1833,7 +1732,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0102",
         "field-role": "Documentation Manager",
         "field-location": "San Francisco"
       }
@@ -1845,7 +1743,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0103",
         "field-role": "Communication Manager",
         "field-location": "Buenos Aires"
       }
@@ -1857,7 +1754,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0104",
         "field-role": "Schedule Manager",
         "field-location": "Buenos Aires"
       }
@@ -1869,7 +1765,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0105",
         "field-role": "Project Timeline Manager",
         "field-location": "Buenos Aires"
       }
@@ -1881,7 +1776,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0106",
         "field-role": "Production Manager",
         "field-location": "Buenos Aires"
       }
@@ -1893,7 +1787,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0107",
         "field-role": "Team Manager",
         "field-location": "Buenos Aires"
       }
@@ -1905,7 +1798,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0108",
         "field-role": "Documentation Manager",
         "field-location": "Buenos Aires"
       }
@@ -1917,7 +1809,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0109",
         "field-role": "Communication Manager",
         "field-location": "Buenos Aires"
       }
@@ -1929,7 +1820,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0110",
         "field-role": "Schedule Manager",
         "field-location": "Buenos Aires"
       }
@@ -1941,7 +1831,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0111",
         "field-role": "Project Timeline Manager",
         "field-location": "Buenos Aires"
       }
@@ -1953,7 +1842,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0112",
         "field-role": "Production Manager",
         "field-location": "Buenos Aires"
       }
@@ -1965,7 +1853,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0113",
         "field-role": "Team Manager",
         "field-location": "Buenos Aires"
       }
@@ -1977,7 +1864,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0114",
         "field-role": "Documentation Manager",
         "field-location": "Buenos Aires"
       }
@@ -1989,7 +1875,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0115",
         "field-role": "Communication Manager",
         "field-location": "VSY"
       }
@@ -2001,7 +1886,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0116",
         "field-role": "Schedule Manager",
         "field-location": "VSY"
       }
@@ -2013,7 +1897,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0117",
         "field-role": "Project Timeline Manager",
         "field-location": "VSY"
       }
@@ -2025,7 +1908,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0118",
         "field-role": "Production Manager",
         "field-location": "VSY"
       }
@@ -2037,7 +1919,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0119",
         "field-role": "Team Manager",
         "field-location": "VSY"
       }
@@ -2049,7 +1930,6 @@
       "status": "active",
       "joinedAt": "2026-09-07",
       "fields": {
-        "field-phone": "+1 555 010 0120",
         "field-role": "Documentation Manager",
         "field-location": "VSY"
       }
@@ -2060,121 +1940,121 @@
       "id": "proj-1",
       "cohortId": "c-fall-2026",
       "title": "Volunteer shift scheduling",
-      "partner": "Bayview Community Pantry"
+      "partnerId": "partner-bayview-community-pantry"
     },
     {
       "id": "proj-2",
       "cohortId": "c-fall-2026",
       "title": "Tenant rights info hub",
-      "partner": "Mission Housing Collective"
+      "partnerId": "partner-mission-housing-collective"
     },
     {
       "id": "proj-3",
       "cohortId": "c-fall-2026",
       "title": "Youth coding club curriculum",
-      "partner": "Eastside Learning Center"
+      "partnerId": "partner-eastside-learning-center"
     },
     {
       "id": "proj-4",
       "cohortId": "c-fall-2026",
       "title": "Library e-resource onboarding",
-      "partner": "Northgate Public Library"
+      "partnerId": "partner-northgate-public-library"
     },
     {
       "id": "proj-5",
       "cohortId": "c-fall-2026",
       "title": "Urban garden plot booking",
-      "partner": "Green Blocks Initiative"
+      "partnerId": "partner-green-blocks-initiative"
     },
     {
       "id": "proj-6",
       "cohortId": "c-fall-2026",
       "title": "Senior tech help desk",
-      "partner": "Golden Years Network"
+      "partnerId": "partner-golden-years-network"
     },
     {
       "id": "proj-7",
       "cohortId": "c-fall-2026",
       "title": "Bike repair co-op inventory",
-      "partner": "Spokes Together"
+      "partnerId": "partner-spokes-together"
     },
     {
       "id": "proj-8",
       "cohortId": "c-fall-2026",
       "title": "Refugee job board",
-      "partner": "New Roots Alliance"
+      "partnerId": "partner-new-roots-alliance"
     },
     {
       "id": "proj-9",
       "cohortId": "c-fall-2026",
       "title": "Clinic wait-time tracker",
-      "partner": "Harborview Free Clinic"
+      "partnerId": "partner-harborview-free-clinic"
     },
     {
       "id": "proj-10",
       "cohortId": "c-fall-2026",
       "title": "Neighborhood safety map",
-      "partner": "Westside Residents Assoc."
+      "partnerId": "partner-westside-residents-assoc"
     },
     {
       "id": "proj-11",
       "cohortId": "c-fall-2026",
       "title": "Food waste pickup routing",
-      "partner": "Second Plate"
+      "partnerId": "partner-second-plate"
     },
     {
       "id": "proj-12",
       "cohortId": "c-fall-2026",
       "title": "Arts grant application helper",
-      "partner": "City Arts Fund"
+      "partnerId": "partner-city-arts-fund"
     },
     {
       "id": "proj-13",
       "cohortId": "c-fall-2026",
       "title": "Transit access guide",
-      "partner": "Bay Rides Coalition"
+      "partnerId": "partner-bay-rides-coalition"
     },
     {
       "id": "proj-14",
       "cohortId": "c-fall-2026",
       "title": "Shelter bed availability board",
-      "partner": "Oakland Open Door"
+      "partnerId": "partner-oakland-open-door"
     },
     {
       "id": "proj-15",
       "cohortId": "c-fall-2026",
       "title": "After-school tutor matching",
-      "partner": "Richmond Reads"
+      "partnerId": "partner-richmond-reads"
     },
     {
       "id": "proj-16",
       "cohortId": "c-fall-2026",
       "title": "Small business grant finder",
-      "partner": "Fruitvale Merchants Group"
+      "partnerId": "partner-fruitvale-merchants-group"
     },
     {
       "id": "proj-17",
       "cohortId": "c-fall-2026",
       "title": "Community fridge tracker",
-      "partner": "Sunset Mutual Aid"
+      "partnerId": "partner-sunset-mutual-aid"
     },
     {
       "id": "proj-18",
       "cohortId": "c-fall-2026",
       "title": "Wetlands volunteer log",
-      "partner": "Baylands Stewards"
+      "partnerId": "partner-baylands-stewards"
     },
     {
       "id": "proj-19",
       "cohortId": "c-fall-2026",
       "title": "Immigrant legal clinic intake",
-      "partner": "San Jose Legal Access"
+      "partnerId": "partner-san-jose-legal-access"
     },
     {
       "id": "proj-20",
       "cohortId": "c-fall-2026",
       "title": "Veteran benefits navigator",
-      "partner": "Marin Veterans Hub"
+      "partnerId": "partner-marin-veterans-hub"
     }
   ],
   "teams": [
@@ -2182,121 +2062,141 @@
       "id": "team-1",
       "cohortId": "c-fall-2026",
       "name": "Harbor",
-      "projectId": "proj-1"
+      "projectId": "proj-1",
+      "ownerId": "staff-theo"
     },
     {
       "id": "team-2",
       "cohortId": "c-fall-2026",
       "name": "Lantern",
-      "projectId": "proj-2"
+      "projectId": "proj-2",
+      "ownerId": "staff-jonah"
     },
     {
       "id": "team-3",
       "cohortId": "c-fall-2026",
       "name": "Compass",
-      "projectId": "proj-3"
+      "projectId": "proj-3",
+      "ownerId": "staff-jonah"
     },
     {
       "id": "team-4",
       "cohortId": "c-fall-2026",
       "name": "Meridian",
-      "projectId": "proj-4"
+      "projectId": "proj-4",
+      "ownerId": "staff-maya"
     },
     {
       "id": "team-5",
       "cohortId": "c-fall-2026",
       "name": "Orchard",
-      "projectId": "proj-5"
+      "projectId": "proj-5",
+      "ownerId": "staff-theo"
     },
     {
       "id": "team-6",
       "cohortId": "c-fall-2026",
       "name": "Beacon",
-      "projectId": "proj-6"
+      "projectId": "proj-6",
+      "ownerId": "staff-lucia"
     },
     {
       "id": "team-7",
       "cohortId": "c-fall-2026",
       "name": "Summit",
-      "projectId": "proj-7"
+      "projectId": "proj-7",
+      "ownerId": "staff-maya"
     },
     {
       "id": "team-8",
       "cohortId": "c-fall-2026",
       "name": "Willow",
-      "projectId": "proj-8"
+      "projectId": "proj-8",
+      "ownerId": "staff-maya"
     },
     {
       "id": "team-9",
       "cohortId": "c-fall-2026",
       "name": "Atlas",
-      "projectId": "proj-9"
+      "projectId": "proj-9",
+      "ownerId": "staff-lucia"
     },
     {
       "id": "team-10",
       "cohortId": "c-fall-2026",
       "name": "Ember",
-      "projectId": "proj-10"
+      "projectId": "proj-10",
+      "ownerId": "staff-lucia"
     },
     {
       "id": "team-11",
       "cohortId": "c-fall-2026",
       "name": "Tide",
-      "projectId": "proj-11"
+      "projectId": "proj-11",
+      "ownerId": "staff-jonah"
     },
     {
       "id": "team-12",
       "cohortId": "c-fall-2026",
       "name": "Juniper",
-      "projectId": "proj-12"
+      "projectId": "proj-12",
+      "ownerId": "staff-theo"
     },
     {
       "id": "team-13",
       "cohortId": "c-fall-2026",
       "name": "Redwood",
-      "projectId": "proj-13"
+      "projectId": "proj-13",
+      "ownerId": "staff-jonah"
     },
     {
       "id": "team-14",
       "cohortId": "c-fall-2026",
       "name": "Cypress",
-      "projectId": "proj-14"
+      "projectId": "proj-14",
+      "ownerId": "staff-lucia"
     },
     {
       "id": "team-15",
       "cohortId": "c-fall-2026",
       "name": "Anchor",
-      "projectId": "proj-15"
+      "projectId": "proj-15",
+      "ownerId": "staff-lucia"
     },
     {
       "id": "team-16",
       "cohortId": "c-fall-2026",
       "name": "Horizon",
-      "projectId": "proj-16"
+      "projectId": "proj-16",
+      "ownerId": "staff-maya"
     },
     {
       "id": "team-17",
       "cohortId": "c-fall-2026",
       "name": "Sequoia",
-      "projectId": "proj-17"
+      "projectId": "proj-17",
+      "ownerId": "staff-jonah"
     },
     {
       "id": "team-18",
       "cohortId": "c-fall-2026",
       "name": "Marina",
-      "projectId": "proj-18"
+      "projectId": "proj-18",
+      "ownerId": "staff-theo"
     },
     {
       "id": "team-19",
       "cohortId": "c-fall-2026",
       "name": "Presidio",
-      "projectId": "proj-19"
+      "projectId": "proj-19",
+      "ownerId": "staff-theo"
     },
     {
       "id": "team-20",
       "cohortId": "c-fall-2026",
       "name": "Golden",
-      "projectId": "proj-20"
+      "projectId": "proj-20",
+      "ownerId": "staff-maya"
     }
   ],
   "memberships": [
@@ -6443,6 +6343,19 @@
       "params": {
         "dueDate": "2026-10-23"
       }
+    },
+    {
+      "id": "req-7",
+      "name": "September Meeting Report",
+      "scope": "team",
+      "type": "record_by",
+      "params": {
+        "typeId": "rt-reports",
+        "viaFieldId": "rf-r-team",
+        "minCount": 1,
+        "dueDate": "2026-10-05",
+        "dateFieldId": "rf-r-date"
+      }
     }
   ],
   "completions": [
@@ -6630,15 +6543,6 @@
   "exemptions": [],
   "fields": [
     {
-      "id": "field-phone",
-      "label": "Phone",
-      "type": "text",
-      "placeholder": "+1 555 010 0000",
-      "required": false,
-      "showInList": false,
-      "visibleToParticipant": true
-    },
-    {
       "id": "field-role",
       "label": "Role",
       "type": "select",
@@ -6664,7 +6568,396 @@
       "visibleToParticipant": true
     }
   ],
-  "teamNotes": [],
+  "partners": [
+    {
+      "id": "partner-bayview-community-pantry",
+      "programId": "prog-civic",
+      "name": "Bayview Community Pantry",
+      "website": "https://bayview-community-pantry.example.org",
+      "ownerId": "staff-theo",
+      "contacts": [
+        {
+          "id": "contact-1",
+          "name": "Maya Torres",
+          "title": "Program director",
+          "email": "maya@bayview-community-pantry.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-mission-housing-collective",
+      "programId": "prog-civic",
+      "name": "Mission Housing Collective",
+      "website": "https://mission-housing-collective.example.org",
+      "ownerId": "staff-jonah",
+      "contacts": [
+        {
+          "id": "contact-2",
+          "name": "Daniel Osei",
+          "title": "Program director",
+          "email": "daniel@mission-housing-collective.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-eastside-learning-center",
+      "programId": "prog-civic",
+      "name": "Eastside Learning Center",
+      "website": "https://eastside-learning-center.example.org",
+      "ownerId": "staff-jonah",
+      "contacts": [
+        {
+          "id": "contact-3",
+          "name": "Ruth Lindholm",
+          "title": "Program director",
+          "email": "ruth@eastside-learning-center.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-northgate-public-library",
+      "programId": "prog-civic",
+      "name": "Northgate Public Library",
+      "website": "https://northgate-public-library.example.org",
+      "ownerId": "staff-maya",
+      "contacts": [
+        {
+          "id": "contact-4",
+          "name": "Imran Qureshi",
+          "title": "Program director",
+          "email": "imran@northgate-public-library.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-green-blocks-initiative",
+      "programId": "prog-civic",
+      "name": "Green Blocks Initiative",
+      "website": "https://green-blocks-initiative.example.org",
+      "ownerId": "staff-theo",
+      "contacts": [
+        {
+          "id": "contact-5",
+          "name": "Lena Fischer",
+          "title": "Program director",
+          "email": "lena@green-blocks-initiative.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-golden-years-network",
+      "programId": "prog-civic",
+      "name": "Golden Years Network",
+      "website": "https://golden-years-network.example.org",
+      "ownerId": "staff-lucia",
+      "contacts": [
+        {
+          "id": "contact-6",
+          "name": "Carlos Mendes",
+          "title": "Program director",
+          "email": "carlos@golden-years-network.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-spokes-together",
+      "programId": "prog-civic",
+      "name": "Spokes Together",
+      "website": "https://spokes-together.example.org",
+      "ownerId": "staff-maya",
+      "contacts": [
+        {
+          "id": "contact-7",
+          "name": "Grace Adeyemi",
+          "title": "Program director",
+          "email": "grace@spokes-together.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-new-roots-alliance",
+      "programId": "prog-civic",
+      "name": "New Roots Alliance",
+      "website": "https://new-roots-alliance.example.org",
+      "ownerId": "staff-maya",
+      "contacts": [
+        {
+          "id": "contact-8",
+          "name": "Hannah Cohen",
+          "title": "Program director",
+          "email": "hannah@new-roots-alliance.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-harborview-free-clinic",
+      "programId": "prog-civic",
+      "name": "Harborview Free Clinic",
+      "website": "https://harborview-free-clinic.example.org",
+      "ownerId": "staff-lucia",
+      "contacts": [
+        {
+          "id": "contact-9",
+          "name": "Minh Tran",
+          "title": "Program director",
+          "email": "minh@harborview-free-clinic.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-westside-residents-assoc",
+      "programId": "prog-civic",
+      "name": "Westside Residents Assoc.",
+      "website": "https://westside-residents-assoc.example.org",
+      "ownerId": "staff-lucia",
+      "contacts": [
+        {
+          "id": "contact-10",
+          "name": "Sara Novak",
+          "title": "Program director",
+          "email": "sara@westside-residents-assoc.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-second-plate",
+      "programId": "prog-civic",
+      "name": "Second Plate",
+      "website": "https://second-plate.example.org",
+      "ownerId": "staff-jonah",
+      "contacts": [
+        {
+          "id": "contact-11",
+          "name": "Maya Torres",
+          "title": "Program director",
+          "email": "maya@second-plate.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-city-arts-fund",
+      "programId": "prog-civic",
+      "name": "City Arts Fund",
+      "website": "https://city-arts-fund.example.org",
+      "ownerId": "staff-theo",
+      "contacts": [
+        {
+          "id": "contact-12",
+          "name": "Daniel Osei",
+          "title": "Program director",
+          "email": "daniel@city-arts-fund.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-bay-rides-coalition",
+      "programId": "prog-civic",
+      "name": "Bay Rides Coalition",
+      "website": "https://bay-rides-coalition.example.org",
+      "ownerId": "staff-jonah",
+      "contacts": [
+        {
+          "id": "contact-13",
+          "name": "Ruth Lindholm",
+          "title": "Program director",
+          "email": "ruth@bay-rides-coalition.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-oakland-open-door",
+      "programId": "prog-civic",
+      "name": "Oakland Open Door",
+      "website": "https://oakland-open-door.example.org",
+      "ownerId": "staff-lucia",
+      "contacts": [
+        {
+          "id": "contact-14",
+          "name": "Imran Qureshi",
+          "title": "Program director",
+          "email": "imran@oakland-open-door.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-richmond-reads",
+      "programId": "prog-civic",
+      "name": "Richmond Reads",
+      "website": "https://richmond-reads.example.org",
+      "ownerId": "staff-lucia",
+      "contacts": [
+        {
+          "id": "contact-15",
+          "name": "Lena Fischer",
+          "title": "Program director",
+          "email": "lena@richmond-reads.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-fruitvale-merchants-group",
+      "programId": "prog-civic",
+      "name": "Fruitvale Merchants Group",
+      "website": "https://fruitvale-merchants-group.example.org",
+      "ownerId": "staff-maya",
+      "contacts": [
+        {
+          "id": "contact-16",
+          "name": "Carlos Mendes",
+          "title": "Program director",
+          "email": "carlos@fruitvale-merchants-group.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-sunset-mutual-aid",
+      "programId": "prog-civic",
+      "name": "Sunset Mutual Aid",
+      "website": "https://sunset-mutual-aid.example.org",
+      "ownerId": "staff-jonah",
+      "contacts": [
+        {
+          "id": "contact-17",
+          "name": "Grace Adeyemi",
+          "title": "Program director",
+          "email": "grace@sunset-mutual-aid.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-baylands-stewards",
+      "programId": "prog-civic",
+      "name": "Baylands Stewards",
+      "website": "https://baylands-stewards.example.org",
+      "ownerId": "staff-theo",
+      "contacts": [
+        {
+          "id": "contact-18",
+          "name": "Hannah Cohen",
+          "title": "Program director",
+          "email": "hannah@baylands-stewards.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-san-jose-legal-access",
+      "programId": "prog-civic",
+      "name": "San Jose Legal Access",
+      "website": "https://san-jose-legal-access.example.org",
+      "ownerId": "staff-theo",
+      "contacts": [
+        {
+          "id": "contact-19",
+          "name": "Minh Tran",
+          "title": "Program director",
+          "email": "minh@san-jose-legal-access.example.org"
+        }
+      ]
+    },
+    {
+      "id": "partner-marin-veterans-hub",
+      "programId": "prog-civic",
+      "name": "Marin Veterans Hub",
+      "website": "https://marin-veterans-hub.example.org",
+      "ownerId": "staff-maya",
+      "contacts": [
+        {
+          "id": "contact-20",
+          "name": "Sara Novak",
+          "title": "Program director",
+          "email": "sara@marin-veterans-hub.example.org"
+        }
+      ]
+    }
+  ],
+  "staff": [
+    {
+      "id": "staff-demo",
+      "name": "Demo Admin",
+      "email": "admin@demo.test",
+      "role": "manager",
+      "jobTitle": "Program coordinator"
+    },
+    {
+      "id": "staff-maya",
+      "name": "Maya Lindgren",
+      "email": "maya.lindgren@example.org",
+      "role": "admin",
+      "jobTitle": "Intern"
+    },
+    {
+      "id": "staff-theo",
+      "name": "Theo Okonkwo",
+      "email": "theo.okonkwo@example.org",
+      "role": "admin",
+      "jobTitle": "Intern"
+    },
+    {
+      "id": "staff-lucia",
+      "name": "Lucia Ferrante",
+      "email": "lucia.ferrante@example.org",
+      "role": "admin",
+      "jobTitle": "Intern"
+    },
+    {
+      "id": "staff-jonah",
+      "name": "Jonah Reyes",
+      "email": "jonah.reyes@example.org",
+      "role": "admin",
+      "jobTitle": "Intern"
+    }
+  ],
+  "notes": [
+    {
+      "id": "note-1",
+      "subjectType": "team",
+      "subjectId": "team-10",
+      "body": "Brief is late. They said the partner hasn't confirmed scope yet, so ask again on Monday.",
+      "author": "Maya Lindgren",
+      "followUpDate": "2026-10-19",
+      "followUpDone": false,
+      "createdAt": "2026-10-16T16:00:00.000Z"
+    },
+    {
+      "id": "note-2",
+      "subjectType": "participant",
+      "subjectId": "enr-12",
+      "body": "Missed two workshops. Emailed to ask if something's going on.",
+      "author": "Demo Admin",
+      "followUpDate": "2026-10-21",
+      "followUpDone": false,
+      "createdAt": "2026-10-15T16:00:00.000Z"
+    },
+    {
+      "id": "note-3",
+      "subjectType": "partner",
+      "subjectId": "partner-green-blocks-initiative",
+      "body": "Main contact is leaving. Find out who takes over before the midpoint showcase.",
+      "author": "Theo Okonkwo",
+      "followUpDate": "2026-10-16",
+      "followUpDone": false,
+      "createdAt": "2026-10-14T16:00:00.000Z"
+    },
+    {
+      "id": "note-4",
+      "subjectType": "team",
+      "subjectId": "team-12",
+      "body": "No partner meetings logged yet. Check whether they're meeting and not logging it.",
+      "author": "Demo Admin",
+      "followUpDate": "2026-10-23",
+      "followUpDone": false,
+      "createdAt": "2026-10-12T16:00:00.000Z"
+    },
+    {
+      "id": "note-5",
+      "subjectType": "partner",
+      "subjectId": "partner-bayview-community-pantry",
+      "body": "Happy with the team so far. Interested in taking another team next cohort.",
+      "author": "Theo Okonkwo",
+      "followUpDone": false,
+      "createdAt": "2026-10-08T16:00:00.000Z"
+    }
+  ],
   "recordTypes": [
     {
       "id": "rt-meetings",
@@ -6690,6 +6983,13 @@
           "type": "link",
           "linkTo": "team",
           "required": true
+        },
+        {
+          "id": "rf-m-event",
+          "label": "Event",
+          "type": "link",
+          "linkTo": "event",
+          "required": false
         },
         {
           "id": "rf-m-attended",
@@ -6777,6 +7077,39 @@
           "id": "rf-i-details",
           "label": "Details",
           "type": "long_text",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "rt-reports",
+      "programId": "prog-civic",
+      "name": "Meeting reports",
+      "singular": "Meeting report",
+      "fields": [
+        {
+          "id": "rf-r-title",
+          "label": "Title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "id": "rf-r-date",
+          "label": "Submitted on",
+          "type": "date",
+          "required": true
+        },
+        {
+          "id": "rf-r-team",
+          "label": "Team",
+          "type": "link",
+          "linkTo": "team",
+          "required": true
+        },
+        {
+          "id": "rf-r-link",
+          "label": "Report link",
+          "type": "url",
           "required": false
         }
       ]
@@ -8846,6 +9179,204 @@
         "rf-i-details": "Resolved after a meeting with the partner on Oct 6."
       },
       "createdAt": "2026-10-02T18:00:00.000Z"
+    },
+    {
+      "id": "rec-107",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-01",
+        "rf-r-team": "team-1"
+      },
+      "createdAt": "2026-10-01T18:00:00.000Z"
+    },
+    {
+      "id": "rec-108",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-02",
+        "rf-r-team": "team-2"
+      },
+      "createdAt": "2026-10-02T18:00:00.000Z"
+    },
+    {
+      "id": "rec-109",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-03",
+        "rf-r-team": "team-3"
+      },
+      "createdAt": "2026-10-03T18:00:00.000Z"
+    },
+    {
+      "id": "rec-110",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-04",
+        "rf-r-team": "team-4"
+      },
+      "createdAt": "2026-10-04T18:00:00.000Z"
+    },
+    {
+      "id": "rec-111",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-01",
+        "rf-r-team": "team-5"
+      },
+      "createdAt": "2026-10-01T18:00:00.000Z"
+    },
+    {
+      "id": "rec-112",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-02",
+        "rf-r-team": "team-6"
+      },
+      "createdAt": "2026-10-02T18:00:00.000Z"
+    },
+    {
+      "id": "rec-113",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-07",
+        "rf-r-team": "team-7"
+      },
+      "createdAt": "2026-10-07T18:00:00.000Z"
+    },
+    {
+      "id": "rec-114",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-04",
+        "rf-r-team": "team-8"
+      },
+      "createdAt": "2026-10-04T18:00:00.000Z"
+    },
+    {
+      "id": "rec-115",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-01",
+        "rf-r-team": "team-9"
+      },
+      "createdAt": "2026-10-01T18:00:00.000Z"
+    },
+    {
+      "id": "rec-116",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-03",
+        "rf-r-team": "team-11"
+      },
+      "createdAt": "2026-10-03T18:00:00.000Z"
+    },
+    {
+      "id": "rec-117",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-04",
+        "rf-r-team": "team-12"
+      },
+      "createdAt": "2026-10-04T18:00:00.000Z"
+    },
+    {
+      "id": "rec-118",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-07",
+        "rf-r-team": "team-13"
+      },
+      "createdAt": "2026-10-07T18:00:00.000Z"
+    },
+    {
+      "id": "rec-119",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-02",
+        "rf-r-team": "team-14"
+      },
+      "createdAt": "2026-10-02T18:00:00.000Z"
+    },
+    {
+      "id": "rec-120",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-03",
+        "rf-r-team": "team-15"
+      },
+      "createdAt": "2026-10-03T18:00:00.000Z"
+    },
+    {
+      "id": "rec-121",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-01",
+        "rf-r-team": "team-17"
+      },
+      "createdAt": "2026-10-01T18:00:00.000Z"
+    },
+    {
+      "id": "rec-122",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-09",
+        "rf-r-team": "team-18"
+      },
+      "createdAt": "2026-10-09T18:00:00.000Z"
+    },
+    {
+      "id": "rec-123",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-03",
+        "rf-r-team": "team-19"
+      },
+      "createdAt": "2026-10-03T18:00:00.000Z"
+    },
+    {
+      "id": "rec-124",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "September meeting report",
+        "rf-r-date": "2026-10-04",
+        "rf-r-team": "team-20"
+      },
+      "createdAt": "2026-10-04T18:00:00.000Z"
     }
   ],
   "calculations": [
@@ -8941,6 +9472,20 @@
         "rf-m-next"
       ],
       "token": "log-meeting-demo",
+      "roster": true,
+      "isOpen": true
+    },
+    {
+      "id": "form-report",
+      "typeId": "rt-reports",
+      "title": "Submit a meeting report",
+      "description": "One per team, each month. Submitting it completes your team's report requirement.",
+      "fieldIds": [
+        "rf-r-title",
+        "rf-r-date",
+        "rf-r-link"
+      ],
+      "token": "submit-report-demo",
       "roster": true,
       "isOpen": true
     }

@@ -27,8 +27,9 @@ from .db import get_session
 from .seed import reset
 from .services import actions
 from .services import records
+from .services import personal
 from .services import team
-from .services.requirements import participant_status, team_status
+from .services.requirements import participant_summary, team_summary
 from .snapshot import build_snapshot, current_cohort, event_schema
 
 app = FastAPI(title="Program Ops API")
@@ -66,8 +67,8 @@ def get_cohort(session: Session = Depends(get_session), cohort: m.Cohort = Depen
 def get_statuses(session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
     data = build_snapshot(session, cohort)
     return s.Statuses(
-        participants={e.id: participant_status(data, e.id) for e in data.enrollments if e.status == "active"},
-        teams={t.id: team_status(data, t) for t in data.teams},
+        participants={e.id: participant_summary(data, e.id) for e in data.enrollments if e.status == "active"},
+        teams={t.id: team_summary(data, t) for t in data.teams},
     )
 
 
@@ -106,32 +107,83 @@ def delete_requirement(
     return saved(session, cohort)
 
 
-# ---- Team notes ----
+# ---- Notes ----
 
 
-@admin.post("/api/teams/{team_id}/notes", response_model=s.CohortData, **api)
-def add_team_note(
-    team_id: str,
-    body: s.TeamNoteIn,
+@admin.post("/api/notes", response_model=s.CohortData, **api)
+def add_note(
+    body: s.NoteCreate,
     session: Session = Depends(get_session),
     cohort: m.Cohort = Depends(cohort_dep),
     user: m.User = Depends(require_admin),
 ):
-    actions.add_team_note(session, cohort, team_id, body.body, user.name)
+    actions.add_note(session, cohort, body, user.name)
     return saved(session, cohort)
 
 
-@admin.patch("/api/team-notes/{note_id}", response_model=s.CohortData, **api)
-def update_team_note(
-    note_id: str, body: s.TeamNoteIn, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+@admin.patch("/api/notes/{note_id}", response_model=s.CohortData, **api)
+def update_note(
+    note_id: str, body: s.NotePatch, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
 ):
-    actions.update_team_note(session, cohort, note_id, body.body)
+    actions.update_note(session, cohort, note_id, body)
     return saved(session, cohort)
 
 
-@admin.delete("/api/team-notes/{note_id}", response_model=s.CohortData, **api)
-def delete_team_note(note_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
-    actions.delete_team_note(session, cohort, note_id)
+@admin.delete("/api/notes/{note_id}", response_model=s.CohortData, **api)
+def delete_note(note_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    actions.delete_note(session, cohort, note_id)
+    return saved(session, cohort)
+
+
+# ---- Partners and owners ----
+
+
+@admin.post("/api/partners", response_model=s.CohortData, **api)
+def add_partner(
+    body: s.PartnerCreate, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+):
+    actions.add_partner(session, cohort, body)
+    return saved(session, cohort)
+
+
+@admin.patch("/api/partners/{partner_id}", response_model=s.CohortData, **api)
+def update_partner(
+    partner_id: str, body: s.PartnerPatch, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    actions.update_partner(session, cohort, partner_id, body)
+    return saved(session, cohort)
+
+
+@admin.post("/api/partners/{partner_id}/contacts", response_model=s.CohortData, **api)
+def add_contact(
+    partner_id: str, body: s.PartnerContactCreate, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    actions.add_contact(session, cohort, partner_id, body)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/partner-contacts/{contact_id}", response_model=s.CohortData, **api)
+def delete_contact(contact_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    actions.delete_contact(session, cohort, contact_id)
+    return saved(session, cohort)
+
+
+@admin.put("/api/projects/{project_id}/partner", response_model=s.CohortData, **api)
+def set_project_partner(
+    project_id: str, body: s.ProjectPartner, session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    actions.set_project_partner(session, cohort, project_id, body.partner_id)
+    return saved(session, cohort)
+
+
+@admin.put("/api/teams/{team_id}/owner", response_model=s.CohortData, **api)
+def set_team_owner(
+    team_id: str, body: s.TeamOwner, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)
+):
+    actions.set_team_owner(session, cohort, team_id, body.owner_id)
     return saved(session, cohort)
 
 
@@ -163,6 +215,12 @@ def add_participants(
 @admin.post("/api/events", response_model=s.CohortData, **api)
 def add_event(body: s.EventIn, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
     actions.add_event(session, cohort, body)
+    return saved(session, cohort)
+
+
+@admin.delete("/api/events/{event_id}", response_model=s.CohortData, **api)
+def delete_event(event_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)):
+    actions.delete_event(session, cohort, event_id)
     return saved(session, cohort)
 
 
@@ -215,6 +273,37 @@ def profile_schema(user: m.User) -> s.Profile:
         id=user.id, name=user.name, email=user.email, job_title=user.job_title,
         pronouns=user.pronouns, phone=user.phone, role=user.role,
     )
+
+
+@admin.get("/api/me/items", response_model=list[s.PersonalItem], **api)
+def get_my_items(session: Session = Depends(get_session), user: m.User = Depends(require_admin)):
+    return personal.items(session, user)
+
+
+@admin.post("/api/me/items", response_model=list[s.PersonalItem], **api)
+def add_my_item(
+    body: s.PersonalItemIn, session: Session = Depends(get_session), user: m.User = Depends(require_admin)
+):
+    personal.add(session, user, body)
+    session.commit()
+    return personal.items(session, user)
+
+
+@admin.patch("/api/me/items/{item_id}", response_model=list[s.PersonalItem], **api)
+def update_my_item(
+    item_id: str, body: s.PersonalItemPatch, session: Session = Depends(get_session),
+    user: m.User = Depends(require_admin),
+):
+    personal.update(session, user, item_id, body)
+    session.commit()
+    return personal.items(session, user)
+
+
+@admin.delete("/api/me/items/{item_id}", response_model=list[s.PersonalItem], **api)
+def delete_my_item(item_id: str, session: Session = Depends(get_session), user: m.User = Depends(require_admin)):
+    personal.remove(session, user, item_id)
+    session.commit()
+    return personal.items(session, user)
 
 
 @admin.get("/api/me", response_model=s.Profile, **api)

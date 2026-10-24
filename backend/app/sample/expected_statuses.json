@@ -1951,6 +1951,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []
@@ -1972,6 +1977,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": [
@@ -1979,7 +1989,7 @@
       ]
     },
     "team-3": {
-      "status": "met",
+      "status": "at_risk",
       "results": [
         {
           "requirementId": "req-4",
@@ -1995,9 +2005,23 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
-      "flags": []
+      "flags": [
+        "No partner meeting in over 2 weeks"
+      ],
+      "ruleResults": [
+        {
+          "ruleId": "rule-meeting-gap",
+          "status": "at_risk",
+          "reason": "No partner meeting in over 2 weeks"
+        }
+      ]
     },
     "team-4": {
       "status": "at_risk",
@@ -2016,6 +2040,11 @@
           "requirementId": "req-6",
           "status": "at_risk",
           "reason": "User research plan due in 4 days, not done yet"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": [
@@ -2023,7 +2052,7 @@
       ]
     },
     "team-5": {
-      "status": "met",
+      "status": "at_risk",
       "results": [
         {
           "requirementId": "req-4",
@@ -2039,9 +2068,23 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-14"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
-      "flags": []
+      "flags": [
+        "Has an open issue"
+      ],
+      "ruleResults": [
+        {
+          "ruleId": "rule-open-issue",
+          "status": "at_risk",
+          "reason": "Has an open issue"
+        }
+      ]
     },
     "team-6": {
       "status": "met",
@@ -2060,6 +2103,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-14"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []
@@ -2081,6 +2129,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-14"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged late, after 2026-10-05"
         }
       ],
       "flags": [
@@ -2104,6 +2157,11 @@
           "requirementId": "req-6",
           "status": "at_risk",
           "reason": "User research plan due in 4 days, not done yet"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": [
@@ -2127,6 +2185,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-16"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []
@@ -2148,10 +2211,24 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "missing",
+          "reason": "September Meeting Report overdue by 14 days, 0 of 1 logged"
         }
       ],
       "flags": [
-        "Project brief overdue by 3 days"
+        "Project brief overdue by 3 days",
+        "September Meeting Report overdue by 14 days, 0 of 1 logged",
+        "No partner meeting in over 2 weeks"
+      ],
+      "ruleResults": [
+        {
+          "ruleId": "rule-meeting-gap",
+          "status": "at_risk",
+          "reason": "No partner meeting in over 2 weeks"
+        }
       ]
     },
     "team-11": {
@@ -2171,6 +2248,11 @@
           "requirementId": "req-6",
           "status": "at_risk",
           "reason": "User research plan due in 4 days, not done yet"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": [
@@ -2178,7 +2260,7 @@
       ]
     },
     "team-12": {
-      "status": "met",
+      "status": "at_risk",
       "results": [
         {
           "requirementId": "req-4",
@@ -2194,9 +2276,23 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
-      "flags": []
+      "flags": [
+        "No partner meeting in over 2 weeks"
+      ],
+      "ruleResults": [
+        {
+          "ruleId": "rule-meeting-gap",
+          "status": "at_risk",
+          "reason": "No partner meeting in over 2 weeks"
+        }
+      ]
     },
     "team-13": {
       "status": "met",
@@ -2215,6 +2311,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-18"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged late, after 2026-10-05"
         }
       ],
       "flags": []
@@ -2236,6 +2337,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-17"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []
@@ -2257,12 +2363,17 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []
     },
     "team-16": {
-      "status": "met",
+      "status": "missing",
       "results": [
         {
           "requirementId": "req-4",
@@ -2278,9 +2389,16 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-18"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "missing",
+          "reason": "September Meeting Report overdue by 14 days, 0 of 1 logged"
         }
       ],
-      "flags": []
+      "flags": [
+        "September Meeting Report overdue by 14 days, 0 of 1 logged"
+      ]
     },
     "team-17": {
       "status": "met",
@@ -2299,6 +2417,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-16"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []
@@ -2320,6 +2443,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged late, after 2026-10-05"
         }
       ],
       "flags": []
@@ -2341,6 +2469,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-15"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []
@@ -2362,6 +2495,11 @@
           "requirementId": "req-6",
           "status": "met",
           "reason": "User research plan done on 2026-10-17"
+        },
+        {
+          "requirementId": "req-7",
+          "status": "met",
+          "reason": "September Meeting Report logged (1)"
         }
       ],
       "flags": []

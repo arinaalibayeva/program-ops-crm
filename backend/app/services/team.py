@@ -9,7 +9,7 @@ import datetime as dt
 import secrets
 
 from fastapi import HTTPException
-from sqlalchemy import delete, select
+from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 
 from .. import models as m
@@ -106,6 +106,9 @@ def remove(session: Session, manager: m.User, user_id: str) -> None:
         raise bad_request("You can't remove yourself.")
     session.execute(delete(m.Invite).where(m.Invite.user_id == user.id))
     session.execute(delete(m.UserSession).where(m.UserSession.user_id == user.id))
+    session.execute(delete(m.PersonalItem).where(m.PersonalItem.user_id == user.id))
+    session.execute(update(m.Team).where(m.Team.owner_id == user.id).values(owner_id=None))
+    session.execute(update(m.Partner).where(m.Partner.owner_id == user.id).values(owner_id=None))
     session.delete(user)
 
 

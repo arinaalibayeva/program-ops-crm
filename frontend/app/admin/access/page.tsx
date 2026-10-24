@@ -22,7 +22,7 @@ const STATUS_LABELS: Record<TeamMember["status"], string> = {
   expired: "Invite expired",
 };
 
-export default function TeamPage() {
+export default function AccessPage() {
   const { profile } = useProfile();
   const isManager = profile?.role === "manager";
   const [members, setMembers] = useState<TeamMember[]>();

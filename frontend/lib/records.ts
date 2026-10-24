@@ -262,6 +262,26 @@ export function evaluateRules(data: CohortData, on: string, subjectId: string): 
   return results;
 }
 
+/** Everything a rule is flagging right now. */
+export function ruleMatches(
+  data: CohortData,
+  rule: Rule,
+): { id: string; label: string; href: string; status: RuleResult["status"] }[] {
+  const on = data.calculations.find((c) => c.id === rule.calculationId)?.on;
+  if (!on) return [];
+  const subjects =
+    on === "participant"
+      ? data.enrollments.filter((e) => e.status === "active")
+      : on === "team"
+        ? data.teams
+        : data.records.filter((r) => r.typeId === on);
+  return subjects.flatMap(({ id }) =>
+    evaluateRules(data, on, id).some((r) => r.ruleId === rule.id)
+      ? [{ id, label: linkLabel(data, on, id), href: targetHref(on, id), status: rule.status }]
+      : [],
+  );
+}
+
 /** Adds rule flags to a requirement-based status. */
 export function withRules(status: SubjectStatus, rules: RuleResult[]): SubjectStatus {
   if (rules.length === 0) return status;

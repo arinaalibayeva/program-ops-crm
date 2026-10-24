@@ -95,7 +95,7 @@ export function NavDock() {
 
   const item = cn(
     tracking ? "duration-75" : "duration-200",
-    "flex min-w-12 flex-col items-center gap-0.5 rounded-full px-1.5 py-1.5 text-[10px] font-medium transition-[color,background-color,transform,margin] ease-out sm:min-w-16 sm:px-3 sm:text-[11px]",
+    "flex min-w-11 flex-col items-center gap-0.5 rounded-full px-1 py-1.5 sm:min-w-12 sm:px-1.5 text-[10px] font-medium transition-[color,background-color,transform,margin] ease-out sm:min-w-16 sm:px-3 sm:text-[11px]",
   );
 
   return (
@@ -119,7 +119,7 @@ export function NavDock() {
           className="pointer-events-auto flex items-end gap-0.5 rounded-full border bg-background/85 p-1.5 shadow-lg backdrop-blur-md"
         >
           {items.map((dockItem, i) => {
-            const { href, label, icon: Icon, stack } = dockItem;
+            const { href, label, short, icon: Icon, stack } = dockItem;
             const active = stack
               ? stack.some((link) => isActive(link.href, here))
               : isActive(href, here);
@@ -154,11 +154,18 @@ export function NavDock() {
                 className={look}
               >
                 <Icon className="size-5" />
-                {label}
+                {short ? (
+                  <>
+                    <span className="sm:hidden">{short}</span>
+                    <span className="hidden sm:inline">{label}</span>
+                  </>
+                ) : (
+                  label
+                )}
               </Link>
             );
           })}
-          <div className="mx-1 mb-1.5 h-8 w-px self-end bg-border" aria-hidden />
+          <div className="mx-0.5 mb-1.5 h-8 w-px self-end bg-border sm:mx-1" aria-hidden />
           <button
             type="button"
             ref={(el) => {
@@ -291,7 +298,14 @@ function DockStack({
         className={cn(className, open && "ring-2 ring-ring/40")}
       >
         <Icon className="size-5" />
-        {item.label}
+        {item.short ? (
+          <>
+            <span className="sm:hidden">{item.short}</span>
+            <span className="hidden sm:inline">{item.label}</span>
+          </>
+        ) : (
+          item.label
+        )}
       </button>
     </div>
   );

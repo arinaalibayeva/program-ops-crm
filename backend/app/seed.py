@@ -22,8 +22,9 @@ SAMPLE = Path(__file__).parent / "sample" / "cohort.json"
 # sessions aren't sample data, so resetting leaves them alone.
 TABLES = [
     m.Rule, m.Calculation, m.RecordForm, m.CustomRecord, m.RecordField, m.RecordType,
-    m.TeamNote, m.Attendance, m.Completion, m.Exemption, m.TeamMembership, m.Event, m.Requirement,
-    m.Enrollment, m.Team, m.Project, m.Person, m.FieldDefinition, m.Cohort, m.Program,
+    m.Note, m.Attendance, m.Completion, m.Exemption, m.TeamMembership, m.Event, m.Requirement,
+    m.Enrollment, m.Team, m.Project, m.PartnerContact, m.Partner, m.Person, m.FieldDefinition,
+    m.Cohort, m.Program,
 ]
 
 
@@ -34,6 +35,18 @@ def load_sample() -> CohortData:
 def clear(session: Session) -> None:
     for table in TABLES:
         session.execute(delete(table))
+
+
+def add_sample_staff(session: Session, data: CohortData) -> None:
+    """The interns who look after the sample teams. Accounts outlast a reset, so
+    they're only added once. With no password, nobody can sign in as them until
+    a manager sends them a link from Team access."""
+    for person in data.staff:
+        if person.role != "manager" and session.get(m.User, person.id) is None:
+            session.add(
+                m.User(id=person.id, name=person.name, email=person.email, role=person.role, job_title=person.job_title)
+            )
+    session.flush()
 
 
 def seed(session: Session, data: CohortData) -> None:
@@ -62,13 +75,32 @@ def seed(session: Session, data: CohortData) -> None:
         )
         for i, f in enumerate(data.fields)
     )
+    add_sample_staff(session, data)
     session.add_all(
-        m.Project(id=p.id, cohort_id=p.cohort_id, title=p.title, partner=p.partner, created_at=at(i))
+        m.Partner(
+            id=p.id, program_id=p.program_id, name=p.name, website=p.website, description=p.description,
+            owner_id=p.owner_id, created_at=at(i),
+        )
+        for i, p in enumerate(data.partners)
+    )
+    session.flush()
+    session.add_all(
+        m.PartnerContact(
+            id=c.id, partner_id=p.id, name=c.name, title=c.title, email=c.email, phone=c.phone, created_at=at(i),
+        )
+        for p in data.partners
+        for i, c in enumerate(p.contacts)
+    )
+    session.add_all(
+        m.Project(id=p.id, cohort_id=p.cohort_id, title=p.title, partner_id=p.partner_id, created_at=at(i))
         for i, p in enumerate(data.projects)
     )
     session.flush()
     session.add_all(
-        m.Team(id=t.id, cohort_id=t.cohort_id, name=t.name, project_id=t.project_id, created_at=at(i))
+        m.Team(
+            id=t.id, cohort_id=t.cohort_id, name=t.name, project_id=t.project_id, owner_id=t.owner_id,
+            created_at=at(i),
+        )
         for i, t in enumerate(data.teams)
     )
     session.flush()
@@ -82,7 +114,7 @@ def seed(session: Session, data: CohortData) -> None:
             end_date=e.end_date, start_time=e.start_time, end_time=e.end_time, location=e.location,
             host=e.host, description=e.description,
             links=[link.model_dump() for link in e.links] if e.links else None,
-            is_required=e.is_required, checkin_token=e.checkin_token,
+            is_required=e.is_required, partner_id=e.partner_id, checkin_token=e.checkin_token,
         )
         for e in data.events
     )
@@ -102,6 +134,13 @@ def seed(session: Session, data: CohortData) -> None:
     session.add_all(
         m.Exemption(requirement_id=x.requirement_id, subject_id=x.subject_id, reason=x.reason)
         for x in data.exemptions
+    )
+    session.add_all(
+        m.Note(
+            id=n.id, subject_type=n.subject_type, subject_id=n.subject_id, body=n.body, author=n.author,
+            follow_up_date=n.follow_up_date, follow_up_done=n.follow_up_done, created_at=n.created_at,
+        )
+        for n in data.notes
     )
     session.flush()
     seed_records(session, data)

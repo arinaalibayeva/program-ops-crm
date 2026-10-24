@@ -5,6 +5,7 @@
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildMockCohort } from "../lib/mock-data";
+import { evaluateRules, withRules } from "../lib/records";
 import { participantStatus, teamStatus } from "../lib/requirements";
 
 const out = join(__dirname, "../../backend/app/sample");
@@ -14,9 +15,11 @@ const statuses = {
   participants: Object.fromEntries(
     data.enrollments
       .filter((e) => e.status === "active")
-      .map((e) => [e.id, participantStatus(data, e.id)]),
+      .map((e) => [e.id, withRules(participantStatus(data, e.id), evaluateRules(data, "participant", e.id))]),
   ),
-  teams: Object.fromEntries(data.teams.map((t) => [t.id, teamStatus(data, t)])),
+  teams: Object.fromEntries(
+    data.teams.map((t) => [t.id, withRules(teamStatus(data, t), evaluateRules(data, "team", t.id))]),
+  ),
 };
 
 writeFileSync(join(out, "cohort.json"), JSON.stringify(data, null, 2) + "\n");

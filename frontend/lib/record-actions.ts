@@ -11,6 +11,7 @@ import type {
   RecordField,
   RecordForm,
   RecordType,
+  Requirement,
   Rule,
 } from "./types";
 
@@ -34,6 +35,17 @@ function dropCalculations(d: CohortData, gone: (c: Calculation) => boolean): Coh
   };
 }
 
+/** Drops record requirements matching `gone`, with their completions and excuses. */
+function dropRequirements(d: CohortData, gone: (r: Extract<Requirement, { type: "record_by" }>) => boolean): CohortData {
+  const removed = new Set(d.requirements.filter((r) => r.type === "record_by" && gone(r)).map((r) => r.id));
+  return {
+    ...d,
+    requirements: d.requirements.filter((r) => !removed.has(r.id)),
+    completions: d.completions.filter((c) => !removed.has(c.requirementId)),
+    exemptions: d.exemptions.filter((x) => !removed.has(x.requirementId)),
+  };
+}
+
 export function addRecordType(d: CohortData, id: string, input: NewRecordType): CohortData {
   const type: RecordType = { id, programId: d.program.id, ...input, fields: [] };
   return { ...d, recordTypes: [...d.recordTypes, type] };
@@ -45,7 +57,10 @@ export function updateRecordType(d: CohortData, id: string, patch: Partial<NewRe
 
 /** Callers check first that no other type links here (the backend refuses). */
 export function deleteRecordType(d: CohortData, id: string): CohortData {
-  const next = dropCalculations(d, (c) => c.sourceTypeId === id || c.on === id);
+  const next = dropRequirements(
+    dropCalculations(d, (c) => c.sourceTypeId === id || c.on === id),
+    (r) => r.params.typeId === id,
+  );
   return {
     ...next,
     recordTypes: next.recordTypes.filter((t) => t.id !== id),
@@ -82,14 +97,23 @@ export function moveRecordField(d: CohortData, typeId: string, fieldId: string, 
 
 /** Also removes the field's values, calculations that use it, and it from forms. */
 export function deleteRecordField(d: CohortData, typeId: string, fieldId: string): CohortData {
-  const next = dropCalculations(
-    d,
-    (c) =>
-      c.sourceTypeId === typeId &&
-      (c.viaFieldId === fieldId || c.dateFieldId === fieldId || c.filter?.fieldId === fieldId),
+  const next = dropRequirements(
+    dropCalculations(
+      d,
+      (c) =>
+        c.sourceTypeId === typeId &&
+        (c.viaFieldId === fieldId || c.dateFieldId === fieldId || c.filter?.fieldId === fieldId),
+    ),
+    (r) => r.params.viaFieldId === fieldId,
   );
   return {
     ...mapType(next, typeId, (t) => ({ ...t, fields: t.fields.filter((f) => f.id !== fieldId) })),
+    requirements: next.requirements.map((r) => {
+      if (r.type !== "record_by" || r.params.dateFieldId !== fieldId) return r;
+      const params = { ...r.params };
+      delete params.dateFieldId;
+      return { ...r, params };
+    }),
     records: next.records.map((r) => {
       if (r.typeId !== typeId || !(fieldId in r.values)) return r;
       const values = { ...r.values };
@@ -174,4 +198,27 @@ export function updateForm(d: CohortData, id: string, patch: Partial<NewRecordFo
 
 export function deleteForm(d: CohortData, id: string): CohortData {
   return { ...d, forms: d.forms.filter((f) => f.id !== id) };
+}
+
+export function deleteEvent(d: CohortData, id: string): CohortData {
+  const linkFields = new Set(
+    d.recordTypes.flatMap((t) => t.fields.filter((f) => f.type === "link" && f.linkTo === "event").map((f) => f.id)),
+  );
+  return {
+    ...d,
+    events: d.events.filter((e) => e.id !== id),
+    attendance: d.attendance.filter((a) => a.eventId !== id),
+    records: d.records.map((r) => {
+      const hit = Object.keys(r.values).some((key) => linkFields.has(key) && linkedIds(r.values[key]).includes(id));
+      if (!hit) return r;
+      const values = { ...r.values };
+      for (const key of Object.keys(values)) {
+        const value = values[key];
+        if (!linkFields.has(key)) continue;
+        if (Array.isArray(value)) values[key] = value.filter((v) => v !== id);
+        else if (value === id) delete values[key];
+      }
+      return { ...r, values };
+    }),
+  };
 }

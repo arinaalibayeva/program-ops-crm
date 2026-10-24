@@ -2,19 +2,35 @@
 
 import Link from "next/link";
 import { Donut, type DonutSlice } from "@/components/charts/donut";
+import { Card } from "@/components/ui/card";
+import { MiniCalendar } from "@/components/mini-calendar";
+import { ComingUpList, DeadlineChecklist } from "@/components/event-calendar";
+import { MyListCard, TabbedCard } from "@/components/today-cards";
 import { PageHeader } from "@/components/page-header";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort, usePeopleIndex } from "@/lib/store";
-import { currentTeamId, needsAttention } from "@/lib/requirements";
+import { currentTeamId, needsAttention, recordProgress, type RecordProgress } from "@/lib/requirements";
+import { takesAttendance } from "@/lib/events";
 import { cohortWeek, formatDate } from "@/lib/format";
-import { SAMPLE_MEETINGS, SAMPLE_REPORTS } from "@/lib/sample-metrics";
-import type { Status } from "@/lib/types";
+import { followUpsOf } from "@/lib/notes";
+import { usePersonalItems } from "@/lib/personal";
+import { useProfile } from "@/lib/profile";
+import type { Requirement, Status } from "@/lib/types";
 
-const SEVERITY: Record<Status, number> = { missing: 0, at_risk: 1, on_track: 2, met: 3 };
+type RecordRequirement = Extract<Requirement, { type: "record_by" }>;
+
+const SEVERITY: Record<Status, number> = {
+  missing: 0,
+  at_risk: 1,
+  on_track: 2,
+  met: 3,
+};
 
 export default function DashboardPage() {
   const { data, participantStatuses, teamStatuses } = useCohort();
   const { personFor, teamById } = usePeopleIndex();
+  const { profile } = useProfile();
+  const personal = usePersonalItems();
 
   const active = data.enrollments.filter((e) => e.status === "active");
   const flaggedPeople = active
@@ -25,134 +41,165 @@ export default function DashboardPage() {
     .map((team) => ({ team, status: teamStatuses.get(team.id)! }))
     .filter(({ status }) => needsAttention(status.status))
     .sort((a, b) => SEVERITY[a.status.status] - SEVERITY[b.status.status]);
+  const followUps = followUpsOf(data);
 
   return (
     <>
       <PageHeader
-        title="Today"
+        title={profile ? `Hi, ${profile.name.split(" ")[0]}` : "Hi"}
         description={`Week ${cohortWeek(data.cohort.startDate, data.today)} · ${formatDate(data.today, { weekday: true })} · ${data.program.name}, ${data.cohort.name}`}
       />
 
-      <ProgramCharts />
-
-      <div className="mt-12 grid gap-x-12 gap-y-12 lg:grid-cols-2">
-        <Section title="People to follow up with" count={flaggedPeople.length}>
-          {flaggedPeople.length === 0 ? (
-            <Empty text="Everyone is on track." />
-          ) : (
-            <ul className="divide-y">
-              {flaggedPeople.map(({ enrollment, status }) => {
-                const person = personFor(enrollment.id)!;
-                const teamId = currentTeamId(data, enrollment.id);
-                return (
-                  <li key={enrollment.id}>
-                    <Link
-                      href={`/admin/participants/${enrollment.id}`}
-                      className="-mx-2 flex items-start justify-between gap-4 rounded-md px-2 py-3 hover:bg-muted/60"
-                    >
-                      <div className="min-w-0">
-                        <div className="text-sm font-medium">
-                          {person.name}
-                          <span className="font-normal text-muted-foreground">
-                            {" "}
-                            · {teamId ? `Team ${teamById.get(teamId)?.name}` : "No team"}
-                          </span>
-                        </div>
-                        {status.flags.map((flag) => (
-                          <div key={flag} className="mt-0.5 text-sm text-muted-foreground">
-                            {flag}
-                          </div>
-                        ))}
-                      </div>
-                      <StatusBadge status={status.status} overall />
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </Section>
-
-        <Section title="Teams to check in on" count={flaggedTeams.length}>
-          {flaggedTeams.length === 0 ? (
-            <Empty text="All teams are on track." />
-          ) : (
-            <ul className="divide-y">
-              {flaggedTeams.map(({ team, status }) => (
-                <li key={team.id}>
-                  <Link
-                    href={`/admin/teams/${team.id}`}
-                    className="-mx-2 flex items-start justify-between gap-4 rounded-md px-2 py-3 hover:bg-muted/60"
-                  >
-                    <div className="min-w-0">
-                      <div className="text-sm font-medium">Team {team.name}</div>
-                      {status.flags.map((flag) => (
-                        <div key={flag} className="mt-0.5 text-sm text-muted-foreground">
-                          {flag}
-                        </div>
+      {/* Each column stacks on its own, so a short card never leaves a hole beside it. */}
+      <div className="grid items-start gap-5 md:grid-cols-[repeat(2,minmax(0,22rem))] xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)_minmax(0,22rem)]">
+        <div className="min-w-0 space-y-5">
+          <MyListCard personal={personal} followUps={followUps} />
+          <TabbedCard
+            title="Needs attention"
+            tabs={[
+              {
+                label: "People",
+                count: flaggedPeople.length,
+                content:
+                  flaggedPeople.length === 0 ? (
+                    <Empty text="Everyone is on track." />
+                  ) : (
+                    <ul className="-mx-2 max-h-[30rem] divide-y overflow-y-auto px-2">
+                      {flaggedPeople.map(({ enrollment, status }) => {
+                        const teamId = currentTeamId(data, enrollment.id);
+                        return (
+                          <FlaggedRow
+                            key={enrollment.id}
+                            href={`/admin/participants/${enrollment.id}`}
+                            name={personFor(enrollment.id)!.name}
+                            detail={teamId ? `Team ${teamById.get(teamId)?.name}` : "No team"}
+                            status={status}
+                          />
+                        );
+                      })}
+                    </ul>
+                  ),
+              },
+              {
+                label: "Teams",
+                count: flaggedTeams.length,
+                content:
+                  flaggedTeams.length === 0 ? (
+                    <Empty text="All teams are on track." />
+                  ) : (
+                    <ul className="-mx-2 max-h-[30rem] divide-y overflow-y-auto px-2">
+                      {flaggedTeams.map(({ team, status }) => (
+                        <FlaggedRow
+                          key={team.id}
+                          href={`/admin/teams/${team.id}`}
+                          name={`Team ${team.name}`}
+                          status={status}
+                        />
                       ))}
-                    </div>
-                    <StatusBadge status={status.status} overall />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Section>
+                    </ul>
+                  ),
+              },
+            ]}
+          />
+        </div>
+        {/* The calendar and metrics sit on the right; the space between stays empty. */}
+        <div className="min-w-0 space-y-5 xl:col-start-3">
+          <MiniCalendar />
+          <ProgramCharts />
+          <TabbedCard
+            tabs={[
+              { label: "Coming up", content: <ComingUpList events={data.events} today={data.today} /> },
+              {
+                label: "Deadlines",
+                count: data.events.filter((e) => !takesAttendance(e) && !e.completed).length,
+                content: <DeadlineChecklist events={data.events} />,
+              },
+            ]}
+          />
+        </div>
       </div>
     </>
   );
 }
 
-function Section({
-  title,
-  count,
-  children,
+function FlaggedRow({
+  href,
+  name,
+  detail,
+  status,
 }: {
-  title: string;
-  count?: number;
-  children: React.ReactNode;
+  href: string;
+  name: string;
+  detail?: string;
+  status: { status: Status; flags: string[] };
 }) {
   return (
-    <section>
-      <h2 className="mb-2 text-lg font-semibold">
-        {title}
-        {count !== undefined && (
-          <span className="ml-2 font-normal text-muted-foreground tabular-nums">{count}</span>
-        )}
-      </h2>
-      {children}
-    </section>
+    <li>
+      <Link
+        href={href}
+        className="-mx-2 flex items-start justify-between gap-4 rounded-md px-2 py-3 hover:bg-muted/60"
+      >
+        <div className="min-w-0">
+          <div className="text-sm font-medium">
+            {name}
+            {detail && <span className="font-normal text-muted-foreground"> · {detail}</span>}
+          </div>
+          {status.flags.map((flag) => (
+            <div key={flag} className="mt-0.5 text-sm text-muted-foreground">
+              {flag}
+            </div>
+          ))}
+        </div>
+        <StatusBadge status={status.status} overall />
+      </Link>
+    </li>
   );
 }
 
-const ON_TRACK = { fill: "bg-chart-2", stroke: "stroke-chart-2" };
-const AT_RISK = { fill: "bg-amber-500", stroke: "stroke-amber-500" };
-const MISSING = { fill: "bg-red-600", stroke: "stroke-red-600" };
+// Darker means more serious, so the rings read as one blue scale.
+const ON_TRACK = { fill: "bg-ocean-300", stroke: "stroke-ocean-300" };
+const AT_RISK = { fill: "bg-ocean-500", stroke: "stroke-ocean-500" };
+const MISSING = { fill: "bg-ocean-900", stroke: "stroke-ocean-900" };
+const PENDING = { fill: "bg-ocean-100", stroke: "stroke-ocean-100" };
 
-function healthSlices(statuses: Status[]): DonutSlice[] {
-  const count = (...wanted: Status[]) => statuses.filter((s) => wanted.includes(s)).length;
+/** Each slice opens the list it counts, already filtered. */
+function healthSlices(statuses: Status[], href: string): DonutSlice[] {
+  const count = (...wanted: Status[]) =>
+    statuses.filter((s) => wanted.includes(s)).length;
   return [
-    { label: "On track", value: count("on_track", "met"), ...ON_TRACK },
-    { label: "At risk", value: count("at_risk"), ...AT_RISK },
-    { label: "Missing", value: count("missing"), ...MISSING },
+    {
+      label: "On track",
+      value: count("on_track", "met"),
+      href: `${href}?status=on_track`,
+      ...ON_TRACK,
+    },
+    {
+      label: "At risk",
+      value: count("at_risk"),
+      href: `${href}?status=at_risk`,
+      ...AT_RISK,
+    },
+    {
+      label: "Missing",
+      value: count("missing"),
+      href: `${href}?status=missing`,
+      ...MISSING,
+    },
   ];
 }
 
 function ChartPanel({
   title,
   href,
-  sample,
   children,
 }: {
   title: string;
   href?: string;
-  sample?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <section>
-      <h2 className="mb-3 flex items-baseline justify-between gap-2 text-sm font-semibold">
+    <section className="min-w-0">
+      <h2 className="mb-2 text-sm font-semibold">
         {href ? (
           <Link href={href} className="hover:underline">
             {title}
@@ -160,59 +207,63 @@ function ChartPanel({
         ) : (
           title
         )}
-        {sample && <span className="text-xs font-normal text-muted-foreground">Sample</span>}
       </h2>
       {children}
     </section>
   );
 }
 
-/** How the program is doing at a glance. */
-function ProgramCharts() {
-  const { participantStatuses, teamStatuses } = useCohort();
-  // The meeting figures are sample data, so their denominator must be too.
-  const teamCount = SAMPLE_REPORTS.onTime + SAMPLE_REPORTS.late + SAMPLE_REPORTS.missing;
-  const statusesOf = (map: Map<string, { status: Status }>) => [...map.values()].map((s) => s.status);
+/** How teams are doing on the latest requirement met by logging records. */
+function RecordRequirementChart({ requirement: req }: { requirement: RecordRequirement }) {
+  const { data } = useCohort();
+  const href = `/admin/requirements/${req.id}`;
+  const excused = new Set(
+    data.exemptions.filter((x) => x.requirementId === req.id).map((x) => x.subjectId),
+  );
+  const progress = data.teams
+    .filter((t) => !excused.has(t.id))
+    .map((t) => recordProgress(data, req, t.id));
+  const count = (wanted: RecordProgress) => progress.filter((p) => p === wanted).length;
+  const pending = count("pending");
 
   return (
-    <div className="grid gap-x-12 gap-y-10 sm:grid-cols-2 xl:grid-cols-4">
-      <ChartPanel title="Team health" href="/admin/teams">
-        <Donut slices={healthSlices(statusesOf(teamStatuses))} unit="teams" />
+    <ChartPanel title={req.name} href={href}>
+      <Donut
+        unit="teams"
+        slices={[
+          { label: "On time", value: count("on_time"), href, ...ON_TRACK },
+          { label: "Late", value: count("late"), href, ...AT_RISK },
+          { label: "Missing", value: count("missing"), href, ...MISSING },
+          ...(pending > 0 ? [{ label: "Not due yet", value: pending, href, ...PENDING }] : []),
+        ]}
+      />
+    </ChartPanel>
+  );
+}
+
+/** How the program is doing at a glance. */
+function ProgramCharts() {
+  const { data, participantStatuses, teamStatuses } = useCohort();
+  const statusesOf = (map: Map<string, { status: Status }>) =>
+    [...map.values()].map((s) => s.status);
+  const latest = data.requirements
+    .filter((r): r is RecordRequirement => r.type === "record_by" && r.scope === "team")
+    .sort((a, b) => a.params.dueDate.localeCompare(b.params.dueDate))
+    .at(-1);
+
+  return (
+    <Card className="gap-5 rounded-2xl p-4">
+      <ChartPanel title="Teams" href="/admin/teams">
+        <Donut slices={healthSlices(statusesOf(teamStatuses), "/admin/teams")} unit="teams" />
       </ChartPanel>
-      <ChartPanel title="Participant health" href="/admin/participants">
-        <Donut slices={healthSlices(statusesOf(participantStatuses))} unit="people" />
-      </ChartPanel>
-      <ChartPanel title="October Meeting Reports" sample>
+      <ChartPanel title="Participants" href="/admin/participants">
         <Donut
-          unit="reports"
-          slices={[
-            { label: "On time", value: SAMPLE_REPORTS.onTime, ...ON_TRACK },
-            { label: "Late", value: SAMPLE_REPORTS.late, ...AT_RISK },
-            { label: "Missing", value: SAMPLE_REPORTS.missing, ...MISSING },
-          ]}
+          slices={healthSlices(statusesOf(participantStatuses), "/admin/participants")}
+          unit="people"
         />
       </ChartPanel>
-      <ChartPanel title="Required meetings this month" sample>
-        <div className="space-y-3.5">
-          {SAMPLE_MEETINGS.map((meeting) => (
-            <div key={meeting.label}>
-              <div className="flex justify-between gap-2 text-sm">
-                <span>{meeting.label}</span>
-                <span className="text-muted-foreground tabular-nums">
-                  {meeting.done}/{teamCount} teams
-                </span>
-              </div>
-              <div className="mt-1.5 h-2 rounded-full bg-muted">
-                <div
-                  className="h-full rounded-full bg-chart-2"
-                  style={{ width: `${(meeting.done / teamCount) * 100}%` }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      </ChartPanel>
-    </div>
+      {latest && <RecordRequirementChart requirement={latest} />}
+    </Card>
   );
 }
 

@@ -18,6 +18,16 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
+  --color-ocean-50: #eef5fd;
+  --color-ocean-100: #dceafa;
+  --color-ocean-200: #bed7f4;
+  --color-ocean-300: #91bceb;
+  --color-ocean-400: #5f9ade;
+  --color-ocean-500: #3a7bc8;
+  --color-ocean-600: #2a62a8;
+  --color-ocean-700: #1d4580;
+  --color-ocean-800: #163a6d;
+  --color-ocean-900: #122848;
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -49,41 +59,41 @@
 }
 
 :root {
-  /* Dark blue for actions, pale blue and beige for surfaces, warm paper for content. */
-  --background: oklch(0.992 0.005 85);
-  --foreground: oklch(0.24 0.045 258);
-  --card: oklch(0.992 0.005 85);
-  --card-foreground: oklch(0.24 0.045 258);
-  --popover: oklch(0.992 0.005 85);
-  --popover-foreground: oklch(0.24 0.045 258);
-  --primary: oklch(0.3 0.085 258);
-  --primary-foreground: oklch(0.985 0.008 85);
-  --secondary: oklch(0.94 0.022 82);
-  --secondary-foreground: oklch(0.32 0.045 258);
-  --muted: oklch(0.94 0.016 235);
-  --muted-foreground: oklch(0.47 0.03 252);
-  --accent: oklch(0.92 0.024 235);
-  --accent-foreground: oklch(0.27 0.06 258);
+  /* A blue scale from pale sky to deep navy, with white surfaces. */
+  --background: #ffffff;
+  --foreground: #122848;
+  --card: #ffffff;
+  --card-foreground: #122848;
+  --popover: #ffffff;
+  --popover-foreground: #122848;
+  --primary: #1d4580;
+  --primary-foreground: #ffffff;
+  --secondary: #dceafa;
+  --secondary-foreground: #1f4c8a;
+  --muted: #e6eff9;
+  --muted-foreground: #4f6585;
+  --accent: #d3e4f8;
+  --accent-foreground: #163a6d;
   --destructive: oklch(0.5 0.18 25);
-  --border: oklch(0.3 0.06 258 / 12%);
-  --input: oklch(0.3 0.06 258 / 18%);
-  --ring: oklch(0.5 0.09 250);
+  --border: #d4e1f0;
+  --input: #c5d7eb;
+  --ring: #3a7bc8;
   --chart-1: oklch(0.3 0.085 258);
-  --chart-2: oklch(0.52 0.11 248);
+  --chart-2: #3a7bc8;
   --chart-3: oklch(0.68 0.06 235);
   --chart-4: oklch(0.82 0.05 85);
   --chart-5: oklch(0.22 0.06 258);
   /* The page behind everything, and the sky on the sign-in page. */
-  --page: oklch(0.95 0.02 85);
-  --canvas: linear-gradient(165deg, oklch(0.925 0.03 235) 0%, oklch(0.955 0.018 225) 42%, oklch(0.955 0.022 85) 100%);
-  --dusk: linear-gradient(178deg, oklch(0.25 0.075 260) 0%, oklch(0.33 0.09 255) 32%, oklch(0.6 0.075 240) 62%, oklch(0.85 0.04 225) 82%, oklch(0.93 0.035 80) 100%);
+  --page: #e4eefa;
+  --canvas: #e4eefa;
+  --dusk: linear-gradient(160deg, #122848 0%, #1d4580 52%, #3a7bc8 100%);
   /* Fine film grain, so gradients don't look flat or banded. */
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .22 0 0 0 0 .3 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain: none;
   /* Components derive their corner radius from this. */
   --radius: 0.625rem;
   --sidebar: oklch(0.992 0.005 85);
   --sidebar-foreground: oklch(0.24 0.045 258);
-  --sidebar-primary: oklch(0.3 0.085 258);
+  --sidebar-primary: #1b3a66;
   --sidebar-primary-foreground: oklch(0.985 0.008 85);
   --sidebar-accent: oklch(0.92 0.024 235);
   --sidebar-accent-foreground: oklch(0.27 0.06 258);
@@ -144,106 +154,6 @@
     @apply font-sans;
     background-color: var(--page);
   }
-}
-
-/*
- * Design options being compared with the picker in the top right. Each is flat:
- * one page color, content surfaces, and dark blue as the only accent. Once one
- * is chosen, its values move into :root and the rest (and the picker) go away.
- */
-[data-theme="white"],
-[data-theme="gray"],
-[data-theme="stone"] {
-  --grain: none;
-  --dusk: #132b4f;
-  --primary: #1b3a66;
-  --primary-foreground: #ffffff;
-  --sidebar-primary: #1b3a66;
-  --ring: #5f7fa8;
-  --chart-2: #2f6fa8;
-}
-
-[data-theme="white"] {
-  --page: #ffffff;
-  --canvas: #ffffff;
-  --background: #ffffff;
-  --card: #ffffff;
-  --popover: #ffffff;
-  --foreground: #16202e;
-  --card-foreground: #16202e;
-  --popover-foreground: #16202e;
-  --secondary: #f1f3f6;
-  --secondary-foreground: #2a3648;
-  --muted: #f4f5f7;
-  --muted-foreground: #667085;
-  --accent: #eceff3;
-  --accent-foreground: #16202e;
-  --border: #e6e8ec;
-  --input: #dfe2e7;
-}
-
-[data-theme="gray"] {
-  --page: #eff1f4;
-  --canvas: #eff1f4;
-  --background: #ffffff;
-  --card: #ffffff;
-  --popover: #ffffff;
-  --foreground: #161f2c;
-  --card-foreground: #161f2c;
-  --popover-foreground: #161f2c;
-  --secondary: #e8ebf0;
-  --secondary-foreground: #2a3648;
-  --muted: #e6e9ee;
-  --muted-foreground: #5f6b7c;
-  --accent: #e3e7ed;
-  --accent-foreground: #161f2c;
-  --border: #dde1e7;
-  --input: #d5dae1;
-}
-
-[data-theme="stone"] {
-  --page: #f4f1ea;
-  --canvas: #f4f1ea;
-  --background: #fffdf9;
-  --card: #fffdf9;
-  --popover: #fffdf9;
-  --foreground: #1e2430;
-  --card-foreground: #1e2430;
-  --popover-foreground: #1e2430;
-  --secondary: #ece7dc;
-  --secondary-foreground: #33393f;
-  --muted: #ebe6db;
-  --muted-foreground: #6c6a64;
-  --accent: #e7e1d4;
-  --accent-foreground: #1e2430;
-  --border: #e3ddd0;
-  --input: #dad3c4;
-}
-
-[data-theme="midnight"] {
-  --grain: none;
-  --dusk: #0d1524;
-  --page: #0f1724;
-  --canvas: #0f1724;
-  --background: #182233;
-  --card: #182233;
-  --popover: #1c2739;
-  --foreground: #e7ebf2;
-  --card-foreground: #e7ebf2;
-  --popover-foreground: #e7ebf2;
-  --primary: #9dbdec;
-  --primary-foreground: #0f1724;
-  --sidebar-primary: #9dbdec;
-  --secondary: #243147;
-  --secondary-foreground: #d5dce8;
-  --muted: #212d41;
-  --muted-foreground: #97a4b8;
-  --accent: #29374e;
-  --accent-foreground: #e7ebf2;
-  --border: #ffffff17;
-  --input: #ffffff24;
-  --ring: #7f9fd0;
-  --chart-2: #6ea3e0;
 }
 
 @utility bg-dusk {

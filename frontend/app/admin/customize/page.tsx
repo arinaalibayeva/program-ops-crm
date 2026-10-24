@@ -70,6 +70,19 @@ export default function CustomizePage() {
         </ul>
       )}
 
+      <Link
+        href="/admin/participants/fields"
+        className="group mt-3 flex items-center justify-between gap-3 rounded-xl border p-4 transition-colors hover:bg-muted/40 sm:max-w-md"
+      >
+        <span>
+          <span className="block font-medium">Participant fields</span>
+          <span className="block text-sm text-muted-foreground">
+            {data.fields.filter((f) => !f.archived).length} fields on every participant&apos;s profile
+          </span>
+        </span>
+        <ArrowRight className="size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5" />
+      </Link>
+
       <section className="mt-12 max-w-2xl space-y-2 border-t text-sm text-muted-foreground">
         <h2 className="pt-8 font-medium text-foreground">How it fits together</h2>
         <p>

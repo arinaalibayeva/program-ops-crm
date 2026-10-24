@@ -1,5 +1,7 @@
 import {
+  CalendarClock,
   CalendarDays,
+  ClipboardCheck,
   Handshake,
   Layers,
   Rows3,
@@ -14,6 +16,8 @@ import type { RecordType } from "./types";
 export interface NavLink {
   href: string;
   label: string;
+  /** Shown in the dock on phones, where the full label won't fit. */
+  short?: string;
   icon: typeof Sun;
 }
 
@@ -34,6 +38,16 @@ const DOCK_ITEMS: DockItem[] = [
     ],
   },
   { href: "/admin/events", label: "Calendar", icon: CalendarDays },
+  {
+    href: "/admin/requirements",
+    label: "Requirements",
+    short: "Rules",
+    icon: ClipboardCheck,
+    stack: [
+      { href: "/admin/requirements", label: "Requirements", icon: ClipboardCheck },
+      { href: "/admin/deadlines", label: "Deadlines", icon: CalendarClock },
+    ],
+  },
   { href: "/admin/partners", label: "Partners", icon: Handshake },
   { href: "/admin/records", label: "Records", icon: Layers, stack: [] },
 ];

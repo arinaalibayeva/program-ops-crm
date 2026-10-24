@@ -30,15 +30,23 @@ import type {
   CohortData,
   FieldDefinition,
   FieldValue,
+  Note,
+  NoteSubject,
+  Partner,
+  PartnerContact,
   ProgramEvent,
   Requirement,
   SubjectStatus,
 } from "./types";
 
 // Bump the version when CohortData changes shape so old saved data is ignored.
-const STORAGE_KEY = "program-ops-crm:cohort:v17";
+const STORAGE_KEY = "program-ops-crm:cohort:v18";
 
 export type NewEvent = Omit<ProgramEvent, "id" | "cohortId" | "checkinToken">;
+
+export type NewPartner = Pick<Partner, "name" | "website" | "description" | "ownerId">;
+export type NewContact = Omit<PartnerContact, "id">;
+export type NotePatch = Partial<Pick<Note, "body" | "followUpDone">> & { followUpDate?: string | null };
 
 export interface NewParticipant {
   name: string;
@@ -61,15 +69,24 @@ interface CohortContextValue {
   addEvent: (event: NewEvent) => void;
   /** Merges the given fields into the event; fields not passed are kept. */
   updateEvent: (id: string, event: Partial<NewEvent>) => void;
+  /** Also removes its attendance and unlinks records that point at it. */
+  deleteEvent: (id: string) => void;
   addRequirement: (req: Omit<Requirement, "id">) => void;
   deleteRequirement: (id: string) => void;
   addField: (field: Omit<FieldDefinition, "id">) => void;
   updateField: (id: string, patch: Partial<Omit<FieldDefinition, "id">>) => void;
   moveField: (id: string, toIndex: number) => void;
   deleteField: (id: string) => void;
-  addTeamNote: (teamId: string, body: string) => void;
-  updateTeamNote: (id: string, body: string) => void;
-  deleteTeamNote: (id: string) => void;
+  addNote: (subjectType: NoteSubject, subjectId: string, body: string, followUpDate?: string) => void;
+  updateNote: (id: string, patch: NotePatch) => void;
+  deleteNote: (id: string) => void;
+  /** Returns the new partner's id so pages can open it. */
+  addPartner: (partner: NewPartner) => string;
+  updatePartner: (id: string, patch: Partial<NewPartner>) => void;
+  addContact: (partnerId: string, contact: NewContact) => void;
+  deleteContact: (partnerId: string, contactId: string) => void;
+  setProjectPartner: (projectId: string, partnerId: string | undefined) => void;
+  setTeamOwner: (teamId: string, ownerId: string | undefined) => void;
   // Custom record types. Adds return the new id so pages can open it.
   addRecordType: (input: NewRecordType) => string;
   updateRecordType: (id: string, patch: Partial<NewRecordType>) => void;
@@ -339,7 +356,14 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
         .map((e) => (e.id === id ? { ...e, ...event } : e))
         .sort((a, b) => a.date.localeCompare(b.date)),
     }));
-    sync(() => api(`/events/${id}`, { method: "PATCH", body: event }));
+    // Undefined means "clear this"; JSON would leave it out, so it's sent as null.
+    const body = Object.fromEntries(Object.entries(event).map(([k, v]) => [k, v ?? null]));
+    sync(() => api(`/events/${id}`, { method: "PATCH", body }));
+  }, [sync]);
+
+  const deleteEvent = useCallback((id: string) => {
+    setData((d) => records.deleteEvent(d, id));
+    sync(() => api(`/events/${id}`, { method: "DELETE" }));
   }, [sync]);
 
   const addRequirement = useCallback((req: Omit<Requirement, "id">) => {
@@ -400,25 +424,92 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     sync(() => api(`/fields/${id}`, { method: "DELETE" }));
   }, [sync]);
 
-  const addTeamNote = useCallback((teamId: string, body: string) => {
-    const note = { id: newId("note"), teamId, body: body.trim(), createdAt: new Date().toISOString() };
-    setData((d) => ({ ...d, teamNotes: [note, ...d.teamNotes] }));
-    sync(() => api(`/teams/${teamId}/notes`, { body: { body } }));
+  const addNote = useCallback<CohortContextValue["addNote"]>((subjectType, subjectId, body, followUpDate) => {
+    const id = newId("note");
+    const note: Note = {
+      id,
+      subjectType,
+      subjectId,
+      body: body.trim(),
+      followUpDate,
+      followUpDone: false,
+      createdAt: new Date().toISOString(),
+    };
+    setData((d) => ({ ...d, notes: [note, ...d.notes] }));
+    sync(() => api("/notes", { body: { id, subjectType, subjectId, body, followUpDate } }));
   }, [sync]);
 
-  const updateTeamNote = useCallback((id: string, body: string) => {
+  const updateNote = useCallback<CohortContextValue["updateNote"]>((id, patch) => {
     setData((d) => ({
       ...d,
-      teamNotes: d.teamNotes.map((n) =>
-        n.id === id ? { ...n, body: body.trim(), updatedAt: new Date().toISOString() } : n,
-      ),
+      notes: d.notes.map((n) => {
+        if (n.id !== id) return n;
+        const next = { ...n, ...patch, followUpDate: "followUpDate" in patch ? (patch.followUpDate ?? undefined) : n.followUpDate };
+        return patch.body === undefined
+          ? next
+          : { ...next, body: patch.body.trim(), updatedAt: new Date().toISOString() };
+      }),
     }));
-    sync(() => api(`/team-notes/${id}`, { method: "PATCH", body: { body } }));
+    sync(() => api(`/notes/${id}`, { method: "PATCH", body: patch }));
   }, [sync]);
 
-  const deleteTeamNote = useCallback((id: string) => {
-    setData((d) => ({ ...d, teamNotes: d.teamNotes.filter((n) => n.id !== id) }));
-    sync(() => api(`/team-notes/${id}`, { method: "DELETE" }));
+  const deleteNote = useCallback((id: string) => {
+    setData((d) => ({ ...d, notes: d.notes.filter((n) => n.id !== id) }));
+    sync(() => api(`/notes/${id}`, { method: "DELETE" }));
+  }, [sync]);
+
+  const addPartner = useCallback((partner: NewPartner) => {
+    const id = newId("partner");
+    setData((d) => ({ ...d, partners: [...d.partners, { ...partner, id, programId: d.program.id, contacts: [] }] }));
+    sync(() => api("/partners", { body: { id, ...partner } }));
+    return id;
+  }, [sync]);
+
+  const updatePartner = useCallback((id: string, patch: Partial<NewPartner>) => {
+    setData((d) => ({
+      ...d,
+      partners: d.partners.map((p) => (p.id === id ? { ...p, ...patch } : p)),
+    }));
+    // Undefined means "clear this"; JSON would leave it out, so it's sent as null.
+    const body = Object.fromEntries(Object.entries(patch).map(([k, v]) => [k, v ?? null]));
+    sync(() => api(`/partners/${id}`, { method: "PATCH", body }));
+  }, [sync]);
+
+  const addContact = useCallback((partnerId: string, contact: NewContact) => {
+    const id = newId("contact");
+    setData((d) => ({
+      ...d,
+      partners: d.partners.map((p) =>
+        p.id === partnerId ? { ...p, contacts: [...p.contacts, { ...contact, id }] } : p,
+      ),
+    }));
+    sync(() => api(`/partners/${partnerId}/contacts`, { body: { id, ...contact } }));
+  }, [sync]);
+
+  const deleteContact = useCallback((partnerId: string, contactId: string) => {
+    setData((d) => ({
+      ...d,
+      partners: d.partners.map((p) =>
+        p.id === partnerId ? { ...p, contacts: p.contacts.filter((c) => c.id !== contactId) } : p,
+      ),
+    }));
+    sync(() => api(`/partner-contacts/${contactId}`, { method: "DELETE" }));
+  }, [sync]);
+
+  const setProjectPartner = useCallback((projectId: string, partnerId: string | undefined) => {
+    setData((d) => ({
+      ...d,
+      projects: d.projects.map((p) => (p.id === projectId ? { ...p, partnerId } : p)),
+    }));
+    sync(() => api(`/projects/${projectId}/partner`, { method: "PUT", body: { partnerId: partnerId ?? null } }));
+  }, [sync]);
+
+  const setTeamOwner = useCallback((teamId: string, ownerId: string | undefined) => {
+    setData((d) => ({
+      ...d,
+      teams: d.teams.map((t) => (t.id === teamId ? { ...t, ownerId } : t)),
+    }));
+    sync(() => api(`/teams/${teamId}/owner`, { method: "PUT", body: { ownerId: ownerId ?? null } }));
   }, [sync]);
 
   // ---- Custom record types ----
@@ -541,15 +632,22 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     addParticipants,
     addEvent,
     updateEvent,
+    deleteEvent,
     addRequirement,
     deleteRequirement,
     addField,
     updateField,
     moveField,
     deleteField,
-    addTeamNote,
-    updateTeamNote,
-    deleteTeamNote,
+    addNote,
+    updateNote,
+    deleteNote,
+    addPartner,
+    updatePartner,
+    addContact,
+    deleteContact,
+    setProjectPartner,
+    setTeamOwner,
     addRecordType,
     updateRecordType,
     deleteRecordType,
@@ -607,10 +705,11 @@ export function usePeopleIndex() {
     const enrollmentById = new Map(data.enrollments.map((e) => [e.id, e]));
     const teamById = new Map(data.teams.map((t) => [t.id, t]));
     const projectById = new Map(data.projects.map((p) => [p.id, p]));
+    const partnerById = new Map(data.partners.map((p) => [p.id, p]));
     const personFor = (enrollmentId: string) => {
       const e = enrollmentById.get(enrollmentId);
       return e ? personById.get(e.personId) : undefined;
     };
-    return { personById, enrollmentById, teamById, projectById, personFor };
+    return { personById, enrollmentById, teamById, projectById, partnerById, personFor };
   }, [data]);
 }

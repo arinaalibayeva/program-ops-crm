@@ -75,7 +75,36 @@ export interface Project {
   id: string;
   cohortId: string;
   title: string;
-  partner?: string;
+  partnerId?: string;
+}
+
+export interface PartnerContact {
+  id: string;
+  name: string;
+  title?: string;
+  email?: string;
+  phone?: string;
+}
+
+/** An organization that gives teams projects. Belongs to the program, so it outlasts a cohort. */
+export interface Partner {
+  id: string;
+  programId: string;
+  name: string;
+  website?: string;
+  description?: string;
+  /** The staff member who looks after this relationship. */
+  ownerId?: string;
+  contacts: PartnerContact[];
+}
+
+/** Someone who can sign in to the CRM and look after teams and partners. */
+export interface StaffMember {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  jobTitle?: string;
 }
 
 export interface Team {
@@ -83,6 +112,8 @@ export interface Team {
   cohortId: string;
   name: string;
   projectId?: string;
+  /** The staff member who looks after this team. */
+  ownerId?: string;
 }
 
 // ---- Custom record types ----
@@ -194,12 +225,19 @@ export interface RecordForm {
   isOpen: boolean;
 }
 
-/** A note an admin wrote about a team. Times are ISO date-times. */
-export interface TeamNote {
+export type NoteSubject = "participant" | "team" | "partner";
+
+/** A note an admin wrote about a participant, team or partner. Times are ISO date-times. */
+export interface Note {
   id: string;
-  teamId: string;
+  subjectType: NoteSubject;
+  /** An enrollment, team or partner id. */
+  subjectId: string;
   body: string;
   author?: string;
+  /** Asks someone to come back to this by a date; it shows on Today until done. */
+  followUpDate?: ISODate;
+  followUpDone: boolean;
   createdAt: string;
   updatedAt?: string;
 }
@@ -255,6 +293,10 @@ export interface ProgramEvent {
   description?: string;
   links?: EventLink[];
   isRequired: boolean;
+  /** The one partner this event is with. Partner sessions without one are for every partner. */
+  partnerId?: string;
+  /** Crossed off on the calendar. Mainly for deadlines. */
+  completed?: boolean;
   checkinToken: string;
 }
 
@@ -267,7 +309,8 @@ export interface Attendance {
 export type RequirementType =
   | "attendance_min"
   | "complete_by"
-  | "team_min_size";
+  | "team_min_size"
+  | "record_by";
 
 export type Requirement =
   | {
@@ -290,6 +333,21 @@ export type Requirement =
       scope: "team";
       type: "team_min_size";
       params: { minActive: number };
+    }
+  | {
+      id: string;
+      name: string;
+      scope: "participant" | "team";
+      type: "record_by";
+      /** Met by logging records of typeId linked through viaFieldId, not by ticking a box. */
+      params: {
+        typeId: string;
+        viaFieldId: string;
+        minCount: number;
+        dueDate: ISODate;
+        /** Which date on the record decides whether it was on time. */
+        dateFieldId?: string;
+      };
     };
 
 /** Marks a complete_by requirement as done for a participant or team. */
@@ -321,8 +379,10 @@ export interface CohortData {
   completions: Completion[];
   exemptions: Exemption[];
   fields: FieldDefinition[];
+  partners: Partner[];
+  staff: StaffMember[];
   /** Newest first. */
-  teamNotes: TeamNote[];
+  notes: Note[];
   recordTypes: RecordType[];
   /** Oldest first. */
   records: CustomRecord[];

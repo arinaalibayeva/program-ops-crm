@@ -1,47 +1,46 @@
-// Partners aren't stored on their own yet: a partner is the organization named
-// on a project. These helpers group projects by that name so each gets a page.
+// A partner's work this cohort, worked out from its projects and their teams.
 
 import { activeMembers, worstStatus } from "./requirements";
-import type { CohortData, Enrollment, Project, Status, SubjectStatus, Team } from "./types";
+import type { CohortData, Enrollment, Partner, ProgramEvent, Project, Status, SubjectStatus, Team } from "./types";
 
-export interface Partner {
-  /** URL-safe id made from the name. */
-  id: string;
-  name: string;
+export interface PartnerSummary extends Partner {
   projects: Project[];
   teams: Team[];
 }
 
-function partnerId(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+function summarize(data: CohortData, partner: Partner): PartnerSummary {
+  const projects = data.projects.filter((p) => p.partnerId === partner.id);
+  const ids = new Set(projects.map((p) => p.id));
+  return { ...partner, projects, teams: data.teams.filter((t) => t.projectId && ids.has(t.projectId)) };
 }
 
-/** Every partner in the cohort, A to Z. */
-export function partnersOf(data: CohortData): Partner[] {
-  const byName = new Map<string, Partner>();
-  for (const project of data.projects) {
-    if (!project.partner) continue;
-    const id = partnerId(project.partner);
-    const partner = byName.get(id) ?? { id, name: project.partner, projects: [], teams: [] };
-    partner.projects.push(project);
-    partner.teams.push(...data.teams.filter((t) => t.projectId === project.id));
-    byName.set(id, partner);
-  }
-  return [...byName.values()].sort((a, b) => a.name.localeCompare(b.name));
+/** Every partner in the program, A to Z. */
+export function partnersOf(data: CohortData): PartnerSummary[] {
+  return data.partners.map((p) => summarize(data, p)).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+export function partnerById(data: CohortData, id: string): PartnerSummary | undefined {
+  const partner = data.partners.find((p) => p.id === id);
+  return partner && summarize(data, partner);
 }
 
 export function partnerOfTeam(data: CohortData, team: Team): Partner | undefined {
-  return partnersOf(data).find((p) => p.teams.some((t) => t.id === team.id));
+  const project = data.projects.find((p) => p.id === team.projectId);
+  return data.partners.find((p) => p.id === project?.partnerId);
 }
 
 /** The worst status among the partner's teams. */
-export function partnerStatus(partner: Partner, teamStatuses: Map<string, SubjectStatus>): Status {
+export function partnerStatus(partner: PartnerSummary, teamStatuses: Map<string, SubjectStatus>): Status {
   return worstStatus(partner.teams.flatMap((t) => teamStatuses.get(t.id)?.status ?? []));
 }
 
-export function partnerMembers(data: CohortData, partner: Partner): Enrollment[] {
+export function partnerMembers(data: CohortData, partner: PartnerSummary): Enrollment[] {
   return partner.teams.flatMap((t) => activeMembers(data, t.id));
+}
+
+/** This partner's events, plus partner sessions held for every partner. */
+export function partnerEvents(data: CohortData, partnerId: string): ProgramEvent[] {
+  return data.events.filter(
+    (e) => e.partnerId === partnerId || (e.category === "partner" && !e.partnerId),
+  );
 }

@@ -168,21 +168,30 @@ function AttendanceCard({ event }: { event: ProgramEvent }) {
         ) : (
           <ul className="grid gap-x-4 gap-y-0.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {shown.map(({ enrollment, person, team, record }) => (
-              <li key={enrollment.id}>
-                <label className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-muted/60">
-                  <Checkbox
-                    checked={!!record}
-                    onCheckedChange={() => toggleAttendance(event.id, enrollment.id)}
-                    aria-label={`${person.name} attended`}
-                  />
-                  <span className="min-w-0">
-                    <span className="block truncate text-sm font-medium">{person.name}</span>
-                    <span className="block truncate text-xs text-muted-foreground">
-                      {team ? `Team ${team.name}` : "No team"}
-                      {record && (record.source === "link" ? " · via link" : " · marked by hand")}
-                    </span>
+              <li key={enrollment.id} className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-muted/60">
+                <Checkbox
+                  checked={!!record}
+                  onCheckedChange={() => toggleAttendance(event.id, enrollment.id)}
+                  aria-label={`${person.name} attended`}
+                />
+                <span className="min-w-0">
+                  <Link
+                    href={`/admin/participants/${enrollment.id}`}
+                    className="block truncate text-sm font-medium hover:underline"
+                  >
+                    {person.name}
+                  </Link>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {team ? (
+                      <Link href={`/admin/teams/${team.id}`} className="hover:text-foreground hover:underline">
+                        Team {team.name}
+                      </Link>
+                    ) : (
+                      "No team"
+                    )}
+                    {record && (record.source === "link" ? " · via link" : " · marked by hand")}
                   </span>
-                </label>
+                </span>
               </li>
             ))}
           </ul>
@@ -198,6 +207,8 @@ function formatDays(event: ProgramEvent): string {
 }
 
 function EventDetails({ event }: { event: ProgramEvent }) {
+  const { partnerById } = usePeopleIndex();
+  const partner = event.partnerId ? partnerById.get(event.partnerId) : undefined;
   const isLink = event.location && /^https?:\/\//.test(event.location);
   const facts: [string, React.ReactNode][] = [
     ["Time", formatEventTime(event)],
@@ -219,6 +230,16 @@ function EventDetails({ event }: { event: ProgramEvent }) {
     ],
     ["Host", event.host],
     ["Category", EVENT_CATEGORY_LABELS[event.category]],
+    [
+      "Partner",
+      partner ? (
+        <Link href={`/admin/partners/${partner.id}`} className="underline underline-offset-2">
+          {partner.name}
+        </Link>
+      ) : event.category === "partner" ? (
+        "All partners"
+      ) : undefined,
+    ],
   ];
 
   return (

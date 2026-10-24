@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import {
   CalendarDays,
   CircleUserRound,
-  ClipboardCheck,
   CornerDownLeft,
   Handshake,
   KeyRound,
@@ -78,8 +77,7 @@ function CommandList({ close }: { close: () => void }) {
         run: go(item.href),
       })),
       { id: "profile", group: "Go to", label: "Profile", icon: CircleUserRound, run: go("/admin/profile") },
-      { id: "team-access", group: "Go to", label: "Team access", icon: KeyRound, run: go("/admin/team") },
-      { id: "requirements", group: "Go to", label: "Requirements", icon: ClipboardCheck, run: go("/admin/requirements") },
+      { id: "team-access", group: "Go to", label: "Team access", icon: KeyRound, run: go("/admin/access") },
       { id: "fields", group: "Go to", label: "Participant fields", icon: SlidersHorizontal, run: go("/admin/participants/fields") },
       ...data.enrollments.map((e) => ({
         id: e.id,

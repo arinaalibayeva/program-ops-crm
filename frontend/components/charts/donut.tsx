@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 export interface DonutSlice {
@@ -9,10 +10,13 @@ export interface DonutSlice {
   /** A fill class for the legend swatch and a stroke class for the ring. */
   fill: string;
   stroke: string;
+  /** Opens whatever is behind this slice. */
+  href?: string;
 }
 
-const SIZE = 136;
-const THICKNESS = 16;
+const SIZE = 116; // the drawing; it scales to DISPLAY_SIZE on screen
+const DISPLAY_SIZE = 92;
+const THICKNESS = 14;
 const RADIUS = (SIZE - THICKNESS) / 2;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 const GAP = 3; // px of background between slices
@@ -30,11 +34,11 @@ export function Donut({ slices, unit }: { slices: DonutSlice[]; unit: string }) 
 
   let offset = 0;
   return (
-    <div className="flex items-center gap-5">
-      <div className="relative shrink-0" style={{ width: SIZE, height: SIZE }}>
+    <div className="flex items-center gap-4">
+      <div className="relative shrink-0" style={{ width: DISPLAY_SIZE, height: DISPLAY_SIZE }}>
         <svg
-          width={SIZE}
-          height={SIZE}
+          width={DISPLAY_SIZE}
+          height={DISPLAY_SIZE}
           viewBox={`0 0 ${SIZE} ${SIZE}`}
           role="img"
           aria-label={slices.map((s) => `${s.label}: ${s.value}`).join(", ")}
@@ -69,27 +73,43 @@ export function Donut({ slices, unit }: { slices: DonutSlice[]; unit: string }) 
           })}
         </svg>
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-          <span className="text-2xl leading-none font-semibold tabular-nums">{shown ? shown.value : total}</span>
-          <span className="mt-1 max-w-20 truncate text-xs text-muted-foreground">{shown ? shown.label : unit}</span>
+          <span className="text-xl leading-none font-semibold tabular-nums">{shown ? shown.value : total}</span>
+          <span className="mt-0.5 max-w-16 truncate text-[11px] text-muted-foreground">{shown ? shown.label : unit}</span>
         </div>
       </div>
-      <ul className="min-w-0 flex-1 space-y-1.5">
+      <ul className="w-full min-w-0 space-y-1">
         {slices.map((slice) => (
           <li
             key={slice.label}
-            tabIndex={0}
             onMouseEnter={() => setActive(slice.label)}
             onMouseLeave={() => setActive(undefined)}
             onFocus={() => setActive(slice.label)}
             onBlur={() => setActive(undefined)}
-            className="flex items-center gap-2 rounded text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
           >
-            <span className={cn("size-2.5 shrink-0 rounded-[3px]", slice.fill)} aria-hidden />
-            <span className="min-w-0 flex-1 truncate">{slice.label}</span>
-            <span className="font-medium tabular-nums">{slice.value}</span>
+            <LegendRow slice={slice} />
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+function LegendRow({ slice }: { slice: DonutSlice }) {
+  const row = "flex items-center gap-2 rounded text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/50";
+  const content = (
+    <>
+      <span className={cn("size-2.5 shrink-0 rounded-[3px]", slice.fill)} aria-hidden />
+      <span className="min-w-0 flex-1 truncate">{slice.label}</span>
+      <span className="font-medium tabular-nums">{slice.value}</span>
+    </>
+  );
+  return slice.href ? (
+    <Link href={slice.href} className={cn(row, "hover:underline")}>
+      {content}
+    </Link>
+  ) : (
+    <div tabIndex={0} className={row}>
+      {content}
     </div>
   );
 }

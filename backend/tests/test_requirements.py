@@ -5,7 +5,13 @@ from pathlib import Path
 
 from app.schemas import CohortData
 from app.seed import load_sample
-from app.services.requirements import category_plural, participant_status, team_status
+from app.services.requirements import (
+    category_plural,
+    participant_status,
+    participant_summary,
+    team_status,
+    team_summary,
+)
 
 EXPECTED = json.loads((Path(__file__).parents[1] / "app" / "sample" / "expected_statuses.json").read_text())
 
@@ -17,20 +23,21 @@ def dump(status):
 def test_participant_statuses_match_frontend():
     data = load_sample()
     for enrollment_id, expected in EXPECTED["participants"].items():
-        assert dump(participant_status(data, enrollment_id)) == expected, enrollment_id
+        assert dump(participant_summary(data, enrollment_id)) == expected, enrollment_id
 
 
 def test_team_statuses_match_frontend():
     data = load_sample()
     for team in data.teams:
-        assert dump(team_status(data, team)) == EXPECTED["teams"][team.id], team.id
+        assert dump(team_summary(data, team)) == EXPECTED["teams"][team.id], team.id
 
 
 def test_sample_has_the_planted_problems():
     data = load_sample()
     flagged = [e for e in data.enrollments if e.status == "active" and participant_status(data, e.id).status in ("at_risk", "missing")]
     teams = [t for t in data.teams if team_status(data, t).status in ("at_risk", "missing")]
-    assert (len(flagged), len(teams)) == (6, 6)
+    # Seven teams: the six from before, plus one that never sent its September report.
+    assert (len(flagged), len(teams)) == (6, 7)
 
 
 # ---- Small hand-built cases for each rule ----

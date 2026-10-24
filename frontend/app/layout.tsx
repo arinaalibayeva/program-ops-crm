@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist_Mono, IBM_Plex_Sans } from "next/font/google";
-import { ThemePicker } from "@/components/theme-picker";
 import "./globals.css";
 
 const plexSans = IBM_Plex_Sans({
@@ -32,7 +31,6 @@ export default function RootLayout({
         className={`${plexSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         {children}
-        <ThemePicker />
       </body>
     </html>
   );
