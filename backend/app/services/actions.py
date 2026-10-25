@@ -154,6 +154,15 @@ def _validate_record_requirement(session: Session, cohort: m.Cohort, req: s.Requ
             raise bad_request("The date to check must be a date field on these records.")
     if not isinstance(p.get("minCount"), int) or p["minCount"] < 1:
         raise bad_request("Record requirements need a minimum of at least 1.")
+    condition = p.get("filter")
+    if condition is not None:
+        try:
+            c = s.Condition.model_validate(condition)
+        except ValueError:
+            raise bad_request("That filter isn't valid.") from None
+        f = session.get(m.RecordField, c.field_id)
+        if f is None or f.type_id != type_.id:
+            raise bad_request("Filter on a field of these records.")
 
 
 def _validate_requirement(session: Session, cohort: m.Cohort, req: s.RequirementIn) -> None:
@@ -190,6 +199,19 @@ def add_requirement(session: Session, cohort: m.Cohort, req: s.RequirementIn) ->
             type=req.type, params=req.params, position=position + 1,
         )
     )
+
+
+def update_requirement(session: Session, cohort: m.Cohort, requirement_id: str, req: s.RequirementIn) -> None:
+    """Changes a requirement's name and settings. What it applies to and how it's checked stay fixed,
+    so completions and excuses keep their meaning."""
+    existing = _requirement(session, cohort, requirement_id)
+    if req.type != existing.type or req.scope != existing.scope:
+        raise bad_request("A requirement's kind can't change. Make a new one instead.")
+    if not req.name.strip():
+        raise bad_request("Enter a name.")
+    _validate_requirement(session, cohort, req)
+    existing.name = req.name.strip()
+    existing.params = req.params
 
 
 def delete_requirement(session: Session, cohort: m.Cohort, requirement_id: str) -> None:

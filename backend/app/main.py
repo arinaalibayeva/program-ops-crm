@@ -99,6 +99,17 @@ def add_requirement(
     return saved(session, cohort)
 
 
+@admin.put("/api/requirements/{requirement_id}", response_model=s.CohortData, **api)
+def update_requirement(
+    requirement_id: str,
+    body: s.RequirementIn,
+    session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+):
+    actions.update_requirement(session, cohort, requirement_id, body)
+    return saved(session, cohort)
+
+
 @admin.delete("/api/requirements/{requirement_id}", response_model=s.CohortData, **api)
 def delete_requirement(
     requirement_id: str, session: Session = Depends(get_session), cohort: m.Cohort = Depends(cohort_dep)

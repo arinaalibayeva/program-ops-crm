@@ -3003,19 +3003,6 @@
       "checkinToken": "chk-ev-7-g9men"
     },
     {
-      "id": "ev-10",
-      "cohortId": "c-fall-2026",
-      "title": "October Meeting Report",
-      "category": "deadline",
-      "date": "2026-10-31",
-      "startTime": "23:00",
-      "location": "Forum",
-      "host": "CCP team",
-      "description": "One Forum submission per team covering the October meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting.",
-      "isRequired": true,
-      "checkinToken": "chk-ev-10"
-    },
-    {
       "id": "ev-8",
       "cohortId": "c-fall-2026",
       "title": "Midpoint showcase",
@@ -3044,45 +3031,6 @@
       "checkinToken": "chk-ev-8-1171lt"
     },
     {
-      "id": "ev-11",
-      "cohortId": "c-fall-2026",
-      "title": "Research Synthesis",
-      "category": "deadline",
-      "date": "2026-11-19",
-      "startTime": "23:00",
-      "location": "Forum",
-      "host": "CCP team",
-      "description": "Group assignment submitted to Forum as a single PDF, scored on #gapanalysis, #evidencebased and #professionalism.\n\nHold your November meetings with your partner, faculty grader and TA before this assignment.",
-      "isRequired": true,
-      "checkinToken": "chk-ev-11"
-    },
-    {
-      "id": "ev-12",
-      "cohortId": "c-fall-2026",
-      "title": "November Meeting Report",
-      "category": "deadline",
-      "date": "2026-11-30",
-      "startTime": "23:00",
-      "location": "Forum",
-      "host": "CCP team",
-      "description": "One Forum submission per team covering the November meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting.",
-      "isRequired": true,
-      "checkinToken": "chk-ev-12"
-    },
-    {
-      "id": "ev-13",
-      "cohortId": "c-fall-2026",
-      "title": "December Meeting Report",
-      "category": "deadline",
-      "date": "2026-12-14",
-      "startTime": "23:00",
-      "location": "Forum",
-      "host": "CCP team",
-      "description": "One Forum submission per team covering the December meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting.",
-      "isRequired": true,
-      "checkinToken": "chk-ev-13"
-    },
-    {
       "id": "ev-14",
       "cohortId": "c-fall-2026",
       "title": "Final Project Proposal Presentations",
@@ -3094,19 +3042,6 @@
       "isRequired": true,
       "checkinToken": "chk-ev-14",
       "endDate": "2026-12-17"
-    },
-    {
-      "id": "ev-15",
-      "cohortId": "c-fall-2026",
-      "title": "Group and Individual Final Deliverable",
-      "category": "deadline",
-      "date": "2026-12-18",
-      "startTime": "23:00",
-      "location": "Forum",
-      "host": "CCP team",
-      "description": "Group: Project Proposal and presentation materials.\n\nIndividual: Teamwork Survey and HC Explanations.",
-      "isRequired": true,
-      "checkinToken": "chk-ev-15"
     }
   ],
   "attendance": [
@@ -6354,7 +6289,90 @@
         "viaFieldId": "rf-r-team",
         "minCount": 1,
         "dueDate": "2026-10-05",
-        "dateFieldId": "rf-r-date"
+        "dateFieldId": "rf-r-date",
+        "filter": {
+          "fieldId": "rf-r-month",
+          "op": "is",
+          "value": "September"
+        },
+        "description": "One Forum submission per team covering the September meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting."
+      }
+    },
+    {
+      "id": "req-8",
+      "name": "October Meeting Report",
+      "scope": "team",
+      "type": "record_by",
+      "params": {
+        "typeId": "rt-reports",
+        "viaFieldId": "rf-r-team",
+        "minCount": 1,
+        "dueDate": "2026-10-31",
+        "dateFieldId": "rf-r-date",
+        "filter": {
+          "fieldId": "rf-r-month",
+          "op": "is",
+          "value": "October"
+        },
+        "description": "One Forum submission per team covering the October meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting."
+      }
+    },
+    {
+      "id": "req-9",
+      "name": "Research Synthesis",
+      "scope": "team",
+      "type": "complete_by",
+      "params": {
+        "dueDate": "2026-11-19",
+        "description": "Group assignment submitted to Forum as a single PDF, scored on #gapanalysis, #evidencebased and #professionalism. Hold your November meetings with your partner, faculty grader and TA before this assignment."
+      }
+    },
+    {
+      "id": "req-10",
+      "name": "November Meeting Report",
+      "scope": "team",
+      "type": "record_by",
+      "params": {
+        "typeId": "rt-reports",
+        "viaFieldId": "rf-r-team",
+        "minCount": 1,
+        "dueDate": "2026-11-30",
+        "dateFieldId": "rf-r-date",
+        "filter": {
+          "fieldId": "rf-r-month",
+          "op": "is",
+          "value": "November"
+        },
+        "description": "One Forum submission per team covering the November meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting."
+      }
+    },
+    {
+      "id": "req-11",
+      "name": "December Meeting Report",
+      "scope": "team",
+      "type": "record_by",
+      "params": {
+        "typeId": "rt-reports",
+        "viaFieldId": "rf-r-team",
+        "minCount": 1,
+        "dueDate": "2026-12-14",
+        "dateFieldId": "rf-r-date",
+        "filter": {
+          "fieldId": "rf-r-month",
+          "op": "is",
+          "value": "December"
+        },
+        "description": "One Forum submission per team covering the December meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting."
+      }
+    },
+    {
+      "id": "req-12",
+      "name": "Group and Individual Final Deliverable",
+      "scope": "team",
+      "type": "complete_by",
+      "params": {
+        "dueDate": "2026-12-18",
+        "description": "Group: Project Proposal and presentation materials. Individual: Teamwork Survey and HC Explanations."
       }
     }
   ],
@@ -7111,6 +7129,18 @@
           "label": "Report link",
           "type": "url",
           "required": false
+        },
+        {
+          "id": "rf-r-month",
+          "label": "Month",
+          "type": "select",
+          "required": true,
+          "options": [
+            "September",
+            "October",
+            "November",
+            "December"
+          ]
         }
       ]
     }
@@ -9185,9 +9215,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Harbor · September",
         "rf-r-date": "2026-10-01",
-        "rf-r-team": "team-1"
+        "rf-r-team": "team-1",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-01T18:00:00.000Z"
     },
@@ -9196,9 +9227,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Lantern · September",
         "rf-r-date": "2026-10-02",
-        "rf-r-team": "team-2"
+        "rf-r-team": "team-2",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-02T18:00:00.000Z"
     },
@@ -9207,9 +9239,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Compass · September",
         "rf-r-date": "2026-10-03",
-        "rf-r-team": "team-3"
+        "rf-r-team": "team-3",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-03T18:00:00.000Z"
     },
@@ -9218,9 +9251,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Meridian · September",
         "rf-r-date": "2026-10-04",
-        "rf-r-team": "team-4"
+        "rf-r-team": "team-4",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-04T18:00:00.000Z"
     },
@@ -9229,9 +9263,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Orchard · September",
         "rf-r-date": "2026-10-01",
-        "rf-r-team": "team-5"
+        "rf-r-team": "team-5",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-01T18:00:00.000Z"
     },
@@ -9240,9 +9275,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Beacon · September",
         "rf-r-date": "2026-10-02",
-        "rf-r-team": "team-6"
+        "rf-r-team": "team-6",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-02T18:00:00.000Z"
     },
@@ -9251,9 +9287,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Summit · September",
         "rf-r-date": "2026-10-07",
-        "rf-r-team": "team-7"
+        "rf-r-team": "team-7",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-07T18:00:00.000Z"
     },
@@ -9262,9 +9299,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Willow · September",
         "rf-r-date": "2026-10-04",
-        "rf-r-team": "team-8"
+        "rf-r-team": "team-8",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-04T18:00:00.000Z"
     },
@@ -9273,9 +9311,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Atlas · September",
         "rf-r-date": "2026-10-01",
-        "rf-r-team": "team-9"
+        "rf-r-team": "team-9",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-01T18:00:00.000Z"
     },
@@ -9284,9 +9323,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Tide · September",
         "rf-r-date": "2026-10-03",
-        "rf-r-team": "team-11"
+        "rf-r-team": "team-11",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-03T18:00:00.000Z"
     },
@@ -9295,9 +9335,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Juniper · September",
         "rf-r-date": "2026-10-04",
-        "rf-r-team": "team-12"
+        "rf-r-team": "team-12",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-04T18:00:00.000Z"
     },
@@ -9306,9 +9347,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Redwood · September",
         "rf-r-date": "2026-10-07",
-        "rf-r-team": "team-13"
+        "rf-r-team": "team-13",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-07T18:00:00.000Z"
     },
@@ -9317,9 +9359,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Cypress · September",
         "rf-r-date": "2026-10-02",
-        "rf-r-team": "team-14"
+        "rf-r-team": "team-14",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-02T18:00:00.000Z"
     },
@@ -9328,9 +9371,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Anchor · September",
         "rf-r-date": "2026-10-03",
-        "rf-r-team": "team-15"
+        "rf-r-team": "team-15",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-03T18:00:00.000Z"
     },
@@ -9339,9 +9383,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Sequoia · September",
         "rf-r-date": "2026-10-01",
-        "rf-r-team": "team-17"
+        "rf-r-team": "team-17",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-01T18:00:00.000Z"
     },
@@ -9350,9 +9395,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Marina · September",
         "rf-r-date": "2026-10-09",
-        "rf-r-team": "team-18"
+        "rf-r-team": "team-18",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-09T18:00:00.000Z"
     },
@@ -9361,9 +9407,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Presidio · September",
         "rf-r-date": "2026-10-03",
-        "rf-r-team": "team-19"
+        "rf-r-team": "team-19",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-03T18:00:00.000Z"
     },
@@ -9372,9 +9419,10 @@
       "typeId": "rt-reports",
       "cohortId": "c-fall-2026",
       "values": {
-        "rf-r-title": "September meeting report",
+        "rf-r-title": "Golden · September",
         "rf-r-date": "2026-10-04",
-        "rf-r-team": "team-20"
+        "rf-r-team": "team-20",
+        "rf-r-month": "September"
       },
       "createdAt": "2026-10-04T18:00:00.000Z"
     }
@@ -9482,6 +9530,7 @@
       "description": "One per team, each month. Submitting it completes your team's report requirement.",
       "fieldIds": [
         "rf-r-title",
+        "rf-r-month",
         "rf-r-date",
         "rf-r-link"
       ],

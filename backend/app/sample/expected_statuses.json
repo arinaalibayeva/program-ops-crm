@@ -1935,7 +1935,7 @@
   },
   "teams": {
     "team-1": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -1945,17 +1945,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-13"
+          "reason": "Project brief done on Oct 13"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
@@ -1971,17 +1996,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-12"
+          "reason": "Project brief done on Oct 12"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -1999,17 +2049,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-12"
+          "reason": "Project brief done on Oct 12"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2034,7 +2109,7 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-11"
+          "reason": "Project brief done on Oct 11"
         },
         {
           "requirementId": "req-6",
@@ -2045,6 +2120,31 @@
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2062,17 +2162,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-14"
+          "reason": "Project brief done on Oct 14"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-14"
+          "reason": "User research plan done on Oct 14"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2087,7 +2212,7 @@
       ]
     },
     "team-6": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2097,17 +2222,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-12"
+          "reason": "Project brief done on Oct 12"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-14"
+          "reason": "User research plan done on Oct 14"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
@@ -2123,17 +2273,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-14"
+          "reason": "Project brief done on Oct 14"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-14"
+          "reason": "User research plan done on Oct 14"
         },
         {
           "requirementId": "req-7",
           "status": "met",
-          "reason": "September Meeting Report logged late, after 2026-10-05"
+          "reason": "September Meeting Report logged late, after Oct 5"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2151,7 +2326,7 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-14"
+          "reason": "Project brief done on Oct 14"
         },
         {
           "requirementId": "req-6",
@@ -2162,6 +2337,31 @@
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2169,7 +2369,7 @@
       ]
     },
     "team-9": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2179,17 +2379,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-13"
+          "reason": "Project brief done on Oct 13"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-16"
+          "reason": "User research plan done on Oct 16"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
@@ -2210,12 +2435,37 @@
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "missing",
           "reason": "September Meeting Report overdue by 14 days, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2242,7 +2492,7 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-14"
+          "reason": "Project brief done on Oct 14"
         },
         {
           "requirementId": "req-6",
@@ -2253,6 +2503,31 @@
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2270,17 +2545,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-13"
+          "reason": "Project brief done on Oct 13"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2295,7 +2595,7 @@
       ]
     },
     "team-13": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2305,23 +2605,48 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-14"
+          "reason": "Project brief done on Oct 14"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-18"
+          "reason": "User research plan done on Oct 18"
         },
         {
           "requirementId": "req-7",
           "status": "met",
-          "reason": "September Meeting Report logged late, after 2026-10-05"
+          "reason": "September Meeting Report logged late, after Oct 5"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
     },
     "team-14": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2331,23 +2656,48 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-14"
+          "reason": "Project brief done on Oct 14"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-17"
+          "reason": "User research plan done on Oct 17"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
     },
     "team-15": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2357,17 +2707,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-13"
+          "reason": "Project brief done on Oct 13"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
@@ -2383,17 +2758,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-13"
+          "reason": "Project brief done on Oct 13"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-18"
+          "reason": "User research plan done on Oct 18"
         },
         {
           "requirementId": "req-7",
           "status": "missing",
           "reason": "September Meeting Report overdue by 14 days, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": [
@@ -2401,7 +2801,7 @@
       ]
     },
     "team-17": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2411,23 +2811,48 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-12"
+          "reason": "Project brief done on Oct 12"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-16"
+          "reason": "User research plan done on Oct 16"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
     },
     "team-18": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2437,23 +2862,48 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-13"
+          "reason": "Project brief done on Oct 13"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "met",
-          "reason": "September Meeting Report logged late, after 2026-10-05"
+          "reason": "September Meeting Report logged late, after Oct 5"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
     },
     "team-19": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2463,23 +2913,48 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-14"
+          "reason": "Project brief done on Oct 14"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-15"
+          "reason": "User research plan done on Oct 15"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []
     },
     "team-20": {
-      "status": "met",
+      "status": "on_track",
       "results": [
         {
           "requirementId": "req-4",
@@ -2489,17 +2964,42 @@
         {
           "requirementId": "req-5",
           "status": "met",
-          "reason": "Project brief done on 2026-10-11"
+          "reason": "Project brief done on Oct 11"
         },
         {
           "requirementId": "req-6",
           "status": "met",
-          "reason": "User research plan done on 2026-10-17"
+          "reason": "User research plan done on Oct 17"
         },
         {
           "requirementId": "req-7",
           "status": "met",
           "reason": "September Meeting Report logged (1)"
+        },
+        {
+          "requirementId": "req-8",
+          "status": "on_track",
+          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-9",
+          "status": "on_track",
+          "reason": "Research Synthesis due Nov 19"
+        },
+        {
+          "requirementId": "req-10",
+          "status": "on_track",
+          "reason": "November Meeting Report due Nov 30, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-11",
+          "status": "on_track",
+          "reason": "December Meeting Report due Dec 14, 0 of 1 logged"
+        },
+        {
+          "requirementId": "req-12",
+          "status": "on_track",
+          "reason": "Group and Individual Final Deliverable due Dec 18"
         }
       ],
       "flags": []

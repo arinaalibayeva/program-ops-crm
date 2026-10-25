@@ -431,30 +431,15 @@ export function buildMockCohort(): CohortData {
     checkinToken: `chk-${id}`,
     ...details,
   });
-  const meetingReport = (month: string) =>
-    `One Forum submission per team covering the ${month} meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting.`;
+  // Deadlines are requirements (below), so they're checked and shown on the
+  // calendar from there. The presentations are a real event.
   events.push(
-    milestone("ev-10", "October Meeting Report", "2026-10-31", meetingReport("October")),
-    milestone(
-      "ev-11",
-      "Research Synthesis",
-      "2026-11-19",
-      "Group assignment submitted to Forum as a single PDF, scored on #gapanalysis, #evidencebased and #professionalism.\n\nHold your November meetings with your partner, faculty grader and TA before this assignment.",
-    ),
-    milestone("ev-12", "November Meeting Report", "2026-11-30", meetingReport("November")),
-    milestone("ev-13", "December Meeting Report", "2026-12-14", meetingReport("December")),
     milestone(
       "ev-14",
       "Final Project Proposal Presentations",
       "2026-12-15",
       "A 10-minute presentation plus 5 minutes of Q&A with your Civic Partner and Faculty Grader. The schedule will be released closer to presentation time.\n\nPresentations are on Zoom, so you must be available with a reliable internet connection during your assigned time.",
       { category: "showcase", endDate: "2026-12-17", startTime: undefined, location: "Zoom" },
-    ),
-    milestone(
-      "ev-15",
-      "Group and Individual Final Deliverable",
-      "2026-12-18",
-      "Group: Project Proposal and presentation materials.\n\nIndividual: Teamwork Survey and HC Explanations.",
     ),
   );
   events.sort((a, b) => a.date.localeCompare(b.date));
@@ -480,6 +465,18 @@ export function buildMockCohort(): CohortData {
         source: rand() < 0.9 ? "link" : "manual",
       });
     }
+  });
+
+  // The handbook's monthly Forum report: one per team, counted by its Month.
+  // All assignments are due at 11 pm PT.
+  const monthlyReport = (month: string, dueDate: string) => ({
+    typeId: "rt-reports",
+    viaFieldId: "rf-r-team",
+    minCount: 1,
+    dueDate,
+    dateFieldId: "rf-r-date",
+    filter: { fieldId: "rf-r-month", op: "is" as const, value: month },
+    description: `One Forum submission per team covering the ${month} meetings with your partner, faculty grader and CCP TA: the date, a brief summary, who attended, and a photo or screenshot from each meeting.`,
   });
 
   const requirements: Requirement[] = [
@@ -523,7 +520,32 @@ export function buildMockCohort(): CohortData {
       name: "September Meeting Report",
       scope: "team",
       type: "record_by",
-      params: { typeId: "rt-reports", viaFieldId: "rf-r-team", minCount: 1, dueDate: "2026-10-05", dateFieldId: "rf-r-date" },
+      params: monthlyReport("September", "2026-10-05"),
+    },
+    { id: "req-8", name: "October Meeting Report", scope: "team", type: "record_by", params: monthlyReport("October", "2026-10-31") },
+    {
+      id: "req-9",
+      name: "Research Synthesis",
+      scope: "team",
+      type: "complete_by",
+      params: {
+        dueDate: "2026-11-19",
+        description:
+          "Group assignment submitted to Forum as a single PDF, scored on #gapanalysis, #evidencebased and #professionalism. Hold your November meetings with your partner, faculty grader and TA before this assignment.",
+      },
+    },
+    { id: "req-10", name: "November Meeting Report", scope: "team", type: "record_by", params: monthlyReport("November", "2026-11-30") },
+    { id: "req-11", name: "December Meeting Report", scope: "team", type: "record_by", params: monthlyReport("December", "2026-12-14") },
+    {
+      id: "req-12",
+      name: "Group and Individual Final Deliverable",
+      scope: "team",
+      type: "complete_by",
+      params: {
+        dueDate: "2026-12-18",
+        description:
+          "Group: Project Proposal and presentation materials. Individual: Teamwork Survey and HC Explanations.",
+      },
     },
   ];
 
@@ -678,6 +700,13 @@ const RECORD_TYPES: RecordType[] = [
       { id: "rf-r-date", label: "Submitted on", type: "date", required: true },
       { id: "rf-r-team", label: "Team", type: "link", linkTo: "team", required: true },
       { id: "rf-r-link", label: "Report link", type: "url", required: false },
+      {
+        id: "rf-r-month",
+        label: "Month",
+        type: "select",
+        required: true,
+        options: ["September", "October", "November", "December"],
+      },
     ],
   },
 ];
@@ -711,7 +740,7 @@ const FORMS: RecordForm[] = [
     typeId: "rt-reports",
     title: "Submit a meeting report",
     description: "One per team, each month. Submitting it completes your team's report requirement.",
-    fieldIds: ["rf-r-title", "rf-r-date", "rf-r-link"],
+    fieldIds: ["rf-r-title", "rf-r-month", "rf-r-date", "rf-r-link"],
     token: "submit-report-demo",
     roster: true,
     isOpen: true,
@@ -774,9 +803,10 @@ function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembers
     const late = RECORD_PLANTED.teamsLateReports.includes(i);
     const date = late ? addDays("2026-10-07", i % 3) : addDays("2026-10-01", i % 4);
     add("rt-reports", date, {
-      "rf-r-title": "September meeting report",
+      "rf-r-title": `${team.name} · September`,
       "rf-r-date": date,
       "rf-r-team": team.id,
+      "rf-r-month": "September",
     });
   });
 

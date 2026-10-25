@@ -40,7 +40,7 @@ import type {
 } from "./types";
 
 // Bump the version when CohortData changes shape so old saved data is ignored.
-const STORAGE_KEY = "program-ops-crm:cohort:v18";
+const STORAGE_KEY = "program-ops-crm:cohort:v19";
 
 export type NewEvent = Omit<ProgramEvent, "id" | "cohortId" | "checkinToken">;
 
@@ -72,6 +72,8 @@ interface CohortContextValue {
   /** Also removes its attendance and unlinks records that point at it. */
   deleteEvent: (id: string) => void;
   addRequirement: (req: Omit<Requirement, "id">) => void;
+  /** Name and settings only; what it applies to and its kind stay fixed. */
+  updateRequirement: (req: Requirement) => void;
   deleteRequirement: (id: string) => void;
   addField: (field: Omit<FieldDefinition, "id">) => void;
   updateField: (id: string, patch: Partial<Omit<FieldDefinition, "id">>) => void;
@@ -374,6 +376,12 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     sync(() => api("/requirements", { body: req }));
   }, [sync]);
 
+  const updateRequirement = useCallback((req: Requirement) => {
+    setData((d) => ({ ...d, requirements: d.requirements.map((r) => (r.id === req.id ? req : r)) }));
+    const { id, ...body } = req;
+    sync(() => api(`/requirements/${id}`, { method: "PUT", body }));
+  }, [sync]);
+
   const deleteRequirement = useCallback((id: string) => {
     setData((d) => ({
       ...d,
@@ -634,6 +642,7 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     updateEvent,
     deleteEvent,
     addRequirement,
+    updateRequirement,
     deleteRequirement,
     addField,
     updateField,
