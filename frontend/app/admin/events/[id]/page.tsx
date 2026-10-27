@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import { use, useState } from "react";
-import { ArrowLeft, ExternalLink, Link as LinkIcon, Pencil, Plus, X } from "lucide-react";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Link as LinkIcon,
+  Pencil,
+  Plus,
+  X,
+} from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -19,14 +26,22 @@ import { PageHeader } from "@/components/page-header";
 import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { currentTeamId } from "@/lib/requirements";
-import { EVENT_CATEGORY_LABELS, formatEventTime, takesAttendance } from "@/lib/events";
+import {
+  EVENT_CATEGORY_LABELS,
+  formatEventTime,
+  takesAttendance,
+} from "@/lib/events";
 import { cohortWeek, formatDate } from "@/lib/format";
 import type { ProgramEvent } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 type Filter = "all" | "present" | "absent";
 
-export default function EventPage({ params }: { params: Promise<{ id: string }> }) {
+export default function EventPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
   const { data } = useCohort();
   const [editing, setEditing] = useState(false);
@@ -104,7 +119,9 @@ function AttendanceCard({ event }: { event: ProgramEvent }) {
         enrollment: e,
         person: personFor(e.id)!,
         team: teamId ? teamById.get(teamId) : undefined,
-        record: data.attendance.find((a) => a.eventId === event.id && a.enrollmentId === e.id),
+        record: data.attendance.find(
+          (a) => a.eventId === event.id && a.enrollmentId === e.id,
+        ),
       };
     })
     .sort((a, b) => a.person.name.localeCompare(b.person.name));
@@ -132,7 +149,10 @@ function AttendanceCard({ event }: { event: ProgramEvent }) {
           </span>
         </CardTitle>
         <div className="flex flex-wrap items-center gap-2">
-          <div role="radiogroup" className="flex h-8 rounded-lg border p-0.5 text-sm">
+          <div
+            role="radiogroup"
+            className="flex h-8 rounded-lg border p-0.5 text-sm"
+          >
             {(["all", "present", "absent"] as const).map((f) => (
               <button
                 key={f}
@@ -160,18 +180,26 @@ function AttendanceCard({ event }: { event: ProgramEvent }) {
       <CardContent className="space-y-3">
         {upcoming && (
           <p className="text-sm text-muted-foreground">
-            This event hasn&apos;t happened yet. Participants check in with the link on the day.
+            This event hasn&apos;t happened yet. Participants check in with the
+            link on the day.
           </p>
         )}
         {shown.length === 0 ? (
-          <p className="py-6 text-center text-sm text-muted-foreground">No one matches.</p>
+          <p className="py-6 text-center text-sm text-muted-foreground">
+            No one matches.
+          </p>
         ) : (
           <ul className="grid gap-x-4 gap-y-0.5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {shown.map(({ enrollment, person, team, record }) => (
-              <li key={enrollment.id} className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-muted/60">
+              <li
+                key={enrollment.id}
+                className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-muted/60"
+              >
                 <Checkbox
                   checked={!!record}
-                  onCheckedChange={() => toggleAttendance(event.id, enrollment.id)}
+                  onCheckedChange={() =>
+                    toggleAttendance(event.id, enrollment.id)
+                  }
                   aria-label={`${person.name} attended`}
                 />
                 <span className="min-w-0">
@@ -183,13 +211,19 @@ function AttendanceCard({ event }: { event: ProgramEvent }) {
                   </Link>
                   <span className="block truncate text-xs text-muted-foreground">
                     {team ? (
-                      <Link href={`/admin/teams/${team.id}`} className="hover:text-foreground hover:underline">
+                      <Link
+                        href={`/admin/teams/${team.id}`}
+                        className="hover:text-foreground hover:underline"
+                      >
                         Team {team.name}
                       </Link>
                     ) : (
                       "No team"
                     )}
-                    {record && (record.source === "link" ? " · via link" : " · marked by hand")}
+                    {record &&
+                      (record.source === "link"
+                        ? " · via link"
+                        : " · marked by hand")}
                   </span>
                 </span>
               </li>
@@ -203,12 +237,16 @@ function AttendanceCard({ event }: { event: ProgramEvent }) {
 
 function formatDays(event: ProgramEvent): string {
   const start = formatDate(event.date, { weekday: true });
-  return event.endDate ? `${start} – ${formatDate(event.endDate, { weekday: true })}` : start;
+  return event.endDate
+    ? `${start} – ${formatDate(event.endDate, { weekday: true })}`
+    : start;
 }
 
 function EventDetails({ event }: { event: ProgramEvent }) {
   const { partnerById } = usePeopleIndex();
-  const partner = event.partnerId ? partnerById.get(event.partnerId) : undefined;
+  const partner = event.partnerId
+    ? partnerById.get(event.partnerId)
+    : undefined;
   const isLink = event.location && /^https?:\/\//.test(event.location);
   const facts: [string, React.ReactNode][] = [
     ["Time", formatEventTime(event)],
@@ -233,7 +271,10 @@ function EventDetails({ event }: { event: ProgramEvent }) {
     [
       "Partner",
       partner ? (
-        <Link href={`/admin/partners/${partner.id}`} className="underline underline-offset-2">
+        <Link
+          href={`/admin/partners/${partner.id}`}
+          className="underline underline-offset-2"
+        >
           {partner.name}
         </Link>
       ) : event.category === "partner" ? (
@@ -250,7 +291,9 @@ function EventDetails({ event }: { event: ProgramEvent }) {
             <div key={label} className="min-w-0">
               <dt className="text-xs text-muted-foreground">{label}</dt>
               <dd className="mt-0.5 font-medium">
-                {value || <span className="font-normal text-muted-foreground">—</span>}
+                {value || (
+                  <span className="font-normal text-muted-foreground">—</span>
+                )}
               </dd>
             </div>
           ))}
@@ -321,12 +364,16 @@ function MaterialsCard({ event }: { event: ProgramEvent }) {
 
   function add(e: React.FormEvent) {
     e.preventDefault();
-    const href = /^https?:\/\//.test(url.trim()) ? url.trim() : `https://${url.trim()}`;
+    const href = /^https?:\/\//.test(url.trim())
+      ? url.trim()
+      : `https://${url.trim()}`;
     if (!url.trim() || !URL.canParse(href)) {
       setError("Enter a valid link.");
       return;
     }
-    updateEvent(event.id, { links: [...links, { label: label.trim() || hostname(href), url: href }] });
+    updateEvent(event.id, {
+      links: [...links, { label: label.trim() || hostname(href), url: href }],
+    });
     closeForm();
   }
 
@@ -344,13 +391,17 @@ function MaterialsCard({ event }: { event: ProgramEvent }) {
       <CardContent className="space-y-3">
         {links.length === 0 && !adding && (
           <p className="text-sm text-muted-foreground">
-            No materials yet. Add slides, recordings, templates or sign-up forms.
+            No materials yet. Add slides, recordings, templates or sign-up
+            forms.
           </p>
         )}
         {links.length > 0 && (
           <ul className="-mx-2">
             {links.map((link, i) => (
-              <li key={i} className="group flex items-center gap-3 px-2 py-1.5 hover:bg-muted/60">
+              <li
+                key={i}
+                className="group flex items-center gap-3 px-2 py-1.5 hover:bg-muted/60"
+              >
                 <LinkIcon className="size-4 shrink-0 text-muted-foreground" />
                 <a
                   href={link.url}
@@ -369,7 +420,9 @@ function MaterialsCard({ event }: { event: ProgramEvent }) {
                   type="button"
                   aria-label={`Remove ${link.label}`}
                   onClick={() =>
-                    updateEvent(event.id, { links: links.filter((_, j) => j !== i) })
+                    updateEvent(event.id, {
+                      links: links.filter((_, j) => j !== i),
+                    })
                   }
                   className="text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-foreground focus-visible:opacity-100"
                 >
@@ -394,7 +447,12 @@ function MaterialsCard({ event }: { event: ProgramEvent }) {
             />
             {error && <p className="text-sm text-destructive">{error}</p>}
             <div className="flex justify-end gap-2">
-              <Button type="button" variant="outline" size="sm" onClick={closeForm}>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={closeForm}
+              >
                 Cancel
               </Button>
               <Button type="submit" size="sm">
@@ -408,9 +466,17 @@ function MaterialsCard({ event }: { event: ProgramEvent }) {
   );
 }
 
-function EditEventCard({ event, onDone }: { event: ProgramEvent; onDone: () => void }) {
+function EditEventCard({
+  event,
+  onDone,
+}: {
+  event: ProgramEvent;
+  onDone: () => void;
+}) {
   const { data, updateEvent } = useCohort();
-  const [values, setValues] = useState<EventFormValues>(() => eventFormValues(data.today, event));
+  const [values, setValues] = useState<EventFormValues>(() =>
+    eventFormValues(data.today, event),
+  );
   const [error, setError] = useState<string>();
 
   function save(e: React.FormEvent) {

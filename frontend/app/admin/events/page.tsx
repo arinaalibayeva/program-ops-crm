@@ -34,6 +34,7 @@ import {
 } from "@/components/event-form";
 import { NativeSelect } from "@/components/native-select";
 import { PageHeader } from "@/components/page-header";
+import { useCalendarEvents } from "@/lib/calendar";
 import { useCohort } from "@/lib/store";
 import {
   EVENT_CATEGORY_LABELS,
@@ -51,6 +52,7 @@ type View = "list" | "calendar";
 
 export default function EventsPage() {
   const { data } = useCohort();
+  const calendarEvents = useCalendarEvents();
   const [view, setView] = useState<View>("calendar");
 
   useEffect(() => {
@@ -73,11 +75,14 @@ export default function EventsPage() {
   return (
     <>
       <PageHeader
-        title="Events"
-        description="Each event has its own check-in link. Attendance feeds requirement status automatically."
+        title="Calendar"
         actions={
           <>
-            <div role="radiogroup" aria-label="View" className="flex h-8 rounded-lg border p-0.5 text-sm">
+            <div
+              role="radiogroup"
+              aria-label="View"
+              className="flex h-8 rounded-lg border p-0.5 text-sm"
+            >
               {(["list", "calendar"] as const).map((v) => (
                 <button
                   key={v}
@@ -90,7 +95,11 @@ export default function EventsPage() {
                     view === v && "bg-muted font-medium text-foreground",
                   )}
                 >
-                  {v === "list" ? <List className="size-4" /> : <CalendarDays className="size-4" />}
+                  {v === "list" ? (
+                    <List className="size-4" />
+                  ) : (
+                    <CalendarDays className="size-4" />
+                  )}
                   {v}
                 </button>
               ))}
@@ -100,7 +109,7 @@ export default function EventsPage() {
         }
       />
       {view === "calendar" ? (
-        <EventCalendar events={data.events} today={data.today} />
+        <EventCalendar events={calendarEvents} today={data.today} />
       ) : (
         <EventTable />
       )}
@@ -143,10 +152,12 @@ function EventTable() {
                   <TableCell className="pl-4">
                     <div>
                       {formatDate(event.date, { weekday: true })}
-                      {event.endDate && ` – ${formatDate(event.endDate, { weekday: true })}`}
+                      {event.endDate &&
+                        ` – ${formatDate(event.endDate, { weekday: true })}`}
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {formatEventTime(event)} · Week {cohortWeek(data.cohort.startDate, event.date)}
+                      {formatEventTime(event)} · Week{" "}
+                      {cohortWeek(data.cohort.startDate, event.date)}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -162,8 +173,14 @@ function EventTable() {
                       <span className="text-muted-foreground">Upcoming</span>
                     )}
                   </TableCell>
-                  <TableCell className="pr-4 text-right" onClick={(e) => e.stopPropagation()}>
-                    <CopyLinkButton path={`/checkin/${event.checkinToken}`} label="Copy link" />
+                  <TableCell
+                    className="pr-4 text-right"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <CopyLinkButton
+                      path={`/checkin/${event.checkinToken}`}
+                      label="Copy link"
+                    />
                   </TableCell>
                 </TableRow>
               );
@@ -191,7 +208,10 @@ function NewEventDialog() {
   const [error, setError] = useState<string>();
 
   const { date } = values;
-  const starts = repeatEvery && until >= date ? repeatDates(date, until, repeatEvery) : [date];
+  const starts =
+    repeatEvery && until >= date
+      ? repeatDates(date, until, repeatEvery)
+      : [date];
 
   function reset() {
     setValues(eventFormValues(data.today));
@@ -231,7 +251,9 @@ function NewEventDialog() {
         <form onSubmit={submit} className="space-y-6">
           <DialogHeader>
             <DialogTitle>New event</DialogTitle>
-            <DialogDescription>Each event gets its own check-in link.</DialogDescription>
+            <DialogDescription>
+              Each event gets its own check-in link.
+            </DialogDescription>
           </DialogHeader>
 
           <EventFields values={values} onChange={setValues} />
@@ -270,9 +292,13 @@ function NewEventDialog() {
             {repeatEvery > 0 && starts.length > 1 && (
               <p className="text-sm text-muted-foreground">
                 Creates {starts.length} events:{" "}
-                {starts.slice(0, 6).map((d) => formatDate(d)).join(", ")}
+                {starts
+                  .slice(0, 6)
+                  .map((d) => formatDate(d))
+                  .join(", ")}
                 {starts.length > 6 && ", …"}
-                {starts.length === MAX_REPEATS && ` (at most ${MAX_REPEATS} at once)`}
+                {starts.length === MAX_REPEATS &&
+                  ` (at most ${MAX_REPEATS} at once)`}
               </p>
             )}
           </div>
@@ -280,11 +306,17 @@ function NewEventDialog() {
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+            >
               Cancel
             </Button>
             <Button type="submit">
-              {starts.length > 1 ? `Create ${starts.length} events` : "Create event"}
+              {starts.length > 1
+                ? `Create ${starts.length} events`
+                : "Create event"}
             </Button>
           </DialogFooter>
         </form>
