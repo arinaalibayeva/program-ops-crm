@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 import { dockItems, type DockItem } from "@/lib/nav";
-import { useCohort } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import { CommandMenu } from "./command-menu";
 
@@ -28,8 +27,7 @@ const REACH = 90; // px from an item's centre where growth fades to nothing
 /** Floating navigation bar, the same on every page and screen size. */
 export function NavDock() {
   const pathname = usePathname();
-  const { data } = useCohort();
-  const items = useMemo(() => dockItems(data.recordTypes), [data.recordTypes]);
+  const items = dockItems();
   const [searchOpen, setSearchOpen] = useState(false);
   const [magnify, setMagnify] = useState(false);
   const [tracking, setTracking] = useState(false);

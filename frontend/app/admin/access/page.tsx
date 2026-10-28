@@ -5,7 +5,13 @@ import Link from "next/link";
 import { ArrowLeft, Link2, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { CopyLinkButton } from "@/components/copy-link-button";
@@ -14,7 +20,12 @@ import { PageHeader } from "@/components/page-header";
 import { USE_BACKEND, api } from "@/lib/api";
 import { initials } from "@/lib/format";
 import { useProfile } from "@/lib/profile";
-import { ROLE_LABELS, type InviteLink, type TeamMember, type TeamRole } from "@/lib/team";
+import {
+  ROLE_LABELS,
+  type InviteLink,
+  type TeamMember,
+  type TeamRole,
+} from "@/lib/team";
 
 const STATUS_LABELS: Record<TeamMember["status"], string> = {
   active: "Active",
@@ -33,7 +44,9 @@ export default function AccessPage() {
   const [confirming, setConfirming] = useState<string>();
 
   const load = useCallback(() => {
-    api<TeamMember[]>("/team").then(setMembers).catch((e: Error) => setError(e.message));
+    api<TeamMember[]>("/team")
+      .then(setMembers)
+      .catch((e: Error) => setError(e.message));
   }, []);
 
   useEffect(() => {
@@ -54,7 +67,9 @@ export default function AccessPage() {
   async function newLink(member: TeamMember) {
     setError(undefined);
     try {
-      setLink(await api<InviteLink>(`/team/${member.id}/link`, { method: "POST" }));
+      setLink(
+        await api<InviteLink>(`/team/${member.id}/link`, { method: "POST" }),
+      );
       setLinkOpen(true);
       load();
     } catch (e) {
@@ -72,7 +87,6 @@ export default function AccessPage() {
       </Link>
       <PageHeader
         title="Team access"
-        description="Everyone who can sign in to the CRM."
         actions={
           isManager && (
             <Button onClick={() => setInviting(true)}>
@@ -83,14 +97,19 @@ export default function AccessPage() {
       />
 
       {!USE_BACKEND ? (
-        <p className="text-sm text-muted-foreground">Invitations need the backend to be running.</p>
+        <p className="text-sm text-muted-foreground">
+          Invitations need the backend to be running.
+        </p>
       ) : (
         <>
           {error && <p className="mb-3 text-sm text-destructive">{error}</p>}
           <Card className="max-w-4xl py-0">
             <ul className="divide-y">
               {members?.map((member) => (
-                <li key={member.id} className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
+                <li
+                  key={member.id}
+                  className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3"
+                >
                   <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-secondary-foreground">
                     {initials(member.name)}
                   </div>
@@ -98,7 +117,10 @@ export default function AccessPage() {
                     <div className="truncate text-sm font-medium">
                       {member.name}
                       {member.email === profile?.email && (
-                        <span className="font-normal text-muted-foreground"> (you)</span>
+                        <span className="font-normal text-muted-foreground">
+                          {" "}
+                          (you)
+                        </span>
                       )}
                     </div>
                     <div className="truncate text-xs text-muted-foreground">
@@ -111,7 +133,10 @@ export default function AccessPage() {
                       value={member.role}
                       onChange={(e) =>
                         change(() =>
-                          api(`/team/${member.id}`, { method: "PATCH", body: { role: e.target.value as TeamRole } }),
+                          api(`/team/${member.id}`, {
+                            method: "PATCH",
+                            body: { role: e.target.value as TeamRole },
+                          }),
                         )
                       }
                     >
@@ -122,12 +147,19 @@ export default function AccessPage() {
                       ))}
                     </NativeSelect>
                   ) : (
-                    <span className="text-sm text-muted-foreground">{ROLE_LABELS[member.role]}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {ROLE_LABELS[member.role]}
+                    </span>
                   )}
                   {isManager && (
                     <div className="flex items-center gap-1">
-                      <Button size="sm" variant="ghost" onClick={() => newLink(member)}>
-                        <Link2 /> {member.status === "active" ? "Reset link" : "New link"}
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => newLink(member)}
+                      >
+                        <Link2 />{" "}
+                        {member.status === "active" ? "Reset link" : "New link"}
                       </Button>
                       {member.email !== profile?.email &&
                         (confirming === member.id ? (
@@ -135,11 +167,21 @@ export default function AccessPage() {
                             <Button
                               size="sm"
                               variant="destructive"
-                              onClick={() => change(() => api(`/team/${member.id}`, { method: "DELETE" }))}
+                              onClick={() =>
+                                change(() =>
+                                  api(`/team/${member.id}`, {
+                                    method: "DELETE",
+                                  }),
+                                )
+                              }
                             >
                               Remove
                             </Button>
-                            <Button size="sm" variant="ghost" onClick={() => setConfirming(undefined)}>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => setConfirming(undefined)}
+                            >
                               Keep
                             </Button>
                           </>
@@ -157,11 +199,16 @@ export default function AccessPage() {
                   )}
                 </li>
               ))}
-              {!members && <li className="px-4 py-6 text-sm text-muted-foreground">Loading…</li>}
+              {!members && (
+                <li className="px-4 py-6 text-sm text-muted-foreground">
+                  Loading…
+                </li>
+              )}
             </ul>
           </Card>
           <p className="mt-3 max-w-4xl text-xs text-muted-foreground">
-            Managers can invite and remove people. Team members can use the whole CRM.
+            Managers can invite and remove people. Team members can use the
+            whole CRM.
           </p>
         </>
       )}
@@ -187,16 +234,27 @@ export default function AccessPage() {
             <div className="space-y-4">
               <DialogHeader>
                 <DialogTitle>
-                  {link.member.status === "active" ? "Password reset link" : "Invite link"} for {link.member.name}
+                  {link.member.status === "active"
+                    ? "Password reset link"
+                    : "Invite link"}{" "}
+                  for {link.member.name}
                 </DialogTitle>
               </DialogHeader>
               <p className="text-sm text-muted-foreground">
-                Send this to {link.member.email}. It works once and expires in 7 days. It won&apos;t be shown again, but
-                you can always make a new one.
+                Send this to {link.member.email}. It works once and expires in 7
+                days. It won&apos;t be shown again, but you can always make a
+                new one.
               </p>
-              <Input readOnly value={`${window.location.origin}/invite/${link.token}`} onFocus={(e) => e.target.select()} />
+              <Input
+                readOnly
+                value={`${window.location.origin}/invite/${link.token}`}
+                onFocus={(e) => e.target.select()}
+              />
               <DialogFooter>
-                <CopyLinkButton path={`/invite/${link.token}`} label="Copy link" />
+                <CopyLinkButton
+                  path={`/invite/${link.token}`}
+                  label="Copy link"
+                />
                 <Button size="sm" onClick={() => setLinkOpen(false)}>
                   Done
                 </Button>
@@ -221,7 +279,9 @@ function InviteForm({ onDone }: { onDone: (link?: InviteLink) => void }) {
     setSending(true);
     setError(undefined);
     try {
-      onDone(await api<InviteLink>("/team/invites", { body: { name, email, role } }));
+      onDone(
+        await api<InviteLink>("/team/invites", { body: { name, email, role } }),
+      );
     } catch (err) {
       setError((err as Error).message);
       setSending(false);
@@ -235,11 +295,21 @@ function InviteForm({ onDone }: { onDone: (link?: InviteLink) => void }) {
       </DialogHeader>
       <div className="space-y-1.5">
         <Label htmlFor="invite-name">Name</Label>
-        <Input id="invite-name" autoFocus value={name} onChange={(e) => setName(e.target.value)} />
+        <Input
+          id="invite-name"
+          autoFocus
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="invite-email">Email</Label>
-        <Input id="invite-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input
+          id="invite-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="invite-role">Role</Label>
