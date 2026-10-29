@@ -17,14 +17,23 @@ const removeButton =
 
 type Personal = ReturnType<typeof usePersonalItems>;
 type FollowUp = ReturnType<typeof followUpsOf>[number];
+type Todo = NonNullable<Personal["items"]>[number];
 
 export type Tab = { label: string; count?: number; content: React.ReactNode };
 
 /** One card holding related lists, one shown at a time. */
-export function TabbedCard({ title, tabs }: { title?: string; tabs: Tab[] }) {
+export function TabbedCard({
+  title,
+  tabs,
+  className,
+}: {
+  title?: string;
+  tabs: Tab[];
+  className?: string;
+}) {
   const [active, setActive] = useState(0);
   return (
-    <Card className="gap-3 rounded-2xl p-4">
+    <Card className={cn("gap-3 rounded-2xl p-5", className)}>
       {title && <h2 className="font-semibold">{title}</h2>}
       <div role="tablist" className="flex gap-1 rounded-lg bg-muted p-[3px]">
         {tabs.map((tab, i) => (
@@ -43,7 +52,9 @@ export function TabbedCard({ title, tabs }: { title?: string; tabs: Tab[] }) {
           >
             {tab.label}
             {tab.count !== undefined && (
-              <span className="ml-1.5 font-normal text-muted-foreground tabular-nums">{tab.count}</span>
+              <span className="ml-1.5 font-normal text-muted-foreground tabular-nums">
+                {tab.count}
+              </span>
             )}
           </button>
         ))}
@@ -59,21 +70,30 @@ export function TabbedCard({ title, tabs }: { title?: string; tabs: Tab[] }) {
 export function MyListCard({
   personal,
   followUps,
+  className,
 }: {
   personal: Personal;
   followUps: FollowUp[];
+  className?: string;
 }) {
-  const todos = (personal.items ?? []).filter((i) => i.kind === "todo" && !i.done).length;
+  const todos = (personal.items ?? []).filter(
+    (i) => i.kind === "todo" && !i.done,
+  ).length;
   const notes = (personal.items ?? []).filter((i) => i.kind === "note").length;
   return (
     <TabbedCard
+      className={className}
       tabs={[
         {
           label: "To do",
           count: todos + followUps.filter((n) => !n.followUpDone).length,
           content: <TodoList personal={personal} followUps={followUps} />,
         },
-        { label: "Notes", count: notes || undefined, content: <NotesList personal={personal} /> },
+        {
+          label: "Notes",
+          count: notes || undefined,
+          content: <NotesList personal={personal} />,
+        },
       ]}
     />
   );
@@ -94,6 +114,9 @@ function TodoList({
   const done = todos.filter((t) => t.done);
   const openFollowUps = followUps.filter((n) => !n.followUpDone);
   const doneFollowUps = followUps.filter((n) => n.followUpDone);
+  // Finished items stay out of the way until asked for.
+  const [showDone, setShowDone] = useState(false);
+  const doneCount = done.length + doneFollowUps.length;
 
   function save() {
     if (!draft.trim()) return;
@@ -142,7 +165,7 @@ function TodoList({
               }
             }}
             placeholder="Description (optional)"
-            className="w-full resize-none rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="w-full resize-none rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-placeholder focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           />
         )}
       </form>
@@ -151,53 +174,74 @@ function TodoList({
         {openFollowUps.map((note) => (
           <FollowUpRow key={note.id} note={note} />
         ))}
-        {[...open, ...done].map((todo, i) => [
-          // Everything done goes together at the bottom.
-          i === open.length &&
-            doneFollowUps.map((note) => <FollowUpRow key={note.id} note={note} />),
-          <li
-            key={todo.id}
-            className="group flex items-start gap-2.5 py-2 text-sm"
-          >
-            <Checkbox
-              className="mt-0.5"
-              checked={todo.done}
-              onCheckedChange={(checked) =>
-                personal.setDone(todo.id, checked === true)
-              }
-              aria-label={`Mark "${todo.body}" ${todo.done ? "not done" : "done"}`}
-            />
-            <div
-              className={cn(
-                "min-w-0 flex-1 break-words",
-                todo.done && "text-muted-foreground line-through",
-              )}
-            >
-              <div className="font-medium">{todo.body}</div>
-              {todo.description && (
-                <div className="whitespace-pre-wrap text-muted-foreground">{todo.description}</div>
-              )}
-            </div>
-            <button
-              type="button"
-              aria-label={`Delete "${todo.body}"`}
-              onClick={() => personal.remove(todo.id)}
-              className={removeButton}
-            >
-              <X className="size-3.5" />
-            </button>
-          </li>,
-        ])}
-        {done.length === 0 &&
-          doneFollowUps.map((note) => <FollowUpRow key={note.id} note={note} />)}
+        {open.map((todo) => (
+          <TodoRow key={todo.id} todo={todo} personal={personal} />
+        ))}
+        {showDone && (
+          <>
+            {doneFollowUps.map((note) => (
+              <FollowUpRow key={note.id} note={note} />
+            ))}
+            {done.map((todo) => (
+              <TodoRow key={todo.id} todo={todo} personal={personal} />
+            ))}
+          </>
+        )}
       </ul>
-      {personal.items && todos.length + followUps.length === 0 && (
-        <p className="text-sm text-muted-foreground">Nothing to do yet.</p>
+      {personal.items && open.length + openFollowUps.length === 0 && (
+        <p className="text-sm text-muted-foreground">
+          {doneCount ? "All done." : "Nothing to do yet."}
+        </p>
+      )}
+      {doneCount > 0 && (
+        <button
+          type="button"
+          onClick={() => setShowDone(!showDone)}
+          className="text-left text-xs font-medium text-ocean-600 hover:underline"
+        >
+          {showDone ? "Hide done" : `Show ${doneCount} done`}
+        </button>
       )}
       {personal.error && (
         <p className="text-sm text-destructive">{personal.error}</p>
       )}
     </div>
+  );
+}
+
+function TodoRow({ todo, personal }: { todo: Todo; personal: Personal }) {
+  return (
+    <li className="group flex items-start gap-2.5 py-2 text-sm">
+      <Checkbox
+        className="mt-0.5"
+        checked={todo.done}
+        onCheckedChange={(checked) =>
+          personal.setDone(todo.id, checked === true)
+        }
+        aria-label={`Mark "${todo.body}" ${todo.done ? "not done" : "done"}`}
+      />
+      <div
+        className={cn(
+          "min-w-0 flex-1 break-words",
+          todo.done && "text-muted-foreground line-through",
+        )}
+      >
+        <div className="font-medium">{todo.body}</div>
+        {todo.description && (
+          <div className="whitespace-pre-wrap text-muted-foreground">
+            {todo.description}
+          </div>
+        )}
+      </div>
+      <button
+        type="button"
+        aria-label={`Delete "${todo.body}"`}
+        onClick={() => personal.remove(todo.id)}
+        className={removeButton}
+      >
+        <X className="size-3.5" />
+      </button>
+    </li>
   );
 }
 
@@ -212,16 +256,33 @@ function FollowUpRow({ note }: { note: FollowUp }) {
       <Checkbox
         className="mt-0.5"
         checked={done}
-        onCheckedChange={(checked) => updateNote(note.id, { followUpDone: checked === true })}
+        onCheckedChange={(checked) =>
+          updateNote(note.id, { followUpDone: checked === true })
+        }
         aria-label={`Mark follow-up with ${subject.label} ${done ? "not done" : "done"}`}
       />
-      <div className={cn("min-w-0 flex-1 text-sm", done && "text-muted-foreground line-through")}>
+      <div
+        className={cn(
+          "min-w-0 flex-1 text-sm",
+          done && "text-muted-foreground line-through",
+        )}
+      >
         <div className="flex items-baseline justify-between gap-2">
-          <Link href={subject.href} className="min-w-0 truncate font-medium hover:underline">
+          <Link
+            href={subject.href}
+            className="min-w-0 truncate font-medium hover:underline"
+          >
             {subject.label}
           </Link>
-          <span className={cn("shrink-0 text-xs tabular-nums", overdue ? "font-medium" : "text-muted-foreground")}>
-            {overdue && <span className="mr-1 inline-block size-1.5 rounded-full bg-red-500 align-middle" />}
+          <span
+            className={cn(
+              "shrink-0 text-xs tabular-nums",
+              overdue ? "font-medium" : "text-muted-foreground",
+            )}
+          >
+            {overdue && (
+              <span className="mr-1 inline-block size-1.5 rounded-full bg-ocean-900 align-middle" />
+            )}
             {formatDate(note.followUpDate)}
           </span>
         </div>
@@ -255,7 +316,7 @@ function NotesList({ personal }: { personal: Personal }) {
           }
         }}
         placeholder="Write something down, press Enter to save"
-        className="w-full resize-none rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+        className="w-full resize-none rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-placeholder focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
       />
       <ul className="max-h-72 divide-y overflow-y-auto">
         {notes.map((note) => (
