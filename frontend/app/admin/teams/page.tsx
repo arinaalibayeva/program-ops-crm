@@ -24,7 +24,8 @@ const FILTERS: { value: "all" | Status; label: string }[] = [
 export default function TeamsPage() {
   const { data, teamStatuses, participantStatuses } = useCohort();
   const { personFor, projectById, partnerById } = usePeopleIndex();
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]["value"]>("all");
+  const [filter, setFilter] =
+    useState<(typeof FILTERS)[number]["value"]>("all");
   const [owner, setOwner] = useState("all");
 
   useUrlParam(
@@ -37,15 +38,22 @@ export default function TeamsPage() {
   useUrlParam("owner", setOwner);
 
   const shown = data.teams.filter((team) => {
-    if (owner === "none" ? team.ownerId : owner !== "all" && team.ownerId !== owner) return false;
+    if (
+      owner === "none"
+        ? team.ownerId
+        : owner !== "all" && team.ownerId !== owner
+    )
+      return false;
     const s = teamStatuses.get(team.id)?.status;
     if (filter === "all") return true;
-    return filter === "on_track" ? s === "on_track" || s === "met" : s === filter;
+    return filter === "on_track"
+      ? s === "on_track" || s === "met"
+      : s === filter;
   });
 
   return (
     <>
-      <PageHeader title="Teams" description={`${data.teams.length} teams in ${data.cohort.name}`} />
+      <PageHeader title="Teams" />
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <div className="flex gap-1 rounded-lg bg-muted p-0.5">
           {FILTERS.map((f) => (
@@ -54,14 +62,20 @@ export default function TeamsPage() {
               onClick={() => setFilter(f.value)}
               className={cn(
                 "rounded-md px-2.5 py-1 text-xs font-medium",
-                filter === f.value ? "bg-background shadow-sm" : "text-muted-foreground hover:text-foreground",
+                filter === f.value
+                  ? "bg-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
               )}
             >
               {f.label}
             </button>
           ))}
         </div>
-        <NativeSelect aria-label="Assigned to" value={owner} onChange={(e) => setOwner(e.target.value)}>
+        <NativeSelect
+          aria-label="Assigned to"
+          value={owner}
+          onChange={(e) => setOwner(e.target.value)}
+        >
           <option value="all">Anyone</option>
           <option value="none">{UNASSIGNED}</option>
           {data.staff.map((s) => (
@@ -72,13 +86,17 @@ export default function TeamsPage() {
         </NativeSelect>
       </div>
       {shown.length === 0 && (
-        <p className="py-8 text-center text-sm text-muted-foreground">No teams match these filters.</p>
+        <p className="py-8 text-center text-sm text-muted-foreground">
+          No teams match these filters.
+        </p>
       )}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {shown.map((team) => {
           const status = teamStatuses.get(team.id)!;
           const members = activeMembers(data, team.id);
-          const project = team.projectId ? projectById.get(team.projectId) : undefined;
+          const project = team.projectId
+            ? projectById.get(team.projectId)
+            : undefined;
           return (
             <Link key={team.id} href={`/admin/teams/${team.id}`}>
               <Card className="h-full transition-shadow hover:shadow-md">
@@ -93,7 +111,8 @@ export default function TeamsPage() {
                     <StatusBadge status={status.status} overall />
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    {project?.partnerId && `${partnerById.get(project.partnerId)?.name} · `}
+                    {project?.partnerId &&
+                      `${partnerById.get(project.partnerId)?.name} · `}
                     {staffName(data, team.ownerId)}
                   </div>
                   <div className="flex -space-x-1.5">
@@ -101,15 +120,15 @@ export default function TeamsPage() {
                       const s = participantStatuses.get(m.id)?.status;
                       const ring =
                         s === "missing"
-                          ? "ring-red-400"
+                          ? "ring-ocean-900"
                           : s === "at_risk"
-                            ? "ring-amber-400"
+                            ? "ring-ocean-500"
                             : "ring-background";
                       return (
                         <div
                           key={m.id}
                           title={personFor(m.id)?.name}
-                          className={`flex size-7 items-center justify-center rounded-full bg-muted text-[10px] font-medium ring-2 ${ring}`}
+                          className={`flex size-7 items-center justify-center rounded-full bg-ocean-100 text-[10px] font-medium text-ocean-800 ring-2 ${ring}`}
                         >
                           {initials(personFor(m.id)?.name ?? "?")}
                         </div>
@@ -119,7 +138,7 @@ export default function TeamsPage() {
                   {status.flags.length > 0 && (
                     <ul className="mt-auto space-y-0.5 border-t pt-2">
                       {status.flags.map((flag) => (
-                        <li key={flag} className="text-xs text-foreground/80">
+                        <li key={flag} className="text-xs text-foreground">
                           {flag}
                         </li>
                       ))}

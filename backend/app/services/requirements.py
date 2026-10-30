@@ -36,6 +36,12 @@ def worst_status(statuses: list[Status]) -> Status:
     return worst
 
 
+def plain_date(value: object) -> str:
+    """A date as people say it, e.g. "Oct 23"."""
+    d = _as_date(value)
+    return f"{d:%b} {d.day}"
+
+
 def needs_attention(status: Status) -> bool:
     return status in ("at_risk", "missing")
 
@@ -102,7 +108,7 @@ def _complete_by(data: CohortData, req: Requirement, subject_id: str) -> Require
     )
     if done:
         return RequirementResult(
-            requirement_id=req.id, status="met", reason=f"{req.name} done on {done.completed_at.isoformat()}"
+            requirement_id=req.id, status="met", reason=f"{req.name} done on {plain_date(done.completed_at)}"
         )
     due = req.params["dueDate"]
     days_left = (_as_date(due) - data.today).days
@@ -114,7 +120,7 @@ def _complete_by(data: CohortData, req: Requirement, subject_id: str) -> Require
         return RequirementResult(
             requirement_id=req.id, status="at_risk", reason=f"{req.name} due in {days_left} days, not done yet"
         )
-    return RequirementResult(requirement_id=req.id, status="on_track", reason=f"{req.name} due {due}")
+    return RequirementResult(requirement_id=req.id, status="on_track", reason=f"{req.name} due {plain_date(due)}")
 
 
 def linked_ids(value: object) -> list[str]:
@@ -125,9 +131,13 @@ def linked_ids(value: object) -> list[str]:
 
 def _linked_records(data: CohortData, req: Requirement, subject_id: str) -> list[CustomRecord]:
     p = req.params
+    # An optional filter, e.g. only meeting reports whose Month is October.
+    condition = Condition.model_validate(p["filter"]) if p.get("filter") else None
     return [
         r for r in data.records
-        if r.type_id == p["typeId"] and subject_id in linked_ids(r.values.get(p["viaFieldId"]))
+        if r.type_id == p["typeId"]
+        and subject_id in linked_ids(r.values.get(p["viaFieldId"]))
+        and (condition is None or _matches(r, condition))
     ]
 
 
@@ -153,13 +163,13 @@ def _record_by(data: CohortData, req: Requirement, subject_id: str) -> Requireme
     if progress == "on_time":
         status, reason = "met", f"{req.name} logged ({count})"
     elif progress == "late":
-        status, reason = "met", f"{req.name} logged late, after {p['dueDate']}"
+        status, reason = "met", f"{req.name} logged late, after {plain_date(p['dueDate'])}"
     elif progress == "missing":
         status, reason = "missing", f"{req.name} overdue by {-days_left} days, {logged}"
     elif days_left <= DUE_SOON_DAYS:
         status, reason = "at_risk", f"{req.name} due in {days_left} days, {logged}"
     else:
-        status, reason = "on_track", f"{req.name} due {p['dueDate']}, {logged}"
+        status, reason = "on_track", f"{req.name} due {plain_date(p['dueDate'])}, {logged}"
     return RequirementResult(requirement_id=req.id, status=status, reason=reason)
 
 

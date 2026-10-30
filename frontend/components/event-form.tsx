@@ -109,7 +109,8 @@ export function EventFields({
               onChange={(e) => set({ category: e.target.value as EventCategory })}
               className="h-9 w-full"
             >
-              {EVENT_CATEGORIES.map((c) => (
+              {/* Deadlines come from requirements, not events. */}
+              {EVENT_CATEGORIES.filter((c) => c !== "deadline" || v.category === "deadline").map((c) => (
                 <option key={c} value={c}>
                   {EVENT_CATEGORY_LABELS[c]}
                 </option>
@@ -151,7 +152,7 @@ export function EventFields({
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="end-time">
-                  End time <span className="font-normal text-muted-foreground">(optional)</span>
+                  End time
                 </Label>
                 <Input
                   id="end-time"
@@ -212,7 +213,7 @@ export function EventFields({
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="event-partner">
-            Partner <span className="font-normal text-muted-foreground">(optional)</span>
+            Partner
           </Label>
           <NativeSelect
             id="event-partner"
@@ -236,7 +237,7 @@ export function EventFields({
             value={v.description}
             onChange={(e) => set({ description: e.target.value })}
             placeholder="What happens at this event and what participants should bring or prepare"
-            className="w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className="w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-placeholder focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
           />
         </div>
       </div>

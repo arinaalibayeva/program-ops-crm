@@ -1,16 +1,6 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { DeadlineList } from "@/components/deadline-list";
-import { PageHeader } from "@/components/page-header";
-
+// Deadlines are requirements with a due date now; old links land there.
 export default function DeadlinesPage() {
-  return (
-    <>
-      <PageHeader
-        title="Deadlines"
-        description="Assignment and report due dates. They show on the calendar automatically."
-      />
-      <DeadlineList />
-    </>
-  );
+  redirect("/admin/requirements");
 }

@@ -298,6 +298,13 @@ export interface ProgramEvent {
   /** Crossed off on the calendar. Mainly for deadlines. */
   completed?: boolean;
   checkinToken: string;
+  /**
+   * Set on calendar items worked out from other things (a requirement's due
+   * date, or records logged that day). They aren't saved as events and open
+   * this page instead of an event page.
+   */
+  href?: string;
+  derived?: "requirement" | "records";
 }
 
 export interface Attendance {
@@ -325,7 +332,11 @@ export type Requirement =
       name: string;
       scope: "participant" | "team";
       type: "complete_by";
-      params: { dueDate: ISODate };
+      params: {
+        dueDate: ISODate;
+        /** What to hand in and where, shown on the calendar. */
+        description?: string;
+      };
     }
   | {
       id: string;
@@ -347,6 +358,10 @@ export type Requirement =
         dueDate: ISODate;
         /** Which date on the record decides whether it was on time. */
         dateFieldId?: string;
+        /** Only records matching this count, e.g. Month is October. */
+        filter?: Condition;
+        /** What to hand in and where, shown on the calendar. */
+        description?: string;
       };
     };
 

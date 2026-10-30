@@ -10,19 +10,35 @@ import { PageHeader } from "@/components/page-header";
 import { RecordDialog } from "@/components/records/record-dialog";
 import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { formatDateTime } from "@/lib/format";
-import { formatRecordValue, linkedIds, linkLabel, recordTitle, targetHref, typeById } from "@/lib/records";
+import {
+  formatRecordValue,
+  linkedIds,
+  linkLabel,
+  recordTitle,
+  targetHref,
+  typeById,
+} from "@/lib/records";
 import { useCohort } from "@/lib/store";
 
-export default function RecordPage({ params }: { params: Promise<{ typeId: string; recordId: string }> }) {
+export default function RecordPage({
+  params,
+}: {
+  params: Promise<{ typeId: string; recordId: string }>;
+}) {
   const { typeId, recordId } = use(params);
   const router = useRouter();
   const { data, deleteRecord } = useCohort();
   const [editing, setEditing] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const type = typeById(data, typeId);
-  const record = data.records.find((r) => r.id === recordId && r.typeId === typeId);
+  const record = data.records.find(
+    (r) => r.id === recordId && r.typeId === typeId,
+  );
 
-  if (!type || !record) return <p className="text-muted-foreground">This record doesn&apos;t exist.</p>;
+  if (!type || !record)
+    return (
+      <p className="text-muted-foreground">This record doesn&apos;t exist.</p>
+    );
 
   return (
     <>
@@ -35,7 +51,9 @@ export default function RecordPage({ params }: { params: Promise<{ typeId: strin
       <PageHeader
         title={recordTitle(data, record)}
         description={`${type.singular} · added ${formatDateTime(record.createdAt)}${
-          record.updatedAt ? ` · edited ${formatDateTime(record.updatedAt)}` : ""
+          record.updatedAt
+            ? ` · edited ${formatDateTime(record.updatedAt)}`
+            : ""
         }`}
         actions={
           confirming ? (
@@ -76,10 +94,16 @@ export default function RecordPage({ params }: { params: Promise<{ typeId: strin
               <dl className="grid gap-x-6 gap-y-4 sm:grid-cols-2">
                 {type.fields.map((f) => {
                   const value = record.values[f.id];
-                  const wide = f.type === "long_text" || (f.type === "link" && f.multiple);
+                  const wide =
+                    f.type === "long_text" || (f.type === "link" && f.multiple);
                   return (
-                    <div key={f.id} className={wide ? "sm:col-span-2" : undefined}>
-                      <dt className="text-xs text-muted-foreground">{f.label}</dt>
+                    <div
+                      key={f.id}
+                      className={wide ? "sm:col-span-2" : undefined}
+                    >
+                      <dt className="text-xs text-muted-foreground">
+                        {f.label}
+                      </dt>
                       <dd className="mt-0.5 text-sm">
                         {f.type === "link" && linkedIds(value).length > 0 ? (
                           <span className="flex flex-wrap gap-1.5">
@@ -93,12 +117,21 @@ export default function RecordPage({ params }: { params: Promise<{ typeId: strin
                               </Link>
                             ))}
                           </span>
-                        ) : f.type === "url" && typeof value === "string" && value ? (
-                          <a href={value} target="_blank" rel="noreferrer" className="break-all underline">
+                        ) : f.type === "url" &&
+                          typeof value === "string" &&
+                          value ? (
+                          <a
+                            href={value}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="break-all underline"
+                          >
                             {value}
                           </a>
                         ) : (
-                          <span className="whitespace-pre-wrap">{formatRecordValue(data, f, value)}</span>
+                          <span className="whitespace-pre-wrap">
+                            {formatRecordValue(data, f, value)}
+                          </span>
                         )}
                       </dd>
                     </div>
@@ -114,7 +147,12 @@ export default function RecordPage({ params }: { params: Promise<{ typeId: strin
         </div>
       </div>
 
-      <RecordDialog type={type} record={record} open={editing} onOpenChange={setEditing} />
+      <RecordDialog
+        type={type}
+        record={record}
+        open={editing}
+        onOpenChange={setEditing}
+      />
     </>
   );
 }

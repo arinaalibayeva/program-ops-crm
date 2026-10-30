@@ -122,8 +122,8 @@ def test_event_can_belong_to_a_partner(client):
     assert client.patch(f"/api/events/{event}", json={"partnerId": "nope"}).status_code == 404
 
 
-def test_a_deadline_can_be_crossed_off_and_back(client):
-    deadline = next(e for e in SAMPLE["events"] if e["category"] == "deadline")["id"]
+def test_an_event_can_be_crossed_off_and_back(client):
+    deadline = SAMPLE["events"][0]["id"]
 
     def event(data):
         return next(e for e in data["events"] if e["id"] == deadline)
@@ -181,9 +181,9 @@ def with_requirement(data: CohortData, req: dict, records: list[dict] | None = N
     return CohortData.model_validate(raw)
 
 
-def report(date: str) -> dict:
+def report(date: str, month: str = "September") -> dict:
     return {"id": f"rec-{date}", "typeId": "rt-reports", "cohortId": "c-fall-2026", "createdAt": f"{date}T10:00:00Z",
-            "values": {"rf-r-title": "R", "rf-r-date": date, "rf-r-team": TEAM}}
+            "values": {"rf-r-title": "R", "rf-r-date": date, "rf-r-team": TEAM, "rf-r-month": month}}
 
 
 def result_for(data: CohortData):
@@ -196,7 +196,7 @@ def test_record_requirement_statuses():
     assert (on_time.status, on_time.reason) == ("met", "Report logged (1)")
 
     late = result_for(with_requirement(sample, requirement(dueDate="2026-10-05"), [report("2026-10-07")]))
-    assert (late.status, late.reason) == ("met", "Report logged late, after 2026-10-05")
+    assert (late.status, late.reason) == ("met", "Report logged late, after Oct 5")
 
     overdue = result_for(with_requirement(sample, requirement(dueDate="2026-10-05")))
     assert (overdue.status, overdue.reason) == ("missing", "Report overdue by 14 days, 0 of 1 logged")
@@ -206,6 +206,14 @@ def test_record_requirement_statuses():
 
     later = result_for(with_requirement(sample, requirement(dueDate="2026-11-22")))
     assert later.status == "on_track"
+
+
+def test_record_requirement_counts_only_matching_records():
+    """September's report doesn't count towards October's."""
+    sample = load_sample()
+    october = requirement(dueDate="2026-10-05", filter={"fieldId": "rf-r-month", "op": "is", "value": "October"})
+    assert result_for(with_requirement(sample, october, [report("2026-10-01")])).status == "missing"
+    assert result_for(with_requirement(sample, october, [report("2026-10-01", "October")])).status == "met"
 
 
 def test_form_submission_completes_a_record_requirement(client, anonymous):
@@ -221,7 +229,7 @@ def test_form_submission_completes_a_record_requirement(client, anonymous):
     enrollment = next(e for e in SAMPLE["enrollments"] if e["id"] == member["enrollmentId"])
     person = next(p for p in SAMPLE["people"] if p["id"] == enrollment["personId"])
     result = anonymous.post("/api/f/submit-report-demo", json={
-        "email": person["email"], "values": {"rf-r-title": "Report", "rf-r-date": "2026-10-19"},
+        "email": person["email"], "values": {"rf-r-title": "Report", "rf-r-date": "2026-10-19", "rf-r-month": "September"},
     }).json()
     assert result["status"] == "saved"
     assert status() == "met"
@@ -239,6 +247,9 @@ def test_record_requirement_validation(client):
     assert add(viaFieldId="rf-m-team").status_code == 400  # a field on another type
     assert add(viaFieldId="rf-r-title").status_code == 400  # not a link
     assert add(dateFieldId="rf-r-title").status_code == 400  # not a date
+    assert add(filter={"fieldId": "rf-m-summary", "op": "is", "value": "x"}).status_code == 400  # another type's field
+    assert add(filter={"fieldId": "rf-r-month", "op": "is", "value": "October"}).status_code == 200
+
     assert add(minCount=0).status_code == 400
     assert add(dueDate="soon").status_code == 400
     scoped = client.post("/api/requirements", json={
@@ -285,3 +296,13 @@ def test_participant_summary_without_rules_keeps_requirement_status():
     data = load_sample()
     summary = participant_summary(data, ENROLLMENT)
     assert summary.rule_results is None
+
+
+def test_a_requirement_can_be_edited_but_not_change_kind(client):
+    body = {"name": "Brief, final", "scope": "team", "type": "complete_by", "params": {"dueDate": "2026-10-30"}}
+    data = client.put("/api/requirements/req-5", json=body).json()
+    req = next(r for r in data["requirements"] if r["id"] == "req-5")
+    assert (req["name"], req["params"]["dueDate"]) == ("Brief, final", "2026-10-30")
+    assert client.put("/api/requirements/req-5", json={**body, "scope": "participant"}).status_code == 400
+    assert client.put("/api/requirements/req-5", json={**body, "params": {}}).status_code == 400
+    assert client.put("/api/requirements/nope", json=body).status_code == 404

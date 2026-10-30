@@ -167,7 +167,7 @@ function CommandList({ close }: { close: () => void }) {
             setSelected(0);
           }}
           placeholder="Search people, teams, events or pages"
-          className="h-12 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+          className="h-12 w-full bg-transparent text-sm outline-none placeholder:text-placeholder"
         />
       </div>
       <div className="max-h-[min(24rem,60vh)] overflow-y-auto p-2">

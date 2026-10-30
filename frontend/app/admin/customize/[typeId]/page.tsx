@@ -13,7 +13,11 @@ import { FormsEditor } from "@/components/customize/forms-editor";
 import { typeById } from "@/lib/records";
 import { useCohort } from "@/lib/store";
 
-export default function CustomizeTypePage({ params }: { params: Promise<{ typeId: string }> }) {
+export default function CustomizeTypePage({
+  params,
+}: {
+  params: Promise<{ typeId: string }>;
+}) {
   const { typeId } = use(params);
   const router = useRouter();
   const { data, updateRecordType, deleteRecordType } = useCohort();
@@ -23,11 +27,18 @@ export default function CustomizeTypePage({ params }: { params: Promise<{ typeId
   const [singular, setSingular] = useState("");
   const [confirming, setConfirming] = useState(false);
 
-  if (!type) return <p className="text-muted-foreground">This record type doesn&apos;t exist.</p>;
+  if (!type)
+    return (
+      <p className="text-muted-foreground">
+        This record type doesn&apos;t exist.
+      </p>
+    );
 
   const count = data.records.filter((r) => r.typeId === type.id).length;
   const linkedFrom = data.recordTypes.filter(
-    (t) => t.id !== type.id && t.fields.some((f) => f.type === "link" && f.linkTo === type.id),
+    (t) =>
+      t.id !== type.id &&
+      t.fields.some((f) => f.type === "link" && f.linkTo === type.id),
   );
 
   return (
@@ -45,11 +56,19 @@ export default function CustomizeTypePage({ params }: { params: Promise<{ typeId
           onSubmit={(e) => {
             e.preventDefault();
             if (!name.trim() || !singular.trim()) return;
-            updateRecordType(type.id, { name: name.trim(), singular: singular.trim() });
+            updateRecordType(type.id, {
+              name: name.trim(),
+              singular: singular.trim(),
+            });
             setRenaming(false);
           }}
         >
-          <Input aria-label="Name" value={name} onChange={(e) => setName(e.target.value)} className="w-56" />
+          <Input
+            aria-label="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-56"
+          />
           <Input
             aria-label="One record is called"
             value={singular}
@@ -57,14 +76,17 @@ export default function CustomizeTypePage({ params }: { params: Promise<{ typeId
             className="w-48"
           />
           <Button type="submit">Save</Button>
-          <Button type="button" variant="ghost" onClick={() => setRenaming(false)}>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setRenaming(false)}
+          >
             Cancel
           </Button>
         </form>
       ) : (
         <PageHeader
           title={type.name}
-          description={`One record is a “${type.singular.toLowerCase()}” · ${count} record${count === 1 ? "" : "s"}`}
           actions={
             <>
               <Button
@@ -77,7 +99,10 @@ export default function CustomizeTypePage({ params }: { params: Promise<{ typeId
               >
                 <Pencil /> Rename
               </Button>
-              <Link href={`/admin/records/${type.id}`} className={buttonVariants()}>
+              <Link
+                href={`/admin/records/${type.id}`}
+                className={buttonVariants()}
+              >
                 View records <ArrowRight />
               </Link>
             </>
@@ -94,14 +119,16 @@ export default function CustomizeTypePage({ params }: { params: Promise<{ typeId
           <h2 className="text-base font-semibold">Delete this type</h2>
           {linkedFrom.length > 0 ? (
             <p className="text-sm text-muted-foreground">
-              {linkedFrom.map((t) => t.name).join(", ")} link{linkedFrom.length === 1 ? "s" : ""} to {type.name}.
-              Remove those link fields first.
+              {linkedFrom.map((t) => t.name).join(", ")} link
+              {linkedFrom.length === 1 ? "s" : ""} to {type.name}. Remove those
+              link fields first.
             </p>
           ) : confirming ? (
             <div className="space-y-2">
               <p className="text-sm">
-                This deletes {count} record{count === 1 ? "" : "s"}, and every calculation, rule and form for{" "}
-                {type.name}. It can&apos;t be undone.
+                This deletes {count} record{count === 1 ? "" : "s"}, and every
+                calculation, rule and form for {type.name}. It can&apos;t be
+                undone.
               </p>
               <div className="flex gap-2">
                 <Button

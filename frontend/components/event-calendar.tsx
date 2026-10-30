@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { EventPopover } from "@/components/event-popover";
+import { eventHref } from "@/lib/calendar";
 import {
   EVENT_CATEGORY_COLORS,
   EVENT_CATEGORY_LABELS,
@@ -124,7 +125,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
   const categories = [...new Set(visible.map((e) => e.category))];
 
   return (
-    <div className="rounded-3xl border border-primary/10 bg-gradient-to-br from-ocean-100 to-ocean-200 p-4 text-foreground shadow-sm sm:p-6">
+    <div className="text-foreground">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
         <div role="radiogroup" aria-label="Calendar view" className="flex gap-1.5">
           {VIEWS.map(({ id, label }) => (
@@ -136,7 +137,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
               onClick={() => setView(id)}
               className={cn(
                 "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                view === id ? "bg-primary text-primary-foreground" : "bg-white/60 text-secondary-foreground hover:bg-white/90",
+                view === id ? "bg-primary text-primary-foreground" : "bg-card text-muted-foreground hover:text-foreground",
               )}
             >
               {label}
@@ -167,14 +168,14 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
           <Deadlines events={events} />
         </aside>
 
-        <section className="order-1 min-w-0 rounded-2xl bg-white/55 p-2 sm:p-3 lg:order-2">
+        <section className="order-1 min-w-0 rounded-2xl bg-card p-2 shadow-[0_1px_2px_rgb(18_40_72/0.04)] sm:p-3 lg:order-2">
           <div className="flex items-center justify-between gap-2 px-2 pt-1 pb-3">
             <h2 className="font-semibold">{rangeLabel(view, anchor)}</h2>
             <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => setAnchor(today)}
-                className="rounded-md px-2 py-0.5 text-sm font-medium underline underline-offset-4 hover:bg-white/70"
+                className="rounded-md px-2 py-0.5 text-sm font-medium underline underline-offset-4 hover:bg-muted"
               >
                 Today
               </button>
@@ -182,7 +183,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
                 type="button"
                 aria-label="Previous"
                 onClick={() => move(-1)}
-                className="flex size-7 items-center justify-center rounded-full bg-white/70 hover:bg-white"
+                className="flex size-7 items-center justify-center rounded-full bg-muted hover:bg-ocean-100"
               >
                 <ChevronLeft className="size-4" />
               </button>
@@ -190,7 +191,7 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
                 type="button"
                 aria-label="Next"
                 onClick={() => move(1)}
-                className="flex size-7 items-center justify-center rounded-full bg-white/70 hover:bg-white"
+                className="flex size-7 items-center justify-center rounded-full bg-muted hover:bg-ocean-100"
               >
                 <ChevronRight className="size-4" />
               </button>
@@ -208,7 +209,10 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
               {categories.map((category) => (
                 <li key={category} className="flex items-center gap-1.5">
                   <span className={cn("size-2 rounded-full", EVENT_CATEGORY_COLORS[category].dot)} aria-hidden />
-                  {EVENT_CATEGORY_LABELS[category]}
+                  {/* Logged records borrow "other"; name them for what they are. */}
+                  {category === "other" && visible.some((e) => e.derived === "records")
+                    ? "Logged by teams"
+                    : EVENT_CATEGORY_LABELS[category]}
                 </li>
               ))}
             </ul>
@@ -244,7 +248,7 @@ function MiniMonth({
   const selectedWeek = mondayOf(anchor);
 
   return (
-    <div className="rounded-2xl bg-white/55 p-3.5">
+    <div className="rounded-2xl bg-card p-3.5 shadow-[0_1px_2px_rgb(18_40_72/0.04)]">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-sm font-semibold">{monthLabel(month)}</span>
         <div className="flex gap-1">
@@ -252,7 +256,7 @@ function MiniMonth({
             type="button"
             aria-label="Previous month"
             onClick={() => setMonth(shiftMonth(month, -1))}
-            className="flex size-6 items-center justify-center rounded-full bg-white/70 hover:bg-white"
+            className="flex size-6 items-center justify-center rounded-full bg-muted hover:bg-ocean-100"
           >
             <ChevronLeft className="size-3.5" />
           </button>
@@ -260,7 +264,7 @@ function MiniMonth({
             type="button"
             aria-label="Next month"
             onClick={() => setMonth(shiftMonth(month, 1))}
-            className="flex size-6 items-center justify-center rounded-full bg-white/70 hover:bg-white"
+            className="flex size-6 items-center justify-center rounded-full bg-muted hover:bg-ocean-100"
           >
             <ChevronRight className="size-3.5" />
           </button>
@@ -286,8 +290,8 @@ function MiniMonth({
               aria-current={day === today ? "date" : undefined}
               onClick={() => onPick(day)}
               className={cn(
-                "relative flex h-7 items-center justify-center tabular-nums hover:bg-white/80",
-                inWeek || picked ? "bg-white/80" : "rounded-full",
+                "relative flex h-7 items-center justify-center tabular-nums hover:bg-muted",
+                inWeek || picked ? "bg-ocean-50" : "rounded-full",
                 inWeek && day === selectedWeek && "rounded-l-full",
                 inWeek && day === addDays(selectedWeek, 6) && "rounded-r-full",
                 picked && "rounded-full",
@@ -315,7 +319,7 @@ function MiniMonth({
 
 function SideList({ title, editHref, children }: { title: string; editHref?: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-2xl bg-card p-3.5 text-card-foreground">
+    <div className="rounded-2xl bg-card p-3.5 text-card-foreground shadow-[0_1px_2px_rgb(18_40_72/0.04)]">
       <h3 className="mb-1 flex items-center justify-between gap-2 text-sm font-semibold">
         {title}
         {editHref && (
@@ -339,12 +343,12 @@ export function ComingUp({ events, today }: { events: ProgramEvent[]; today: str
 
 /** The next three events people attend. */
 export function ComingUpList({ events, today }: { events: ProgramEvent[]; today: string }) {
-  const coming = events.filter((e) => takesAttendance(e) && e.date >= today).slice(0, 3);
+  const coming = events.filter((e) => takesAttendance(e) && !e.derived && e.date >= today).slice(0, 3);
   return (
     <ul className="divide-y">
       {coming.map((event) => (
         <li key={event.id}>
-          <Link href={`/admin/events/${event.id}`} className="group block py-2 text-sm">
+          <Link href={eventHref(event)} className="group block py-2 text-sm">
             <div className="truncate font-medium group-hover:underline">{event.title}</div>
             <div className="text-xs text-muted-foreground">
               {[formatDate(event.date, { weekday: true }), formatEventTime(event)].filter(Boolean).join(" · ")}
@@ -359,47 +363,42 @@ export function ComingUpList({ events, today }: { events: ProgramEvent[]; today:
 
 export function Deadlines({ events }: { events: ProgramEvent[] }) {
   return (
-    <SideList title="Deadlines" editHref="/admin/deadlines">
+    <SideList title="Deadlines" editHref="/admin/requirements">
       <DeadlineChecklist events={events} />
     </SideList>
   );
 }
 
-/** Every deadline in order. Ticking one crosses it off; it stays in the list. */
+/** Upcoming deadlines in order, with how many are in. Each opens its requirement. */
 export function DeadlineChecklist({ events }: { events: ProgramEvent[] }) {
-  const { updateEvent } = useCohort();
+  const { data } = useCohort();
+  const upcoming = events.filter((e) => e.category === "deadline" && e.date >= data.today);
   return (
     <ul className="divide-y">
-      {events
-        .filter((e) => !takesAttendance(e))
-        .map((event) => {
-          const done = !!event.completed;
-          return (
-            <li key={event.id} className="flex items-center gap-2.5 py-2 text-sm">
-              <button
-                type="button"
-                role="checkbox"
-                aria-checked={done}
-                aria-label={`Mark ${event.title} ${done ? "not done" : "done"}`}
-                onClick={() => updateEvent(event.id, { completed: !done })}
-                className={cn(
-                  "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
-                  done
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-muted-foreground/40 hover:border-primary",
-                )}
-              >
-                {done && <Check className="size-3" strokeWidth={3} />}
-              </button>
-              <Link href={`/admin/events/${event.id}`} className="group min-w-0 flex-1">
-                <span className={cn("line-clamp-2 group-hover:underline", done && "text-muted-foreground line-through")}>
-                  {event.title}
-                </span>
-                <span className="block text-xs text-muted-foreground">{formatDate(event.date)}</span>
-              </Link>
-            </li>
-          );
-        })}
+      {upcoming.map((event) => {
+        const done = !!event.completed;
+        return (
+          <li key={event.id} className="flex items-center gap-2.5 py-2 text-sm">
+            <span
+              aria-hidden
+              className={cn(
+                "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2",
+                done ? "border-primary bg-primary text-primary-foreground" : "border-muted-foreground/40",
+              )}
+            >
+              {done && <Check className="size-3" strokeWidth={3} />}
+            </span>
+            <Link href={eventHref(event)} className="group min-w-0 flex-1">
+              <span className="line-clamp-2 group-hover:underline">{event.title}</span>
+              <span className="block text-xs text-muted-foreground">
+                {formatDate(event.date)}
+                {event.derived === "requirement" && event.description && ` · ${event.description.split(".")[0]}`}
+              </span>
+            </Link>
+          </li>
+        );
+      })}
+      {upcoming.length === 0 && <li className="py-2 text-sm text-muted-foreground">No deadlines left.</li>}
     </ul>
   );
 }
@@ -506,7 +505,7 @@ function TimeGrid({
                 .map((event) => (
                   <Link
                     key={event.id}
-                    href={`/admin/events/${event.id}`}
+                    href={eventHref(event)}
                     title={event.title}
                     onClick={(e) => onOpen(e, event)}
                     className={cn(
@@ -540,7 +539,7 @@ function TimeGrid({
               return (
                 <Link
                   key={event.id}
-                  href={`/admin/events/${event.id}`}
+                  href={eventHref(event)}
                   title={event.title}
                   onClick={(e) => onOpen(e, event)}
                   style={{
@@ -617,7 +616,7 @@ function MonthGrid({
                 .map((event) => (
                   <Link
                     key={event.id}
-                    href={`/admin/events/${event.id}`}
+                    href={eventHref(event)}
                     title={event.title}
                     onClick={(e) => onOpen(e, event)}
                     className={cn(

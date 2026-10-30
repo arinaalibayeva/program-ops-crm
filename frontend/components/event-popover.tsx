@@ -10,6 +10,7 @@ import {
   formatEventTime,
   takesAttendance,
 } from "@/lib/events";
+import { eventHref } from "@/lib/calendar";
 import { formatDate } from "@/lib/format";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import type { ProgramEvent } from "@/lib/types";
@@ -52,7 +53,7 @@ function Details({ event, onClose }: { event: ProgramEvent; onClose: () => void 
   const { partnerById } = usePeopleIndex();
   const partner = event.partnerId ? partnerById.get(event.partnerId) : undefined;
   const isLink = /^https?:\/\//i.test(event.location ?? "");
-  const past = takesAttendance(event) && event.date < data.today;
+  const past = !event.derived && takesAttendance(event) && event.date < data.today;
   const active = new Set(data.enrollments.filter((e) => e.status === "active").map((e) => e.id));
   const present = data.attendance.filter((a) => a.eventId === event.id && active.has(a.enrollmentId)).length;
 
@@ -62,7 +63,11 @@ function Details({ event, onClose }: { event: ProgramEvent; onClose: () => void 
         <div className="min-w-0">
           <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
             <span className={cn("size-2 shrink-0 rounded-full", EVENT_CATEGORY_COLORS[event.category].dot)} aria-hidden />
-            {EVENT_CATEGORY_LABELS[event.category]} · {event.isRequired ? "Required" : "Optional"}
+            {event.derived === "requirement"
+              ? "Deadline"
+              : event.derived === "records"
+                ? "Logged"
+                : EVENT_CATEGORY_LABELS[event.category]}
           </div>
           <Popover.Title className="mt-1 text-base leading-snug font-semibold">{event.title}</Popover.Title>
         </div>
@@ -81,7 +86,7 @@ function Details({ event, onClose }: { event: ProgramEvent; onClose: () => void 
           {formatDate(event.date, { weekday: true })}
           {event.endDate && ` – ${formatDate(event.endDate, { weekday: true })}`}
         </Fact>
-        <Fact icon={Clock}>{formatEventTime(event)}</Fact>
+        {!event.derived && <Fact icon={Clock}>{formatEventTime(event)}</Fact>}
         {event.location && (
           <Fact icon={MapPin}>
             {isLink ? (
@@ -111,8 +116,8 @@ function Details({ event, onClose }: { event: ProgramEvent; onClose: () => void 
         <span className="text-xs text-muted-foreground tabular-nums">
           {past && `${present} of ${active.size} attended`}
         </span>
-        <Link href={`/admin/events/${event.id}`} className={buttonVariants({ size: "sm" })}>
-          Open event
+        <Link href={eventHref(event)} className={buttonVariants({ size: "sm" })}>
+          {event.derived === "requirement" ? "See who's in" : event.derived === "records" ? "See records" : "Open event"}
         </Link>
       </div>
     </div>
