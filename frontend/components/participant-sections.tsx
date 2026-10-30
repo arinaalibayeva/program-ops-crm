@@ -258,7 +258,7 @@ export function AttendanceSection({ view, enrollment, draft, update }: SectionPr
                           )}
                         >
                           {!present && selected && (
-                            <span className="size-1.5 rounded-full bg-red-500" />
+                            <span className="size-1.5 rounded-full bg-ocean-900" />
                           )}
                           {present ? "Present" : "Absent"}
                         </button>

@@ -18,16 +18,16 @@
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
-  --color-ocean-50: #eef5fd;
-  --color-ocean-100: #dceafa;
-  --color-ocean-200: #bed7f4;
-  --color-ocean-300: #91bceb;
-  --color-ocean-400: #5f9ade;
-  --color-ocean-500: #3a7bc8;
-  --color-ocean-600: #2a62a8;
-  --color-ocean-700: #1d4580;
-  --color-ocean-800: #163a6d;
-  --color-ocean-900: #122848;
+  --color-ocean-50: #f0f5fe;
+  --color-ocean-100: #e3ecfd;
+  --color-ocean-200: #cadbfb;
+  --color-ocean-300: #a5c3f8;
+  --color-ocean-400: #7da7f3;
+  --color-ocean-500: #5b8dec;
+  --color-ocean-600: #3a6bd5;
+  --color-ocean-700: #3360bd;
+  --color-ocean-800: #2b4f97;
+  --color-ocean-900: #1f3a70;
   --color-chart-5: var(--chart-5);
   --color-chart-4: var(--chart-4);
   --color-chart-3: var(--chart-3);
@@ -40,6 +40,7 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
+  --color-placeholder: var(--placeholder);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
@@ -61,36 +62,39 @@
 :root {
   /* A blue scale from pale sky to deep navy, with white surfaces. */
   --background: #ffffff;
-  --foreground: #122848;
+  --foreground: #1b2232;
   --card: #ffffff;
-  --card-foreground: #122848;
+  --card-foreground: #1b2232;
   --popover: #ffffff;
-  --popover-foreground: #122848;
+  --popover-foreground: #1b2232;
   --primary: #1d4580;
   --primary-foreground: #ffffff;
-  --secondary: #dceafa;
-  --secondary-foreground: #1f4c8a;
-  --muted: #e6eff9;
-  --muted-foreground: #4f6585;
-  --accent: #d3e4f8;
-  --accent-foreground: #163a6d;
+  --secondary: #e3ecfd;
+  --secondary-foreground: #3360bd;
+  --muted: #f3f6fb;
+  /* Secondary text is black too; size and weight carry the hierarchy. */
+  --muted-foreground: #1b2232;
+  /* Only empty inputs stay light, so they never look filled in. */
+  --placeholder: #8a91a1;
+  --accent: #e3ecfd;
+  --accent-foreground: #2b4f97;
   --destructive: oklch(0.5 0.18 25);
-  --border: #d4e1f0;
-  --input: #c5d7eb;
-  --ring: #3a7bc8;
+  --border: #e6e9f0;
+  --input: #dce1ea;
+  --ring: #5b8dec;
   --chart-1: oklch(0.3 0.085 258);
   --chart-2: #3a7bc8;
   --chart-3: oklch(0.68 0.06 235);
   --chart-4: oklch(0.82 0.05 85);
   --chart-5: oklch(0.22 0.06 258);
   /* The page behind everything, and the sky on the sign-in page. */
-  --page: #e4eefa;
-  --canvas: #e4eefa;
-  --dusk: linear-gradient(160deg, #122848 0%, #1d4580 52%, #3a7bc8 100%);
+  --page: #eef1f7;
+  --canvas: #eef1f7;
+  --dusk: linear-gradient(160deg, #2b4f97 0%, #3a6bd5 55%, #7da7f3 100%);
   /* Fine film grain, so gradients don't look flat or banded. */
   --grain: none;
   /* Components derive their corner radius from this. */
-  --radius: 0.625rem;
+  --radius: 0.25rem;
   --sidebar: oklch(0.992 0.005 85);
   --sidebar-foreground: oklch(0.24 0.045 258);
   --sidebar-primary: #1b3a66;
@@ -113,7 +117,8 @@
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  --muted-foreground: oklch(0.985 0 0);
+  --placeholder: oklch(0.708 0 0);
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);

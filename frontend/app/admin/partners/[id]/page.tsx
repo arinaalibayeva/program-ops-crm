@@ -5,7 +5,13 @@ import Link from "next/link";
 import { ArrowLeft, ExternalLink, Mail, Pencil, Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect } from "@/components/native-select";
@@ -17,21 +23,36 @@ import { StatusBadge } from "@/components/status-badge";
 import { Timeline } from "@/components/timeline";
 import { formatEventTime } from "@/lib/events";
 import { formatDate } from "@/lib/format";
-import { partnerById, partnerEvents, partnerMembers, partnerStatus, type PartnerSummary } from "@/lib/partners";
+import {
+  partnerById,
+  partnerEvents,
+  partnerMembers,
+  partnerStatus,
+  type PartnerSummary,
+} from "@/lib/partners";
 import { activeMembers } from "@/lib/requirements";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { partnerTimeline } from "@/lib/timeline";
 import type { Team } from "@/lib/types";
 
-export default function PartnerPage({ params }: { params: Promise<{ id: string }> }) {
+export default function PartnerPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
   const { data, teamStatuses, updatePartner } = useCohort();
   const [editing, setEditing] = useState(false);
   const partner = partnerById(data, id);
 
-  if (!partner) return <p className="text-muted-foreground">Partner not found.</p>;
+  if (!partner)
+    return <p className="text-muted-foreground">Partner not found.</p>;
 
-  const flags = [...new Set(partner.teams.flatMap((t) => teamStatuses.get(t.id)?.flags ?? []))];
+  const flags = [
+    ...new Set(
+      partner.teams.flatMap((t) => teamStatuses.get(t.id)?.flags ?? []),
+    ),
+  ];
   const events = partnerEvents(data, partner.id);
   const members = partnerMembers(data, partner).length;
 
@@ -47,7 +68,10 @@ export default function PartnerPage({ params }: { params: Promise<{ id: string }
         title={
           <span className="flex items-center gap-3">
             {partner.name}
-            <StatusBadge status={partnerStatus(partner, teamStatuses)} overall />
+            <StatusBadge
+              status={partnerStatus(partner, teamStatuses)}
+              overall
+            />
           </span>
         }
         description={[
@@ -59,9 +83,16 @@ export default function PartnerPage({ params }: { params: Promise<{ id: string }
           <>
             <label className="flex items-center gap-2 text-sm text-muted-foreground">
               Assigned to
-              <OwnerSelect value={partner.ownerId} onChange={(ownerId) => updatePartner(id, { ownerId })} />
+              <OwnerSelect
+                value={partner.ownerId}
+                onChange={(ownerId) => updatePartner(id, { ownerId })}
+              />
             </label>
-            <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setEditing(true)}
+            >
               <Pencil /> Edit partner
             </Button>
           </>
@@ -87,7 +118,9 @@ export default function PartnerPage({ params }: { params: Promise<{ id: string }
           {(partner.website || partner.description) && (
             <Card>
               <CardContent className="space-y-2 text-sm">
-                {partner.description && <p className="whitespace-pre-wrap">{partner.description}</p>}
+                {partner.description && (
+                  <p className="whitespace-pre-wrap">{partner.description}</p>
+                )}
                 {/* Only link http(s) so a pasted "javascript:" value can't run. */}
                 {partner.website && /^https?:\/\//i.test(partner.website) && (
                   <a
@@ -106,7 +139,11 @@ export default function PartnerPage({ params }: { params: Promise<{ id: string }
           {partner.teams.map((team) => (
             <LinkedRecords key={team.id} target="team" id={team.id} />
           ))}
-          {partner.teams.length === 0 && <p className="text-sm text-muted-foreground">No team is on this project yet.</p>}
+          {partner.teams.length === 0 && (
+            <p className="text-sm text-muted-foreground">
+              No team is on this project yet.
+            </p>
+          )}
           <Notes subjectType="partner" subjectId={partner.id} />
         </div>
 
@@ -128,8 +165,13 @@ export default function PartnerPage({ params }: { params: Promise<{ id: string }
                 <ul className="space-y-3">
                   {events.map((e) => (
                     <li key={e.id}>
-                      <Link href={`/admin/events/${e.id}`} className="group block text-sm">
-                        <div className="font-medium group-hover:underline">{e.title}</div>
+                      <Link
+                        href={`/admin/events/${e.id}`}
+                        className="group block text-sm"
+                      >
+                        <div className="font-medium group-hover:underline">
+                          {e.title}
+                        </div>
                         <div className="text-muted-foreground">
                           {[
                             formatDate(e.date, { weekday: true }),
@@ -150,7 +192,12 @@ export default function PartnerPage({ params }: { params: Promise<{ id: string }
         </div>
       </div>
 
-      <EditPartnerDialog key={String(editing)} partner={partner} open={editing} onOpenChange={setEditing} />
+      <EditPartnerDialog
+        key={String(editing)}
+        partner={partner}
+        open={editing}
+        onOpenChange={setEditing}
+      />
     </>
   );
 }
@@ -174,7 +221,8 @@ function EditPartnerDialog({
     e.preventDefault();
     const url = website.trim();
     if (!name.trim()) return setError("Enter a name.");
-    if (url && !/^https?:\/\/\S+$/i.test(url)) return setError("Websites must start with http:// or https://.");
+    if (url && !/^https?:\/\/\S+$/i.test(url))
+      return setError("Websites must start with http:// or https://.");
     updatePartner(partner.id, {
       name: name.trim(),
       website: url || undefined,
@@ -192,7 +240,11 @@ function EditPartnerDialog({
           </DialogHeader>
           <div className="space-y-1.5">
             <Label htmlFor="partner-name">Name</Label>
-            <Input id="partner-name" value={name} onChange={(e) => setName(e.target.value)} />
+            <Input
+              id="partner-name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="partner-website">Website</Label>
@@ -211,7 +263,7 @@ function EditPartnerDialog({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="What they do and how they work with the program"
-              className="w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              className="w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none placeholder:text-placeholder focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
             />
           </div>
           {error && <p className="text-sm text-destructive">{error}</p>}
@@ -243,7 +295,8 @@ function ContactsCard({ partner }: { partner: PartnerSummary }) {
   function submit(e: React.FormEvent) {
     e.preventDefault();
     if (!name.trim()) return setError("Enter their name.");
-    if (email.trim() && !/^\S+@\S+\.\S+$/.test(email.trim())) return setError("Enter a valid email.");
+    if (email.trim() && !/^\S+@\S+\.\S+$/.test(email.trim()))
+      return setError("Enter a valid email.");
     addContact(partner.id, {
       name: name.trim(),
       title: title.trim() || undefined,
@@ -268,10 +321,15 @@ function ContactsCard({ partner }: { partner: PartnerSummary }) {
         )}
         <ul className="space-y-3">
           {partner.contacts.map((c) => (
-            <li key={c.id} className="group flex items-start justify-between gap-2 text-sm">
+            <li
+              key={c.id}
+              className="group flex items-start justify-between gap-2 text-sm"
+            >
               <div className="min-w-0">
                 <div className="font-medium">{c.name}</div>
-                {c.title && <div className="text-xs text-muted-foreground">{c.title}</div>}
+                {c.title && (
+                  <div className="text-xs text-muted-foreground">{c.title}</div>
+                )}
                 {c.email && (
                   <a
                     href={`mailto:${c.email}`}
@@ -294,9 +352,24 @@ function ContactsCard({ partner }: { partner: PartnerSummary }) {
         </ul>
         {adding && (
           <form onSubmit={submit} className="space-y-2 border-t pt-3">
-            <Input aria-label="Name" placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />
-            <Input aria-label="Role" placeholder="Role" value={title} onChange={(e) => setTitle(e.target.value)} />
-            <Input aria-label="Email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              aria-label="Name"
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Input
+              aria-label="Role"
+              placeholder="Role"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <Input
+              aria-label="Email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
             {error && <p className="text-sm text-destructive">{error}</p>}
             <div className="flex justify-end gap-2">
               <Button type="button" size="sm" variant="ghost" onClick={close}>
@@ -323,10 +396,17 @@ function ProjectsCard({ partner }: { partner: PartnerSummary }) {
         <CardTitle>Projects</CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
-        {partner.projects.length === 0 && <p className="text-sm text-muted-foreground">No projects this cohort.</p>}
+        {partner.projects.length === 0 && (
+          <p className="text-sm text-muted-foreground">
+            No projects this cohort.
+          </p>
+        )}
         <ul className="space-y-1.5">
           {partner.projects.map((p) => (
-            <li key={p.id} className="group flex items-center justify-between gap-2 text-sm">
+            <li
+              key={p.id}
+              className="group flex items-center justify-between gap-2 text-sm"
+            >
               <span className="min-w-0">{p.title}</span>
               <button
                 type="button"
@@ -343,7 +423,9 @@ function ProjectsCard({ partner }: { partner: PartnerSummary }) {
           <NativeSelect
             aria-label="Link a project"
             value=""
-            onChange={(e) => e.target.value && setProjectPartner(e.target.value, partner.id)}
+            onChange={(e) =>
+              e.target.value && setProjectPartner(e.target.value, partner.id)
+            }
             className="w-full"
           >
             <option value="">Link a project…</option>
@@ -378,7 +460,10 @@ function TeamCard({ team }: { team: Team }) {
         <ul>
           {activeMembers(data, team.id).map((m) => (
             <li key={m.id}>
-              <Link href={`/admin/participants/${m.id}`} className="block px-4 py-1.5 text-sm hover:bg-muted/50">
+              <Link
+                href={`/admin/participants/${m.id}`}
+                className="block px-4 py-1.5 text-sm hover:bg-muted/50"
+              >
                 {personFor(m.id)?.name}
               </Link>
             </li>

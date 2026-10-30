@@ -5,8 +5,8 @@ import type { Status } from "@/lib/types";
 // Color only means "look here": statuses that are fine stay muted, and
 // problems get a small colored dot next to the word.
 const DOT: Partial<Record<Status, string>> = {
-  at_risk: "bg-amber-500 dark:bg-amber-400",
-  missing: "bg-red-500 dark:bg-red-400",
+  at_risk: "bg-ocean-500",
+  missing: "bg-ocean-900",
 };
 
 const LABEL: Record<Status, string> = {

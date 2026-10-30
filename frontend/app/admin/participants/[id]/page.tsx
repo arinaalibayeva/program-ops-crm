@@ -27,7 +27,14 @@ import {
 } from "@/lib/participant-draft";
 import { participantTimeline } from "@/lib/timeline";
 
-type SectionId = "requirements" | "attendance" | "records" | "profile" | "team" | "notes" | "timeline";
+type SectionId =
+  | "requirements"
+  | "attendance"
+  | "records"
+  | "profile"
+  | "team"
+  | "notes"
+  | "timeline";
 
 const SECTION_LABELS: Record<SectionId, string> = {
   requirements: "Requirements",
@@ -60,7 +67,11 @@ function loadLayout(): BoardLayout<SectionId> {
   return DEFAULT_LAYOUT;
 }
 
-export default function ParticipantPage({ params }: { params: Promise<{ id: string }> }) {
+export default function ParticipantPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
   const { data, updateParticipant } = useCohort();
   const [draft, setDraft] = useState<ParticipantDraft>();
@@ -73,15 +84,20 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
 
   // While editing, every section shows the draft applied to the data, so
   // statuses update live before anything is saved.
-  const view = useMemo(() => (draft ? applyDraft(data, id, draft) : data), [data, id, draft]);
+  const view = useMemo(
+    () => (draft ? applyDraft(data, id, draft) : data),
+    [data, id, draft],
+  );
 
   const enrollment = view.enrollments.find((e) => e.id === id);
-  const person = enrollment && view.people.find((p) => p.id === enrollment.personId);
+  const person =
+    enrollment && view.people.find((p) => p.id === enrollment.personId);
   if (!enrollment || !person) {
     return <p className="text-muted-foreground">Participant not found.</p>;
   }
 
-  const status = enrollment.status === "active" ? fullStatus(view, id) : undefined;
+  const status =
+    enrollment.status === "active" ? fullStatus(view, id) : undefined;
   const update = (patch: Partial<ParticipantDraft>) =>
     setDraft((d) => (d ? { ...d, ...patch } : d));
 
@@ -131,13 +147,16 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
           <div className="text-sm">
             <span className="font-medium">Editing</span>{" "}
             <span className="text-muted-foreground">
-              Drag sections by their handle to rearrange. Nothing is saved until you click
-              Save.
+              Drag sections by their handle to rearrange. Nothing is saved until
+              you click Save.
             </span>
             {error && <div className="text-destructive">{error}</div>}
           </div>
           <div className="flex gap-2">
-            <Button variant="ghost" onClick={() => setLayoutDraft(DEFAULT_LAYOUT)}>
+            <Button
+              variant="ghost"
+              onClick={() => setLayoutDraft(DEFAULT_LAYOUT)}
+            >
               Reset layout
             </Button>
             <Button variant="ghost" onClick={cancel}>
@@ -153,9 +172,17 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
           <span className="flex items-center gap-3">
             {person.name || "Unnamed"}
             {enrollment.status === "withdrawn" ? (
-              <span className="text-sm font-normal text-muted-foreground">Withdrawn</span>
+              <span className="text-sm font-normal text-muted-foreground">
+                Withdrawn
+              </span>
             ) : (
-              status && <StatusBadge status={status.status} overall className="text-sm" />
+              status && (
+                <StatusBadge
+                  status={status.status}
+                  overall
+                  className="text-sm"
+                />
+              )
             )}
           </span>
         }
@@ -188,9 +215,13 @@ export default function ParticipantPage({ params }: { params: Promise<{ id: stri
             case "team":
               return <TeamSection {...section} />;
             case "notes":
-              return <Notes subjectType="participant" subjectId={enrollment.id} />;
+              return (
+                <Notes subjectType="participant" subjectId={enrollment.id} />
+              );
             case "timeline":
-              return <Timeline entries={participantTimeline(view, enrollment.id)} />;
+              return (
+                <Timeline entries={participantTimeline(view, enrollment.id)} />
+              );
             case "records":
               return <RecordsSection enrollmentId={enrollment.id} />;
           }

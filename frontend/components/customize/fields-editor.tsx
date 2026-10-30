@@ -63,7 +63,6 @@ export function FieldsEditor({ type }: { type: RecordType }) {
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium">
                   {f.label}
-                  {f.required && <span className="ml-1.5 text-xs font-normal text-muted-foreground">required</span>}
                 </div>
                 <div className="truncate text-xs text-muted-foreground">{describeField(data, f)}</div>
               </div>

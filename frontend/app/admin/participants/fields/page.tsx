@@ -63,11 +63,7 @@ export default function FieldsPage() {
       >
         <ArrowLeft className="size-4" /> Participants
       </Link>
-      <PageHeader
-        title="Participant fields"
-        description="Choose what you track about each participant. Drag to reorder: forms and profiles use this order."
-        actions={<FieldDialog />}
-      />
+      <PageHeader title="Participant fields" actions={<FieldDialog />} />
 
       <Card className="mb-6 py-0">
         <CardContent className="px-0">
@@ -108,7 +104,8 @@ export default function FieldsPage() {
                   }}
                   onDragOver={(e) => {
                     e.preventDefault();
-                    if (dragId && dragId !== field.id) moveField(dragId, indexOf(field.id));
+                    if (dragId && dragId !== field.id)
+                      moveField(dragId, indexOf(field.id));
                   }}
                   onDragEnd={() => setDragId(undefined)}
                   className={cn(
@@ -124,7 +121,9 @@ export default function FieldsPage() {
                       size="icon-sm"
                       aria-label={`Move ${field.label} up`}
                       disabled={i === 0}
-                      onClick={() => moveField(field.id, indexOf(active[i - 1].id))}
+                      onClick={() =>
+                        moveField(field.id, indexOf(active[i - 1].id))
+                      }
                     >
                       <ChevronUp />
                     </Button>
@@ -133,7 +132,9 @@ export default function FieldsPage() {
                       size="icon-sm"
                       aria-label={`Move ${field.label} down`}
                       disabled={i === active.length - 1}
-                      onClick={() => moveField(field.id, indexOf(active[i + 1].id))}
+                      onClick={() =>
+                        moveField(field.id, indexOf(active[i + 1].id))
+                      }
                     >
                       <ChevronDown />
                     </Button>
@@ -165,7 +166,10 @@ export default function FieldsPage() {
               {archived.map((field) => {
                 const count = countValues(data, field.id);
                 return (
-                  <li key={field.id} className="flex items-center gap-3 px-4 py-2.5 opacity-70">
+                  <li
+                    key={field.id}
+                    className="flex items-center gap-3 px-4 py-2.5 opacity-70"
+                  >
                     <Archive className="size-4 text-muted-foreground" />
                     <FieldSummary field={field} />
                     <Button
@@ -222,14 +226,19 @@ function FieldSummary({ field }: { field: FieldDefinition }) {
           </span>
         )}
         {field.visibleToParticipant && (
-          <span className="text-muted-foreground" title="Participants can see this">
+          <span
+            className="text-muted-foreground"
+            title="Participants can see this"
+          >
             <Eye className="size-3.5" />
           </span>
         )}
       </div>
       <div className="truncate text-xs text-muted-foreground">
         {FIELD_TYPE_LABELS[field.type]}
-        {field.options && hasOptions(field.type) && ` · ${field.options.join(", ")}`}
+        {field.options &&
+          hasOptions(field.type) &&
+          ` · ${field.options.join(", ")}`}
         {field.type !== "checkbox" && ` · filled for ${count} of ${total}`}
       </div>
     </div>
@@ -243,7 +252,13 @@ function FieldDialog({ field }: { field?: FieldDefinition }) {
     <Dialog open={open} onOpenChange={setOpen}>
       {field ? (
         <DialogTrigger
-          render={<Button variant="ghost" size="icon-sm" aria-label={`Edit ${field.label}`} />}
+          render={
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              aria-label={`Edit ${field.label}`}
+            />
+          }
         >
           <Pencil />
         </DialogTrigger>
@@ -261,7 +276,13 @@ function FieldDialog({ field }: { field?: FieldDefinition }) {
   );
 }
 
-function FieldForm({ field, onDone }: { field?: FieldDefinition; onDone: () => void }) {
+function FieldForm({
+  field,
+  onDone,
+}: {
+  field?: FieldDefinition;
+  onDone: () => void;
+}) {
   const { data, addField, updateField } = useCohort();
   const [label, setLabel] = useState(field?.label ?? "");
   const [type, setType] = useState<FieldType>(field?.type ?? "text");
@@ -288,7 +309,10 @@ function FieldForm({ field, onDone }: { field?: FieldDefinition; onDone: () => v
   function submit(e: React.FormEvent) {
     e.preventDefault();
     const name = label.trim();
-    const taken = [...BUILT_IN.map((b) => b.label), ...data.fields.filter((f) => f.id !== field?.id).map((f) => f.label)];
+    const taken = [
+      ...BUILT_IN.map((b) => b.label),
+      ...data.fields.filter((f) => f.id !== field?.id).map((f) => f.label),
+    ];
     if (!name) return setError("Give the field a name.");
     if (taken.some((t) => t.toLowerCase() === name.toLowerCase())) {
       return setError(`There is already a field called "${name}".`);
@@ -348,7 +372,8 @@ function FieldForm({ field, onDone }: { field?: FieldDefinition; onDone: () => v
         </NativeSelect>
         {typeLocked && (
           <p className="text-xs text-muted-foreground">
-            The type can&apos;t change once participants have values for this field.
+            The type can&apos;t change once participants have values for this
+            field.
           </p>
         )}
       </div>
@@ -408,7 +433,10 @@ function FieldForm({ field, onDone }: { field?: FieldDefinition; onDone: () => v
           Show as a column in the participant list
         </label>
         <label className="flex items-center gap-2 text-sm">
-          <Checkbox checked={visibleToParticipant} onCheckedChange={setVisibleToParticipant} />
+          <Checkbox
+            checked={visibleToParticipant}
+            onCheckedChange={setVisibleToParticipant}
+          />
           Participants can see this on their profile
         </label>
       </div>

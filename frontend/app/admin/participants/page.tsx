@@ -29,7 +29,11 @@ import { PageHeader } from "@/components/page-header";
 import { ParticipantPanel } from "@/components/participant-panel";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort, usePeopleIndex } from "@/lib/store";
-import { attendanceSummary, currentTeamId, worstStatus } from "@/lib/requirements";
+import {
+  attendanceSummary,
+  currentTeamId,
+  worstStatus,
+} from "@/lib/requirements";
 import { participantOwner, staffName } from "@/lib/staff";
 import { activeFields, formatFieldValue, validateFields } from "@/lib/fields";
 import { useUrlParam } from "@/lib/url-param";
@@ -48,7 +52,8 @@ export default function ParticipantsPage() {
   const { data, participantStatuses } = useCohort();
   const { personFor, teamById } = usePeopleIndex();
   const [query, setQuery] = useState("");
-  const [filter, setFilter] = useState<(typeof FILTERS)[number]["value"]>("all");
+  const [filter, setFilter] =
+    useState<(typeof FILTERS)[number]["value"]>("all");
   const [teamFilter, setTeamFilter] = useState("all");
   const [openId, setOpenId] = useState<string>();
   const closePanel = useCallback(() => setOpenId(undefined), []);
@@ -63,9 +68,13 @@ export default function ParticipantsPage() {
   // Filters for pick-one / pick-several columns, keyed by field id.
   const [fieldFilters, setFieldFilters] = useState<Record<string, string>>({});
 
-  const columns = useMemo(() => activeFields(data).filter((f) => f.showInList), [data]);
+  const columns = useMemo(
+    () => activeFields(data).filter((f) => f.showInList),
+    [data],
+  );
   const filterable = useMemo(
-    () => columns.filter((f) => f.type === "select" || f.type === "multi_select"),
+    () =>
+      columns.filter((f) => f.type === "select" || f.type === "multi_select"),
     [columns],
   );
 
@@ -80,7 +89,11 @@ export default function ParticipantsPage() {
       })
       .filter(({ enrollment, person, teamId, status }) => {
         const q = query.trim().toLowerCase();
-        if (q && !person.name.toLowerCase().includes(q) && !person.email.toLowerCase().includes(q)) {
+        if (
+          q &&
+          !person.name.toLowerCase().includes(q) &&
+          !person.email.toLowerCase().includes(q)
+        ) {
           return false;
         }
         if (teamFilter !== "all" && teamId !== teamFilter) return false;
@@ -89,7 +102,8 @@ export default function ParticipantsPage() {
           const wanted = fieldFilters[f.id];
           if (!wanted) continue;
           const v = enrollment.fields?.[f.id];
-          if (Array.isArray(v) ? !v.includes(wanted) : v !== wanted) return false;
+          if (Array.isArray(v) ? !v.includes(wanted) : v !== wanted)
+            return false;
         }
         if (filter === "all") return true;
         const s = status?.status;
@@ -110,12 +124,19 @@ export default function ParticipantsPage() {
   ]);
 
   // Attendance requirements share one column; anything else keeps its own.
-  const attendanceIds = new Set(data.requirements.filter((r) => r.type === "attendance_min").map((r) => r.id));
-  const participantReqs = data.requirements.filter((r) => r.scope === "participant" && !attendanceIds.has(r.id));
+  const attendanceIds = new Set(
+    data.requirements
+      .filter((r) => r.type === "attendance_min")
+      .map((r) => r.id),
+  );
+  const participantReqs = data.requirements.filter(
+    (r) => r.scope === "participant" && !attendanceIds.has(r.id),
+  );
 
   // With a profile open there's only room for the columns that identify someone.
   const narrow = openId ? "xl:max-[110rem]:hidden" : undefined;
-  const narrowField = (id: string) => (id !== "field-role" ? narrow : openId ? "xl:max-[90rem]:hidden" : undefined);
+  const narrowField = (id: string) =>
+    id !== "field-role" ? narrow : openId ? "xl:max-[90rem]:hidden" : undefined;
 
   return (
     // Centered in the page. On wide screens it slides left when a profile opens,
@@ -128,7 +149,6 @@ export default function ParticipantsPage() {
     >
       <PageHeader
         title="Participants"
-        description={`${data.enrollments.filter((e) => e.status === "active").length} active in ${data.cohort.name}`}
         actions={
           <>
             <Link
@@ -138,7 +158,10 @@ export default function ParticipantsPage() {
               <SlidersHorizontal />
               Manage fields
             </Link>
-            <Link href="/admin/import" className={buttonVariants({ variant: "outline" })}>
+            <Link
+              href="/admin/import"
+              className={buttonVariants({ variant: "outline" })}
+            >
               <Upload />
               Import spreadsheet
             </Link>
@@ -173,7 +196,10 @@ export default function ParticipantsPage() {
             </button>
           ))}
         </div>
-        <NativeSelect value={teamFilter} onChange={(e) => setTeamFilter(e.target.value)}>
+        <NativeSelect
+          value={teamFilter}
+          onChange={(e) => setTeamFilter(e.target.value)}
+        >
           <option value="all">All teams</option>
           {data.teams.map((t) => (
             <option key={t.id} value={t.id}>
@@ -185,7 +211,9 @@ export default function ParticipantsPage() {
           <NativeSelect
             key={f.id}
             value={fieldFilters[f.id] ?? ""}
-            onChange={(e) => setFieldFilters({ ...fieldFilters, [f.id]: e.target.value })}
+            onChange={(e) =>
+              setFieldFilters({ ...fieldFilters, [f.id]: e.target.value })
+            }
           >
             <option value="">Any {f.label.toLowerCase()}</option>
             {f.options?.map((o) => (
@@ -227,10 +255,15 @@ export default function ParticipantsPage() {
                 className="cursor-pointer"
               >
                 <TableCell className="pl-4">
-                  <button type="button" className="text-left font-medium hover:underline">
+                  <button
+                    type="button"
+                    className="text-left font-medium hover:underline"
+                  >
                     {person.name}
                   </button>
-                  <div className="text-xs text-muted-foreground">{person.email}</div>
+                  <div className="text-xs text-muted-foreground">
+                    {person.email}
+                  </div>
                 </TableCell>
                 <TableCell>
                   {teamId ? (
@@ -245,9 +278,14 @@ export default function ParticipantsPage() {
                     "—"
                   )}
                 </TableCell>
-                <TableCell className={narrow}>{staffName(data, participantOwner(data, enrollment.id))}</TableCell>
+                <TableCell className={narrow}>
+                  {staffName(data, participantOwner(data, enrollment.id))}
+                </TableCell>
                 {columns.map((f) => (
-                  <TableCell key={f.id} className={cn("max-w-48 truncate", narrowField(f.id))}>
+                  <TableCell
+                    key={f.id}
+                    className={cn("max-w-48 truncate", narrowField(f.id))}
+                  >
                     {formatFieldValue(f, enrollment.fields?.[f.id])}
                   </TableCell>
                 ))}
@@ -255,12 +293,16 @@ export default function ParticipantsPage() {
                   <AttendanceCell
                     {...attendanceSummary(data, enrollment.id)}
                     status={worstStatus(
-                      (status?.results ?? []).filter((r) => attendanceIds.has(r.requirementId)).map((r) => r.status),
+                      (status?.results ?? [])
+                        .filter((r) => attendanceIds.has(r.requirementId))
+                        .map((r) => r.status),
                     )}
                   />
                 </TableCell>
                 {participantReqs.map((r) => {
-                  const result = status?.results.find((x) => x.requirementId === r.id);
+                  const result = status?.results.find(
+                    (x) => x.requirementId === r.id,
+                  );
                   return (
                     <TableCell key={r.id} className={narrow}>
                       {result ? <StatusBadge status={result.status} /> : "—"}
@@ -286,13 +328,23 @@ export default function ParticipantsPage() {
         </Table>
       </Card>
 
-      {openId && <ParticipantPanel enrollmentId={openId} onClose={closePanel} />}
+      {openId && (
+        <ParticipantPanel enrollmentId={openId} onClose={closePanel} />
+      )}
     </div>
   );
 }
 
 /** Events attended so far, with a dot when it's putting a requirement at risk. */
-function AttendanceCell({ attended, total, status }: { attended: number; total: number; status: Status }) {
+function AttendanceCell({
+  attended,
+  total,
+  status,
+}: {
+  attended: number;
+  total: number;
+  status: Status;
+}) {
   const flagged = status === "at_risk" || status === "missing";
   return (
     <span className="inline-flex items-center gap-2 whitespace-nowrap">
@@ -326,7 +378,9 @@ function AddParticipantDialog() {
     }
     let added: number;
     try {
-      added = await addParticipants([{ name: name.trim(), email: email.trim(), fields: values }]);
+      added = await addParticipants([
+        { name: name.trim(), email: email.trim(), fields: values },
+      ]);
     } catch (e) {
       setError((e as Error).message);
       return;
@@ -355,7 +409,11 @@ function AddParticipantDialog() {
           </DialogHeader>
           <div className="space-y-1.5">
             <Label htmlFor="name">Name</Label>
-            <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+            <Input
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>
@@ -369,12 +427,7 @@ function AddParticipantDialog() {
           </div>
           {fields.map((f) => (
             <div key={f.id} className="space-y-1.5">
-              <Label htmlFor={`add-${f.id}`}>
-                {f.label}
-                {!f.required && (
-                  <span className="font-normal text-muted-foreground">(optional)</span>
-                )}
-              </Label>
+              <Label htmlFor={`add-${f.id}`}>{f.label}</Label>
               <FieldInput
                 id={`add-${f.id}`}
                 field={f}

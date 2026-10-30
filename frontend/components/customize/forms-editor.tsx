@@ -176,7 +176,7 @@ function FormFields({
       </div>
       <div className="space-y-1.5">
         <Label htmlFor="form-description">
-          Instructions <span className="font-normal text-muted-foreground">(optional)</span>
+          Instructions
         </Label>
         <Input id="form-description" value={description} onChange={(e) => setDescription(e.target.value)} />
       </div>

@@ -20,10 +20,30 @@ import { useCohort } from "@/lib/store";
 
 type Field = "name" | "email" | "team";
 
-const FIELDS: { key: Field; label: string; required: boolean; guesses: string[] }[] = [
-  { key: "name", label: "Name", required: true, guesses: ["name", "full name", "student", "participant"] },
-  { key: "email", label: "Email", required: true, guesses: ["email", "e-mail", "email address"] },
-  { key: "team", label: "Team", required: false, guesses: ["team", "group", "team name"] },
+const FIELDS: {
+  key: Field;
+  label: string;
+  required: boolean;
+  guesses: string[];
+}[] = [
+  {
+    key: "name",
+    label: "Name",
+    required: true,
+    guesses: ["name", "full name", "student", "participant"],
+  },
+  {
+    key: "email",
+    label: "Email",
+    required: true,
+    guesses: ["email", "e-mail", "email address"],
+  },
+  {
+    key: "team",
+    label: "Team",
+    required: false,
+    guesses: ["team", "group", "team name"],
+  },
 ];
 
 const SAMPLE_CSV = `Full Name,Email Address,Team,Year
@@ -44,7 +64,11 @@ export default function ImportPage() {
   const { data, addParticipants } = useCohort();
   const [fileName, setFileName] = useState<string>();
   const [csv, setCsv] = useState<{ headers: string[]; rows: string[][] }>();
-  const [mapping, setMapping] = useState<Record<Field, number>>({ name: -1, email: -1, team: -1 });
+  const [mapping, setMapping] = useState<Record<Field, number>>({
+    name: -1,
+    email: -1,
+    team: -1,
+  });
   const [result, setResult] = useState<number>();
   const [importError, setImportError] = useState<string>();
 
@@ -56,7 +80,8 @@ export default function ImportPage() {
     // Guess the mapping from header names so most files need no changes.
     const lower = parsed.headers.map((h) => h.toLowerCase());
     const guess = {} as Record<Field, number>;
-    for (const f of FIELDS) guess[f.key] = lower.findIndex((h) => f.guesses.includes(h));
+    for (const f of FIELDS)
+      guess[f.key] = lower.findIndex((h) => f.guesses.includes(h));
     setMapping(guess);
   }
 
@@ -68,7 +93,9 @@ export default function ImportPage() {
   const checked: RowCheck[] = useMemo(() => {
     if (!csv) return [];
     const existingEmails = new Set(
-      data.enrollments.map((e) => data.people.find((p) => p.id === e.personId)?.email.toLowerCase()),
+      data.enrollments.map((e) =>
+        data.people.find((p) => p.id === e.personId)?.email.toLowerCase(),
+      ),
     );
     const seen = new Set<string>();
     const teamNames = new Set(data.teams.map((t) => t.name.toLowerCase()));
@@ -95,7 +122,9 @@ export default function ImportPage() {
   }, [csv, mapping, data]);
 
   const valid = checked.filter((r) => !r.error);
-  const mappingComplete = FIELDS.every((f) => !f.required || mapping[f.key] >= 0);
+  const mappingComplete = FIELDS.every(
+    (f) => !f.required || mapping[f.key] >= 0,
+  );
 
   async function runImport() {
     setImportError(undefined);
@@ -109,10 +138,7 @@ export default function ImportPage() {
 
   return (
     <>
-      <PageHeader
-        title="Import participants"
-        description="Upload a CSV export of your roster or matching spreadsheet. Nothing is saved until you confirm."
-      />
+      <PageHeader title="Import participants" />
 
       {importError && (
         <p className="mb-6 rounded-lg border border-destructive/30 px-4 py-3 text-sm text-destructive">
@@ -138,9 +164,17 @@ export default function ImportPage() {
           <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-dashed px-4 py-3 text-sm hover:bg-muted/50">
             <FileSpreadsheet className="size-4" />
             {fileName ?? "Upload .csv"}
-            <input type="file" accept=".csv,text/csv" onChange={onFile} className="hidden" />
+            <input
+              type="file"
+              accept=".csv,text/csv"
+              onChange={onFile}
+              className="hidden"
+            />
           </label>
-          <Button variant="ghost" onClick={() => load(SAMPLE_CSV, "sample.csv")}>
+          <Button
+            variant="ghost"
+            onClick={() => load(SAMPLE_CSV, "sample.csv")}
+          >
             Use a sample file
           </Button>
           <span className="text-xs text-muted-foreground">
@@ -158,13 +192,15 @@ export default function ImportPage() {
             <CardContent className="grid gap-4 sm:grid-cols-3">
               {FIELDS.map((f) => (
                 <label key={f.key} className="space-y-1.5 text-sm">
-                  <span className="font-medium">
-                    {f.label}
-                    {!f.required && <span className="text-muted-foreground"> (optional)</span>}
-                  </span>
+                  <span className="font-medium">{f.label}</span>
                   <NativeSelect
                     value={mapping[f.key]}
-                    onChange={(e) => setMapping({ ...mapping, [f.key]: Number(e.target.value) })}
+                    onChange={(e) =>
+                      setMapping({
+                        ...mapping,
+                        [f.key]: Number(e.target.value),
+                      })
+                    }
                     className="w-full"
                   >
                     <option value={-1}>— Not in file —</option>
@@ -177,8 +213,11 @@ export default function ImportPage() {
                 </label>
               ))}
               <p className="text-xs text-muted-foreground sm:col-span-3">
-                Other columns ({csv.headers.filter((_, i) => !Object.values(mapping).includes(i)).join(", ") || "none"})
-                will be kept as extra profile fields once the backend exists.
+                Other columns (
+                {csv.headers
+                  .filter((_, i) => !Object.values(mapping).includes(i))
+                  .join(", ") || "none"}
+                ) will be kept as extra profile fields once the backend exists.
               </p>
             </CardContent>
           </Card>
@@ -188,10 +227,14 @@ export default function ImportPage() {
               <CardTitle>
                 3. Review{" "}
                 <span className="font-normal text-muted-foreground">
-                  {valid.length} ready · {checked.length - valid.length} with problems
+                  {valid.length} ready · {checked.length - valid.length} with
+                  problems
                 </span>
               </CardTitle>
-              <Button onClick={runImport} disabled={!mappingComplete || valid.length === 0}>
+              <Button
+                onClick={runImport}
+                disabled={!mappingComplete || valid.length === 0}
+              >
                 Import {valid.length} participant{valid.length === 1 ? "" : "s"}
               </Button>
             </CardHeader>
@@ -213,7 +256,14 @@ export default function ImportPage() {
                   </TableHeader>
                   <TableBody>
                     {checked.map((row, i) => (
-                      <TableRow key={i} className={row.error ? "bg-red-50/60 dark:bg-red-500/10" : undefined}>
+                      <TableRow
+                        key={i}
+                        className={
+                          row.error
+                            ? "bg-red-50/60 dark:bg-red-500/10"
+                            : undefined
+                        }
+                      >
                         <TableCell className="pl-4 text-muted-foreground tabular-nums">
                           {i + 2}
                         </TableCell>
@@ -227,7 +277,8 @@ export default function ImportPage() {
                             </span>
                           ) : (
                             <span className="flex items-center gap-1 text-primary">
-                              <CheckCircle2 className="size-3.5" /> {row.warning ?? "Ready"}
+                              <CheckCircle2 className="size-3.5" />{" "}
+                              {row.warning ?? "Ready"}
                             </span>
                           )}
                         </TableCell>

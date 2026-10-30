@@ -197,7 +197,6 @@ function FormView({ info, submit }: { info: FormInfo | null; submit: Submit }) {
           <div key={f.id} className="space-y-1.5">
             <Label htmlFor={`f-${f.id}`}>
               {f.label}
-              {!f.required && <span className="font-normal text-muted-foreground">(optional)</span>}
             </Label>
             <FieldInput
               id={`f-${f.id}`}

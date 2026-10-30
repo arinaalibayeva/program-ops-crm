@@ -85,7 +85,6 @@ function RecordForm({
         <div key={f.id} className="space-y-1.5">
           <Label htmlFor={`rec-${f.id}`}>
             {f.label}
-            {!f.required && <span className="font-normal text-muted-foreground">(optional)</span>}
           </Label>
           <RecordInput
             id={`rec-${f.id}`}
