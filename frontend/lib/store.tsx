@@ -40,7 +40,7 @@ import type {
 } from "./types";
 
 // Bump the version when CohortData changes shape so old saved data is ignored.
-const STORAGE_KEY = "program-ops-crm:cohort:v19";
+const STORAGE_KEY = "program-ops-crm:cohort:v21";
 
 export type NewEvent = Omit<ProgramEvent, "id" | "cohortId" | "checkinToken">;
 
@@ -80,6 +80,8 @@ interface CohortContextValue {
   moveField: (id: string, toIndex: number) => void;
   deleteField: (id: string) => void;
   addNote: (subjectType: NoteSubject, subjectId: string, body: string, followUpDate?: string) => void;
+  /** Record when a reminder draft was opened; mailto links cannot confirm delivery. */
+  addNudge: (subjectId: string, requirementId?: string) => void;
   updateNote: (id: string, patch: NotePatch) => void;
   deleteNote: (id: string) => void;
   /** Returns the new partner's id so pages can open it. */
@@ -432,6 +434,15 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     sync(() => api(`/fields/${id}`, { method: "DELETE" }));
   }, [sync]);
 
+  const addNudge = useCallback<CohortContextValue["addNudge"]>((subjectId, requirementId) => {
+    const id = newId("nudge");
+    setData((d) => ({
+      ...d,
+      nudges: [...(d.nudges ?? []), { id, subjectId, requirementId, sentOn: d.today }],
+    }));
+    sync(() => api("/nudges", { body: { id, subjectId, requirementId } }));
+  }, [sync]);
+
   const addNote = useCallback<CohortContextValue["addNote"]>((subjectType, subjectId, body, followUpDate) => {
     const id = newId("note");
     const note: Note = {
@@ -649,6 +660,7 @@ export function CohortProvider({ children }: { children: React.ReactNode }) {
     moveField,
     deleteField,
     addNote,
+    addNudge,
     updateNote,
     deleteNote,
     addPartner,

@@ -71,6 +71,7 @@ class Project(CamelModel):
     cohort_id: str
     title: str
     partner_id: str | None = None
+    description: str | None = None
 
 
 class PartnerContactIn(CamelModel):
@@ -225,6 +226,20 @@ class Note(CamelModel):
     follow_up_done: bool = False
     created_at: dt.datetime
     updated_at: dt.datetime | None = None
+
+
+class Nudge(CamelModel):
+    id: str
+    requirement_id: str | None = None
+    subject_id: str
+    sent_by: str | None = None
+    sent_on: dt.date
+
+
+class NudgeIn(CamelModel):
+    id: str | None = None
+    requirement_id: str | None = None
+    subject_id: str
 
 
 class NoteCreate(CamelModel):
@@ -431,6 +446,7 @@ class CohortData(CamelModel):
     partners: list[Partner] = []
     staff: list[StaffMember] = []
     notes: list[Note] = []
+    nudges: list[Nudge] = []
     record_types: list[RecordType] = []
     records: list[CustomRecord] = []
     calculations: list[Calculation] = []

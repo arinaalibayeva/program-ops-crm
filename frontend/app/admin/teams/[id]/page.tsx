@@ -50,26 +50,6 @@ export default function TeamPage({
             <StatusBadge status={status.status} overall />
           </span>
         }
-        description={
-          project ? (
-            <>
-              {project.title}
-              {partner && (
-                <>
-                  {" · "}
-                  <Link
-                    href={`/admin/partners/${partner.id}`}
-                    className="hover:text-foreground hover:underline"
-                  >
-                    {partner.name}
-                  </Link>
-                </>
-              )}
-            </>
-          ) : (
-            "No project assigned"
-          )
-        }
         actions={
           <label className="flex items-center gap-2 text-sm text-muted-foreground">
             Assigned to
@@ -83,6 +63,25 @@ export default function TeamPage({
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
+          <Card size="sm" className="gap-2 px-5">
+            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h2 className="font-semibold">
+                {project?.title ?? "No project assigned"}
+              </h2>
+              {partner && (
+                <Link
+                  href={`/admin/partners/${partner.id}`}
+                  className="text-sm hover:underline"
+                >
+                  {partner.name}
+                </Link>
+              )}
+            </div>
+            {project?.description && (
+              <p className="text-sm leading-relaxed">{project.description}</p>
+            )}
+          </Card>
+
           <StatusCard subjectId={id} status={status} />
 
           <Card>

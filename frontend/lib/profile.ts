@@ -19,14 +19,21 @@ export interface Profile {
 }
 
 const KEY = "program-ops-crm:profile";
-const DEMO: Profile = { id: "staff-demo", name: "Demo Admin", email: "admin@demo.test", jobTitle: "Program coordinator" };
+const DEMO: Profile = {
+  id: "staff-demo",
+  name: "Arina Alibayeva",
+  email: "admin@demo.test",
+  jobTitle: "Program coordinator",
+};
 
 export function useProfile() {
   const [profile, setProfile] = useState<Profile>();
 
   useEffect(() => {
     if (USE_BACKEND) {
-      api<Profile>("/me").then(setProfile).catch(() => setProfile(DEMO));
+      api<Profile>("/me")
+        .then(setProfile)
+        .catch(() => setProfile(DEMO));
       return;
     }
     try {
@@ -39,7 +46,9 @@ export function useProfile() {
 
   /** Saves and returns the stored profile; throws with a readable message if refused. */
   const save = useCallback(async (next: Profile) => {
-    const saved = USE_BACKEND ? await api<Profile>("/me", { method: "PUT", body: next }) : next;
+    const saved = USE_BACKEND
+      ? await api<Profile>("/me", { method: "PUT", body: next })
+      : next;
     if (!USE_BACKEND) {
       try {
         localStorage.setItem(KEY, JSON.stringify(saved));

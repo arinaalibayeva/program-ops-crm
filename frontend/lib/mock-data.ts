@@ -2,6 +2,7 @@
 // partners are made up. Problems are planted on purpose (see PLANTED below)
 // so user tests have known answers to score against.
 
+import { PROJECT_BRIEFS } from "./project-briefs";
 import type {
   Attendance,
   Calculation,
@@ -11,6 +12,7 @@ import type {
   Enrollment,
   FieldDefinition,
   Note,
+  Nudge,
   Partner,
   Person,
   ProgramEvent,
@@ -25,34 +27,140 @@ import type {
 } from "./types";
 
 const FIRST_NAMES = [
-  "Amara", "Bruno", "Chen", "Dalia", "Emeka", "Farah", "Gabriel", "Hana",
-  "Ivan", "Jaya", "Kofi", "Lucía", "Mateo", "Nadia", "Omar", "Priya",
-  "Rafael", "Sofia", "Tariq", "Yuki", "Aisha", "Andrei", "Beatriz", "Camila",
-  "Daniel", "Elena", "Fatima", "Georgia", "Hugo", "Ingrid", "Jonas", "Kavya",
-  "Leila", "Marcus", "Naomi", "Oscar", "Paula", "Quentin", "Rosa", "Samir",
-  "Tessa", "Uma", "Victor", "Wei", "Ximena", "Yusuf", "Zara", "Noah",
+  "Amara",
+  "Bruno",
+  "Chen",
+  "Dalia",
+  "Emeka",
+  "Farah",
+  "Gabriel",
+  "Hana",
+  "Ivan",
+  "Jaya",
+  "Kofi",
+  "Lucía",
+  "Mateo",
+  "Nadia",
+  "Omar",
+  "Priya",
+  "Rafael",
+  "Sofia",
+  "Tariq",
+  "Yuki",
+  "Aisha",
+  "Andrei",
+  "Beatriz",
+  "Camila",
+  "Daniel",
+  "Elena",
+  "Fatima",
+  "Georgia",
+  "Hugo",
+  "Ingrid",
+  "Jonas",
+  "Kavya",
+  "Leila",
+  "Marcus",
+  "Naomi",
+  "Oscar",
+  "Paula",
+  "Quentin",
+  "Rosa",
+  "Samir",
+  "Tessa",
+  "Uma",
+  "Victor",
+  "Wei",
+  "Ximena",
+  "Yusuf",
+  "Zara",
+  "Noah",
 ];
 const LAST_NAMES = [
-  "Okafor", "Silva", "Wang", "Haddad", "Mensah", "Rahman", "Costa", "Kim",
-  "Petrov", "Iyer", "Asante", "Moreno", "Rossi", "Nowak", "Farouk", "Shah",
-  "Duarte", "Lindqvist", "Aziz", "Tanaka", "Abebe", "Bauer", "Castillo", "Dang",
-  "Eriksen", "Fernandes", "Garcia", "Hassan", "Ivanova", "Jensen", "Khan", "Lopez",
-  "Morales", "Nguyen", "Oliveira", "Park", "Quispe", "Reyes", "Santos", "Torres",
-  "Ueda", "Vargas", "Weber", "Yilmaz", "Zhou", "Banerjee", "Clarke", "Dubois",
+  "Okafor",
+  "Silva",
+  "Wang",
+  "Haddad",
+  "Mensah",
+  "Rahman",
+  "Costa",
+  "Kim",
+  "Petrov",
+  "Iyer",
+  "Asante",
+  "Moreno",
+  "Rossi",
+  "Nowak",
+  "Farouk",
+  "Shah",
+  "Duarte",
+  "Lindqvist",
+  "Aziz",
+  "Tanaka",
+  "Abebe",
+  "Bauer",
+  "Castillo",
+  "Dang",
+  "Eriksen",
+  "Fernandes",
+  "Garcia",
+  "Hassan",
+  "Ivanova",
+  "Jensen",
+  "Khan",
+  "Lopez",
+  "Morales",
+  "Nguyen",
+  "Oliveira",
+  "Park",
+  "Quispe",
+  "Reyes",
+  "Santos",
+  "Torres",
+  "Ueda",
+  "Vargas",
+  "Weber",
+  "Yilmaz",
+  "Zhou",
+  "Banerjee",
+  "Clarke",
+  "Dubois",
 ];
 
 const TEAM_NAMES = [
-  "Harbor", "Lantern", "Compass", "Meridian", "Orchard", "Beacon",
-  "Summit", "Willow", "Atlas", "Ember", "Tide", "Juniper",
-  "Redwood", "Cypress", "Anchor", "Horizon", "Sequoia", "Marina",
-  "Presidio", "Golden",
+  "Harbor",
+  "Lantern",
+  "Compass",
+  "Meridian",
+  "Orchard",
+  "Beacon",
+  "Summit",
+  "Willow",
+  "Atlas",
+  "Ember",
+  "Tide",
+  "Juniper",
+  "Redwood",
+  "Cypress",
+  "Anchor",
+  "Horizon",
+  "Sequoia",
+  "Marina",
+  "Presidio",
+  "Golden",
 ];
 
 const PROJECTS: { title: string; partner: string }[] = [
   { title: "Volunteer shift scheduling", partner: "Bayview Community Pantry" },
   { title: "Tenant rights info hub", partner: "Mission Housing Collective" },
-  { title: "Youth coding club curriculum", partner: "Eastside Learning Center" },
-  { title: "Library e-resource onboarding", partner: "Northgate Public Library" },
+  {
+    title: "Youth coding club curriculum",
+    partner: "Eastside Learning Center",
+  },
+  {
+    title: "Library e-resource onboarding",
+    partner: "Northgate Public Library",
+  },
   { title: "Urban garden plot booking", partner: "Green Blocks Initiative" },
   { title: "Senior tech help desk", partner: "Golden Years Network" },
   { title: "Bike repair co-op inventory", partner: "Spokes Together" },
@@ -64,7 +172,10 @@ const PROJECTS: { title: string; partner: string }[] = [
   { title: "Transit access guide", partner: "Bay Rides Coalition" },
   { title: "Shelter bed availability board", partner: "Oakland Open Door" },
   { title: "After-school tutor matching", partner: "Richmond Reads" },
-  { title: "Small business grant finder", partner: "Fruitvale Merchants Group" },
+  {
+    title: "Small business grant finder",
+    partner: "Fruitvale Merchants Group",
+  },
   { title: "Community fridge tracker", partner: "Sunset Mutual Aid" },
   { title: "Wetlands volunteer log", partner: "Baylands Stewards" },
   { title: "Immigrant legal clinic intake", partner: "San Jose Legal Access" },
@@ -73,22 +184,55 @@ const PROJECTS: { title: string; partner: string }[] = [
 
 /** The four interns who look after the teams and their partners. */
 const INTERNS: StaffMember[] = [
-  { id: "staff-maya", name: "Maya Lindgren", email: "maya.lindgren@example.org", role: "admin", jobTitle: "Intern" },
-  { id: "staff-theo", name: "Theo Okonkwo", email: "theo.okonkwo@example.org", role: "admin", jobTitle: "Intern" },
-  { id: "staff-lucia", name: "Lucia Ferrante", email: "lucia.ferrante@example.org", role: "admin", jobTitle: "Intern" },
-  { id: "staff-jonah", name: "Jonah Reyes", email: "jonah.reyes@example.org", role: "admin", jobTitle: "Intern" },
+  {
+    id: "staff-maya",
+    name: "Maya Lindgren",
+    email: "maya.lindgren@example.org",
+    role: "admin",
+    jobTitle: "Intern",
+  },
+  {
+    id: "staff-theo",
+    name: "Theo Okonkwo",
+    email: "theo.okonkwo@example.org",
+    role: "admin",
+    jobTitle: "Intern",
+  },
+  {
+    id: "staff-lucia",
+    name: "Lucia Ferrante",
+    email: "lucia.ferrante@example.org",
+    role: "admin",
+    jobTitle: "Intern",
+  },
+  {
+    id: "staff-jonah",
+    name: "Jonah Reyes",
+    email: "jonah.reyes@example.org",
+    role: "admin",
+    jobTitle: "Intern",
+  },
 ];
 
 /** Sample staff. With the backend on, the manager is whoever signed in. */
 const STAFF: StaffMember[] = [
-  { id: "staff-demo", name: "Demo Admin", email: "admin@demo.test", role: "manager", jobTitle: "Program coordinator" },
+  {
+    id: "staff-demo",
+    name: "Arina Alibayeva",
+    email: "admin@demo.test",
+    role: "manager",
+    jobTitle: "Program coordinator",
+  },
   ...INTERNS,
 ];
 
 /** An even but shuffled split, the same on every load: index in PROJECTS -> intern. */
 function internForEachTeam(count: number): StaffMember[] {
   const rand = mulberry32(7);
-  const assigned = Array.from({ length: count }, (_, i) => INTERNS[i % INTERNS.length]);
+  const assigned = Array.from(
+    { length: count },
+    (_, i) => INTERNS[i % INTERNS.length],
+  );
   for (let i = assigned.length - 1; i > 0; i--) {
     const j = Math.floor(rand() * (i + 1));
     [assigned[i], assigned[j]] = [assigned[j], assigned[i]];
@@ -97,13 +241,24 @@ function internForEachTeam(count: number): StaffMember[] {
 }
 
 const CONTACT_NAMES = [
-  "Maya Torres", "Daniel Osei", "Ruth Lindholm", "Imran Qureshi", "Lena Fischer",
-  "Carlos Mendes", "Grace Adeyemi", "Hannah Cohen", "Minh Tran", "Sara Novak",
+  "Maya Torres",
+  "Daniel Osei",
+  "Ruth Lindholm",
+  "Imran Qureshi",
+  "Lena Fischer",
+  "Carlos Mendes",
+  "Grace Adeyemi",
+  "Hannah Cohen",
+  "Minh Tran",
+  "Sara Novak",
 ];
 
 function buildPartners(interns: StaffMember[]): Partner[] {
   return PROJECTS.map((p, i) => {
-    const slug = p.partner.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const slug = p.partner
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
     const name = CONTACT_NAMES[i % CONTACT_NAMES.length];
     return {
       id: `partner-${slug}`,
@@ -206,6 +361,7 @@ export function buildMockCohort(): CohortData {
     cohortId,
     title: p.title,
     partnerId: partners[i].id,
+    description: PROJECT_BRIEFS[p.title],
   }));
 
   const teams: Team[] = TEAM_NAMES.map((name, i) => ({
@@ -222,7 +378,8 @@ export function buildMockCohort(): CohortData {
 
   // Its own generator so names don't shift the attendance data below.
   const nameRand = mulberry32(2026);
-  const nameFrom = <T,>(items: T[]) => items[Math.floor(nameRand() * items.length)];
+  const nameFrom = <T>(items: T[]) =>
+    items[Math.floor(nameRand() * items.length)];
   const usedNames = new Set<string>();
   function uniqueName(): [string, string] {
     for (;;) {
@@ -264,10 +421,12 @@ export function buildMockCohort(): CohortData {
 
   const [swapA, swapB] = PLANTED.teamSwap.map((i) => enrollments[i].id);
   const swapTeam = (enrollmentId: string, teamId: string) => {
-    memberships.find((m) => m.enrollmentId === enrollmentId)!.endDate = "2026-10-05";
+    memberships.find((m) => m.enrollmentId === enrollmentId)!.endDate =
+      "2026-10-05";
     memberships.push({ enrollmentId, teamId, startDate: "2026-10-05" });
   };
-  const teamOf = (enrollmentId: string) => memberships.find((m) => m.enrollmentId === enrollmentId)!.teamId;
+  const teamOf = (enrollmentId: string) =>
+    memberships.find((m) => m.enrollmentId === enrollmentId)!.teamId;
   const [teamA, teamB] = [teamOf(swapA), teamOf(swapB)];
   swapTeam(swapA, teamB);
   swapTeam(swapB, teamA);
@@ -310,9 +469,18 @@ export function buildMockCohort(): CohortData {
       description:
         "Most projects struggle not because the solution is wrong but because the problem was never clearly defined. In this workshop, each team turns its partner's broad challenge into a specific problem statement it can actually test.\n\nWe'll work through three short exercises: mapping who is affected, separating symptoms from causes, and writing a \"How might we\" question. By the end, every team should have one problem statement it agrees on.\n\nBring your partner brief and a laptop. Teams will share their statements at the end for quick feedback.",
       links: [
-        { label: "Workshop slides", url: "https://slides.example.org/problem-framing" },
-        { label: "Problem statement template", url: "https://docs.example.org/problem-statement-template" },
-        { label: "Partner briefs", url: "https://drive.example.org/partner-briefs" },
+        {
+          label: "Workshop slides",
+          url: "https://slides.example.org/problem-framing",
+        },
+        {
+          label: "Problem statement template",
+          url: "https://docs.example.org/problem-statement-template",
+        },
+        {
+          label: "Partner briefs",
+          url: "https://drive.example.org/partner-briefs",
+        },
       ],
     }),
     ev("ev-3", "Workshop 2: User research", "workshop", "2026-10-13", true, {
@@ -323,9 +491,18 @@ export function buildMockCohort(): CohortData {
       description:
         "Before building anything, you need to hear from the people your project is for. This session covers how to find interviewees, how to ask open questions without leading people toward the answer you want, and how to take notes your whole team can use.\n\nThe second half is practice: teams pair up and run short mock interviews with each other, then swap roles. You'll leave with an interview guide and a plan to talk to at least five people before the next workshop.",
       links: [
-        { label: "Workshop slides", url: "https://slides.example.org/user-research" },
-        { label: "Interview guide template", url: "https://docs.example.org/interview-guide" },
-        { label: "Consent form for interviewees", url: "https://forms.example.org/interview-consent" },
+        {
+          label: "Workshop slides",
+          url: "https://slides.example.org/user-research",
+        },
+        {
+          label: "Interview guide template",
+          url: "https://docs.example.org/interview-guide",
+        },
+        {
+          label: "Consent form for interviewees",
+          url: "https://forms.example.org/interview-consent",
+        },
       ],
     }),
     ev("ev-4", "Partner meet & greet", "partner", "2026-10-08", false, {
@@ -337,7 +514,10 @@ export function buildMockCohort(): CohortData {
         "An informal online call to meet the partner organizations behind this cohort's projects. Each partner will spend a few minutes on who they are, the work they do and why they brought their challenge to the program.\n\nThere will be time for questions at the end, so come with anything you'd like to know about your partner's goals, constraints or the people they serve. The call is optional but strongly recommended if you haven't spoken with your partner yet.\n\nThe recording will be shared afterwards for anyone who can't join.",
       links: [
         { label: "Call link", url: "https://meet.example.org/partners" },
-        { label: "Partner profiles", url: "https://docs.example.org/partner-profiles" },
+        {
+          label: "Partner profiles",
+          url: "https://docs.example.org/partner-profiles",
+        },
         { label: "Recording", url: "https://video.example.org/partner-call" },
       ],
     }),
@@ -349,9 +529,18 @@ export function buildMockCohort(): CohortData {
       description:
         "Now that you understand the problem, it's time to make something people can react to. This workshop is about building quick, rough versions of your idea, like paper sketches, clickable mockups or a simple role-play, before investing weeks into a polished solution.\n\nWe'll look at examples of good and bad prototypes, then teams will have about an hour in the maker lab to build their first one. Materials are provided, including paper, markers, sticky notes and a few tablets.\n\nThe goal is not perfection. If your prototype takes more than an hour to make, it's probably too detailed.",
       links: [
-        { label: "Workshop slides", url: "https://slides.example.org/prototyping" },
-        { label: "Prototype examples", url: "https://board.example.org/prototype-examples" },
-        { label: "Maker lab booking form", url: "https://forms.example.org/maker-lab" },
+        {
+          label: "Workshop slides",
+          url: "https://slides.example.org/prototyping",
+        },
+        {
+          label: "Prototype examples",
+          url: "https://board.example.org/prototype-examples",
+        },
+        {
+          label: "Maker lab booking form",
+          url: "https://forms.example.org/maker-lab",
+        },
       ],
     }),
     ev("ev-6", "Social night", "social", "2026-10-16", false, {
@@ -360,7 +549,10 @@ export function buildMockCohort(): CohortData {
       description:
         "A relaxed evening with food, music and games, and no work talk required. It's a chance to get to know people from other teams, swap stories about how your projects are going and meet some of the mentors outside of workshops.\n\nVegetarian and vegan options will be available. Friends and partners are welcome to come along.",
       links: [
-        { label: "RSVP for food", url: "https://forms.example.org/social-rsvp" },
+        {
+          label: "RSVP for food",
+          url: "https://forms.example.org/social-rsvp",
+        },
       ],
     }),
     // Happening on the demo's "today" so the check-in page can be tried.
@@ -378,22 +570,40 @@ export function buildMockCohort(): CohortData {
       host: "Program team",
       description:
         "A short weekly meeting where each team shares what they did last week, what they plan to do next and anything they're stuck on.\n\nKeep it to two minutes per team. Mentors will stay afterwards for anyone who wants help.",
-      links: [{ label: "Weekly update form", url: "https://forms.example.org/weekly-update" }],
+      links: [
+        {
+          label: "Weekly update form",
+          url: "https://forms.example.org/weekly-update",
+        },
+      ],
       isRequired: false,
       checkinToken: "chk-ev-9-today",
     },
-    ev("ev-7", "Workshop 4: Testing with users", "workshop", "2026-10-27", true, {
-      startTime: "18:00",
-      endTime: "20:00",
-      location: "Room 204",
-      host: "Sam Ortiz",
-      description:
-        "Time to put your prototype in front of real users and find out what works. We'll cover how to run a short testing session, what to watch for while someone uses your prototype and how to avoid explaining it too much.\n\nEach team will then run at least two live tests with invited guests during the session. At the end, teams will sort what they saw into what to keep, change and drop, and decide on next steps before the midpoint showcase.\n\nPlease bring your latest prototype and make sure it's ready to be tested.",
-      links: [
-        { label: "Testing script template", url: "https://docs.example.org/testing-script" },
-        { label: "Guest sign-up sheet", url: "https://sheets.example.org/test-guests" },
-      ],
-    }),
+    ev(
+      "ev-7",
+      "Workshop 4: Testing with users",
+      "workshop",
+      "2026-10-27",
+      true,
+      {
+        startTime: "18:00",
+        endTime: "20:00",
+        location: "Room 204",
+        host: "Sam Ortiz",
+        description:
+          "Time to put your prototype in front of real users and find out what works. We'll cover how to run a short testing session, what to watch for while someone uses your prototype and how to avoid explaining it too much.\n\nEach team will then run at least two live tests with invited guests during the session. At the end, teams will sort what they saw into what to keep, change and drop, and decide on next steps before the midpoint showcase.\n\nPlease bring your latest prototype and make sure it's ready to be tested.",
+        links: [
+          {
+            label: "Testing script template",
+            url: "https://docs.example.org/testing-script",
+          },
+          {
+            label: "Guest sign-up sheet",
+            url: "https://sheets.example.org/test-guests",
+          },
+        ],
+      },
+    ),
     ev("ev-8", "Midpoint showcase", "all-hands", "2026-11-10", true, {
       startTime: "17:00",
       endTime: "19:30",
@@ -402,9 +612,18 @@ export function buildMockCohort(): CohortData {
       description:
         "The midpoint showcase is where each team presents its progress to partners, mentors and the rest of the cohort. Every team gets five minutes to present followed by three minutes of questions.\n\nCover the problem you're working on, what you've learned from users so far, what your prototype looks like now and what you plan to do in the second half of the program. Slides are optional; a short demo is encouraged.\n\nPartners will give written feedback to each team after the event. Please send your slides, if any, to the program team by noon on the day.",
       links: [
-        { label: "Presentation guidelines", url: "https://docs.example.org/showcase-guidelines" },
-        { label: "Slide upload folder", url: "https://drive.example.org/showcase-slides" },
-        { label: "Feedback form for partners", url: "https://forms.example.org/showcase-feedback" },
+        {
+          label: "Presentation guidelines",
+          url: "https://docs.example.org/showcase-guidelines",
+        },
+        {
+          label: "Slide upload folder",
+          url: "https://drive.example.org/showcase-slides",
+        },
+        {
+          label: "Feedback form for partners",
+          url: "https://forms.example.org/showcase-feedback",
+        },
       ],
     }),
   ];
@@ -439,7 +658,12 @@ export function buildMockCohort(): CohortData {
       "Final Project Proposal Presentations",
       "2026-12-15",
       "A 10-minute presentation plus 5 minutes of Q&A with your Civic Partner and Faculty Grader. The schedule will be released closer to presentation time.\n\nPresentations are on Zoom, so you must be available with a reliable internet connection during your assigned time.",
-      { category: "showcase", endDate: "2026-12-17", startTime: undefined, location: "Zoom" },
+      {
+        category: "showcase",
+        endDate: "2026-12-17",
+        startTime: undefined,
+        location: "Zoom",
+      },
     ),
   );
   events.sort((a, b) => a.date.localeCompare(b.date));
@@ -522,7 +746,13 @@ export function buildMockCohort(): CohortData {
       type: "record_by",
       params: monthlyReport("September", "2026-10-05"),
     },
-    { id: "req-8", name: "October Meeting Report", scope: "team", type: "record_by", params: monthlyReport("October", "2026-10-31") },
+    {
+      id: "req-8",
+      name: "October Meeting Report",
+      scope: "team",
+      type: "record_by",
+      params: monthlyReport("October", "2026-10-31"),
+    },
     {
       id: "req-9",
       name: "Research Synthesis",
@@ -534,8 +764,20 @@ export function buildMockCohort(): CohortData {
           "Group assignment submitted to Forum as a single PDF, scored on #gapanalysis, #evidencebased and #professionalism. Hold your November meetings with your partner, faculty grader and TA before this assignment.",
       },
     },
-    { id: "req-10", name: "November Meeting Report", scope: "team", type: "record_by", params: monthlyReport("November", "2026-11-30") },
-    { id: "req-11", name: "December Meeting Report", scope: "team", type: "record_by", params: monthlyReport("December", "2026-12-14") },
+    {
+      id: "req-10",
+      name: "November Meeting Report",
+      scope: "team",
+      type: "record_by",
+      params: monthlyReport("November", "2026-11-30"),
+    },
+    {
+      id: "req-11",
+      name: "December Meeting Report",
+      scope: "team",
+      type: "record_by",
+      params: monthlyReport("December", "2026-12-14"),
+    },
     {
       id: "req-12",
       name: "Group and Individual Final Deliverable",
@@ -551,7 +793,9 @@ export function buildMockCohort(): CohortData {
 
   const seatsTaken = new Map<string, number>();
   enrollments.forEach((enr) => {
-    const teamId = memberships.find((m) => m.enrollmentId === enr.id && !m.endDate)!.teamId;
+    const teamId = memberships.find(
+      (m) => m.enrollmentId === enr.id && !m.endDate,
+    )!.teamId;
     const teamName = teams.find((t) => t.id === teamId)!.name;
     const seat = seatsTaken.get(teamId) ?? 0;
     seatsTaken.set(teamId, seat + 1);
@@ -598,17 +842,61 @@ export function buildMockCohort(): CohortData {
     attendance,
     requirements,
     completions,
-    exemptions: [],
+    // Someone on approved medical leave is excused from an all-hands.
+    exemptions: [
+      {
+        requirementId: "req-2",
+        subjectId: enrollments[50].id,
+        reason: "Medical leave Oct 5 to 12, approved by the program director",
+      },
+    ],
     fields: FIELDS.map((f) => ({ ...f })),
     partners,
     staff: STAFF.map((s) => ({ ...s })),
     notes: sampleNotes(teams, enrollments, partners),
+    nudges: sampleNudges(teams, enrollments),
     ...sampleRecords(cohortId, teams, memberships),
   };
 }
 
+/** The name of the intern who looks after a team. */
+function ownerName(team: Team): string {
+  return STAFF.find((x) => x.id === team.ownerId)?.name ?? "Arina Alibayeva";
+}
+
+/** Reminders already sent, so Needs attention shows "Nudged Oct 16". */
+function sampleNudges(teams: Team[], enrollments: Enrollment[]): Nudge[] {
+  return [
+    {
+      id: "nudge-1",
+      requirementId: "req-7",
+      subjectId: teams[15].id,
+      sentBy: ownerName(teams[15]),
+      sentOn: "2026-10-16",
+    },
+    {
+      id: "nudge-2",
+      requirementId: "req-1",
+      subjectId: enrollments[PLANTED.missedTwoWorkshops[0]].id,
+      sentBy: "Arina Alibayeva",
+      sentOn: "2026-10-15",
+    },
+    {
+      id: "nudge-3",
+      requirementId: "req-5",
+      subjectId: teams[PLANTED.teamMissingBrief].id,
+      sentBy: "Arina Alibayeva",
+      sentOn: "2026-10-17",
+    },
+  ];
+}
+
 /** A few notes with follow-ups, some already overdue on the demo's "today". */
-function sampleNotes(teams: Team[], enrollments: Enrollment[], partners: Partner[]): Note[] {
+function sampleNotes(
+  teams: Team[],
+  enrollments: Enrollment[],
+  partners: Partner[],
+): Note[] {
   const note = (
     id: string,
     subjectType: Note["subjectType"],
@@ -628,16 +916,165 @@ function sampleNotes(teams: Team[], enrollments: Enrollment[], partners: Partner
     createdAt: `${createdAt}T16:00:00.000Z`,
   });
   return [
-    note("1", "team", teams[PLANTED.teamMissingBrief].id, "2026-10-16", "Maya Lindgren",
-      "Brief is late. They said the partner hasn't confirmed scope yet, so ask again on Monday.", "2026-10-19"),
-    note("2", "participant", enrollments[PLANTED.missedTwoWorkshops[0]].id, "2026-10-15", "Demo Admin",
-      "Missed two workshops. Emailed to ask if something's going on.", "2026-10-21"),
-    note("3", "partner", partners[RECORD_PLANTED.teamOpenIssue].id, "2026-10-14", "Theo Okonkwo",
-      "Main contact is leaving. Find out who takes over before the midpoint showcase.", "2026-10-16"),
-    note("4", "team", teams[RECORD_PLANTED.teamNoMeetings].id, "2026-10-12", "Demo Admin",
-      "No partner meetings logged yet. Check whether they're meeting and not logging it.", "2026-10-23"),
-    note("5", "partner", partners[0].id, "2026-10-08", "Theo Okonkwo",
-      "Happy with the team so far. Interested in taking another team next cohort."),
+    note(
+      "1",
+      "team",
+      teams[PLANTED.teamMissingBrief].id,
+      "2026-10-16",
+      ownerName(teams[PLANTED.teamMissingBrief]),
+      "Brief is late. They said the partner hasn't confirmed scope yet, so ask again on Monday.",
+      "2026-10-19",
+    ),
+    note(
+      "2",
+      "participant",
+      enrollments[PLANTED.missedTwoWorkshops[0]].id,
+      "2026-10-15",
+      "Arina Alibayeva",
+      "Missed two workshops. Emailed to ask if something's going on.",
+      "2026-10-21",
+    ),
+    note(
+      "3",
+      "partner",
+      partners[RECORD_PLANTED.teamOpenIssue].id,
+      "2026-10-14",
+      ownerName(teams[RECORD_PLANTED.teamOpenIssue]),
+      "Main contact is leaving. Find out who takes over before the midpoint showcase.",
+      "2026-10-16",
+    ),
+    note(
+      "4",
+      "team",
+      teams[RECORD_PLANTED.teamNoMeetings].id,
+      "2026-10-12",
+      "Arina Alibayeva",
+      "No partner meetings logged yet. Check whether they're meeting and not logging it.",
+      "2026-10-23",
+    ),
+    note(
+      "5",
+      "partner",
+      partners[0].id,
+      "2026-10-08",
+      ownerName(teams[0]),
+      "Happy with the team so far. Interested in taking another team next cohort.",
+    ),
+    // Each intern writes about their own teams and partners.
+    note(
+      "6",
+      "team",
+      teams[1].id,
+      "2026-10-16",
+      ownerName(teams[1]),
+      "Checked in after Workshop 3. They've narrowed it to two prototype ideas and want the partner's view before choosing.",
+    ),
+    note(
+      "7",
+      "team",
+      teams[2].id,
+      "2026-10-14",
+      ownerName(teams[2]),
+      "No partner meeting since Oct 2. The partner is traveling until the 20th; the team will meet them on the 22nd.",
+      "2026-10-22",
+    ),
+    note(
+      "8",
+      "team",
+      teams[3].id,
+      "2026-10-17",
+      ownerName(teams[3]),
+      "User research plan is about half done. Two members are running interviews this weekend.",
+      "2026-10-23",
+    ),
+    note(
+      "9",
+      "team",
+      teams[6].id,
+      "2026-10-09",
+      ownerName(teams[6]),
+      "September report came in late. Reminded them about the Oct 31 deadline and that each meeting needs a photo.",
+      "2026-10-30",
+    ),
+    note(
+      "10",
+      "team",
+      teams[7].id,
+      "2026-10-13",
+      ownerName(teams[7]),
+      "Asked for help finding people to interview. Put them in touch with the partner's volunteer coordinator.",
+    ),
+    note(
+      "11",
+      "team",
+      teams[10].id,
+      "2026-10-15",
+      ownerName(teams[10]),
+      "Research plan is waiting on the partner to approve the survey questions.",
+      "2026-10-21",
+    ),
+    note(
+      "12",
+      "team",
+      teams[15].id,
+      "2026-10-12",
+      ownerName(teams[15]),
+      "Missed the September report. They say it went to the wrong Forum thread; asked them to resubmit it.",
+      "2026-10-20",
+    ),
+    note(
+      "13",
+      "team",
+      teams[12].id,
+      "2026-10-07",
+      ownerName(teams[12]),
+      "Strong relationship with the partner, who wants to co-present with them at the midpoint showcase.",
+    ),
+    note(
+      "14",
+      "team",
+      teams[PLANTED.teamMissingBrief].id,
+      "2026-10-18",
+      "Arina Alibayeva",
+      "Talked to the intern about this team. If the brief isn't in by Wednesday, set up a call with the partner.",
+      "2026-10-21",
+    ),
+    note(
+      "15",
+      "participant",
+      enrollments[PLANTED.missedLastWorkshop[0]].id,
+      "2026-10-16",
+      "Arina Alibayeva",
+      "Missed Workshop 3 because of a midterm. Says they'll be at Workshop 4.",
+      "2026-10-27",
+    ),
+    note(
+      "16",
+      "participant",
+      enrollments[PLANTED.missedTwoWorkshops[1]].id,
+      "2026-10-14",
+      "Arina Alibayeva",
+      "No reply to two emails. Asked their team manager to check in with them.",
+      "2026-10-20",
+    ),
+    note(
+      "17",
+      "partner",
+      partners[15].id,
+      "2026-10-13",
+      ownerName(teams[15]),
+      "The data export they promised is two weeks late. The team is working from public data in the meantime.",
+      "2026-10-26",
+    ),
+    note(
+      "18",
+      "partner",
+      partners[9].id,
+      "2026-10-17",
+      ownerName(teams[9]),
+      "Invited the team to their November community meeting to hear from residents directly.",
+      "2026-10-28",
+    ),
   ].sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
@@ -667,12 +1104,41 @@ const RECORD_TYPES: RecordType[] = [
     fields: [
       { id: "rf-m-summary", label: "Summary", type: "text", required: true },
       { id: "rf-m-date", label: "Date", type: "date", required: true },
-      { id: "rf-m-team", label: "Team", type: "link", linkTo: "team", required: true },
-      { id: "rf-m-event", label: "Event", type: "link", linkTo: "event", required: false },
-      { id: "rf-m-attended", label: "Attended by", type: "link", linkTo: "participant", multiple: true, required: false },
-      { id: "rf-m-partner", label: "Partner attended", type: "checkbox", required: false },
+      {
+        id: "rf-m-team",
+        label: "Team",
+        type: "link",
+        linkTo: "team",
+        required: true,
+      },
+      {
+        id: "rf-m-event",
+        label: "Event",
+        type: "link",
+        linkTo: "event",
+        required: false,
+      },
+      {
+        id: "rf-m-attended",
+        label: "Attended by",
+        type: "link",
+        linkTo: "participant",
+        multiple: true,
+        required: false,
+      },
+      {
+        id: "rf-m-partner",
+        label: "Partner attended",
+        type: "checkbox",
+        required: false,
+      },
       { id: "rf-m-notes", label: "Notes", type: "long_text", required: false },
-      { id: "rf-m-next", label: "Next steps", type: "long_text", required: false },
+      {
+        id: "rf-m-next",
+        label: "Next steps",
+        type: "long_text",
+        required: false,
+      },
     ],
   },
   {
@@ -682,12 +1148,42 @@ const RECORD_TYPES: RecordType[] = [
     singular: "Issue",
     fields: [
       { id: "rf-i-title", label: "Title", type: "text", required: true },
-      { id: "rf-i-status", label: "Status", type: "select", options: ["Open", "Resolved"], required: true },
-      { id: "rf-i-severity", label: "Severity", type: "select", options: ["Low", "Medium", "High"], required: false },
-      { id: "rf-i-team", label: "Team", type: "link", linkTo: "team", required: false },
-      { id: "rf-i-people", label: "People involved", type: "link", linkTo: "participant", multiple: true, required: false },
+      {
+        id: "rf-i-status",
+        label: "Status",
+        type: "select",
+        options: ["Open", "Resolved"],
+        required: true,
+      },
+      {
+        id: "rf-i-severity",
+        label: "Severity",
+        type: "select",
+        options: ["Low", "Medium", "High"],
+        required: false,
+      },
+      {
+        id: "rf-i-team",
+        label: "Team",
+        type: "link",
+        linkTo: "team",
+        required: false,
+      },
+      {
+        id: "rf-i-people",
+        label: "People involved",
+        type: "link",
+        linkTo: "participant",
+        multiple: true,
+        required: false,
+      },
       { id: "rf-i-opened", label: "Opened on", type: "date", required: false },
-      { id: "rf-i-details", label: "Details", type: "long_text", required: false },
+      {
+        id: "rf-i-details",
+        label: "Details",
+        type: "long_text",
+        required: false,
+      },
     ],
   },
   {
@@ -698,7 +1194,13 @@ const RECORD_TYPES: RecordType[] = [
     fields: [
       { id: "rf-r-title", label: "Title", type: "text", required: true },
       { id: "rf-r-date", label: "Submitted on", type: "date", required: true },
-      { id: "rf-r-team", label: "Team", type: "link", linkTo: "team", required: true },
+      {
+        id: "rf-r-team",
+        label: "Team",
+        type: "link",
+        linkTo: "team",
+        required: true,
+      },
       { id: "rf-r-link", label: "Report link", type: "url", required: false },
       {
         id: "rf-r-month",
@@ -712,16 +1214,76 @@ const RECORD_TYPES: RecordType[] = [
 ];
 
 const CALCULATIONS: Calculation[] = [
-  { id: "calc-last-meeting", programId: "prog-civic", label: "Last partner meeting", on: "team", kind: "latest", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", dateFieldId: "rf-m-date" },
-  { id: "calc-days-since-meeting", programId: "prog-civic", label: "Days since partner meeting", on: "team", kind: "days_since", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", dateFieldId: "rf-m-date" },
-  { id: "calc-partner-present", programId: "prog-civic", label: "Meetings the partner attended", on: "team", kind: "percent", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-team", filter: { fieldId: "rf-m-partner", op: "is", value: "yes" } },
-  { id: "calc-open-issues", programId: "prog-civic", label: "Open issues", on: "team", kind: "count", sourceTypeId: "rt-issues", viaFieldId: "rf-i-team", filter: { fieldId: "rf-i-status", op: "is", value: "Open" } },
-  { id: "calc-meetings-attended", programId: "prog-civic", label: "Partner meetings attended", on: "participant", kind: "count", sourceTypeId: "rt-meetings", viaFieldId: "rf-m-attended" },
+  {
+    id: "calc-last-meeting",
+    programId: "prog-civic",
+    label: "Last partner meeting",
+    on: "team",
+    kind: "latest",
+    sourceTypeId: "rt-meetings",
+    viaFieldId: "rf-m-team",
+    dateFieldId: "rf-m-date",
+  },
+  {
+    id: "calc-days-since-meeting",
+    programId: "prog-civic",
+    label: "Days since partner meeting",
+    on: "team",
+    kind: "days_since",
+    sourceTypeId: "rt-meetings",
+    viaFieldId: "rf-m-team",
+    dateFieldId: "rf-m-date",
+  },
+  {
+    id: "calc-partner-present",
+    programId: "prog-civic",
+    label: "Meetings the partner attended",
+    on: "team",
+    kind: "percent",
+    sourceTypeId: "rt-meetings",
+    viaFieldId: "rf-m-team",
+    filter: { fieldId: "rf-m-partner", op: "is", value: "yes" },
+  },
+  {
+    id: "calc-open-issues",
+    programId: "prog-civic",
+    label: "Open issues",
+    on: "team",
+    kind: "count",
+    sourceTypeId: "rt-issues",
+    viaFieldId: "rf-i-team",
+    filter: { fieldId: "rf-i-status", op: "is", value: "Open" },
+  },
+  {
+    id: "calc-meetings-attended",
+    programId: "prog-civic",
+    label: "Partner meetings attended",
+    on: "participant",
+    kind: "count",
+    sourceTypeId: "rt-meetings",
+    viaFieldId: "rf-m-attended",
+  },
 ];
 
 const RULES: Rule[] = [
-  { id: "rule-meeting-gap", calculationId: "calc-days-since-meeting", op: "gt", value: 14, whenEmpty: true, status: "at_risk", message: "No partner meeting in over 2 weeks" },
-  { id: "rule-open-issue", calculationId: "calc-open-issues", op: "gte", value: 1, whenEmpty: false, status: "at_risk", message: "Has an open issue" },
+  {
+    id: "rule-meeting-gap",
+    calculationId: "calc-days-since-meeting",
+    op: "gt",
+    value: 14,
+    whenEmpty: true,
+    status: "at_risk",
+    message: "No partner meeting in over 2 weeks",
+  },
+  {
+    id: "rule-open-issue",
+    calculationId: "calc-open-issues",
+    op: "gte",
+    value: 1,
+    whenEmpty: false,
+    status: "at_risk",
+    message: "Has an open issue",
+  },
 ];
 
 const FORMS: RecordForm[] = [
@@ -729,8 +1291,15 @@ const FORMS: RecordForm[] = [
     id: "form-meeting",
     typeId: "rt-meetings",
     title: "Log a partner meeting",
-    description: "Fill this in after every meeting with your partner. It takes a minute.",
-    fieldIds: ["rf-m-summary", "rf-m-date", "rf-m-partner", "rf-m-notes", "rf-m-next"],
+    description:
+      "Fill this in after every meeting with your partner. It takes a minute.",
+    fieldIds: [
+      "rf-m-summary",
+      "rf-m-date",
+      "rf-m-partner",
+      "rf-m-notes",
+      "rf-m-next",
+    ],
     token: "log-meeting-demo",
     roster: true,
     isOpen: true,
@@ -739,7 +1308,8 @@ const FORMS: RecordForm[] = [
     id: "form-report",
     typeId: "rt-reports",
     title: "Submit a meeting report",
-    description: "One per team, each month. Submitting it completes your team's report requirement.",
+    description:
+      "One per team, each month. Submitting it completes your team's report requirement.",
     fieldIds: ["rf-r-title", "rf-r-month", "rf-r-date", "rf-r-link"],
     token: "submit-report-demo",
     roster: true,
@@ -756,26 +1326,45 @@ const MEETING_TOPICS = [
   "Planning next sprint",
 ];
 
-function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembership[]) {
+function sampleRecords(
+  cohortId: string,
+  teams: Team[],
+  memberships: TeamMembership[],
+) {
   const rand = mulberry32(11);
   const records: CustomRecord[] = [];
   let n = 0;
   const add = (typeId: string, date: string, values: CustomRecord["values"]) =>
-    records.push({ id: `rec-${++n}`, typeId, cohortId, values, createdAt: `${date}T18:00:00.000Z` });
+    records.push({
+      id: `rec-${++n}`,
+      typeId,
+      cohortId,
+      values,
+      createdAt: `${date}T18:00:00.000Z`,
+    });
 
   teams.forEach((team, i) => {
     if (i === RECORD_PLANTED.teamNoMeetings) return;
-    const members = memberships.filter((m) => m.teamId === team.id && !m.endDate).map((m) => m.enrollmentId);
+    const members = memberships
+      .filter((m) => m.teamId === team.id && !m.endDate)
+      .map((m) => m.enrollmentId);
     // Roughly weekly from the kickoff; stale teams stop early.
-    const last = RECORD_PLANTED.teamsStaleMeetings.includes(i) ? "2026-09-30" : "2026-10-19";
-    for (let date = addDays("2026-09-10", Math.floor(rand() * 3)), k = 0; date <= last; date = addDays(date, 6 + Math.floor(rand() * 4)), k++) {
+    const last = RECORD_PLANTED.teamsStaleMeetings.includes(i)
+      ? "2026-09-30"
+      : "2026-10-19";
+    for (
+      let date = addDays("2026-09-10", Math.floor(rand() * 3)), k = 0;
+      date <= last;
+      date = addDays(date, 6 + Math.floor(rand() * 4)), k++
+    ) {
       add("rt-meetings", date, {
         "rf-m-summary": MEETING_TOPICS[Math.min(k, MEETING_TOPICS.length - 1)],
         "rf-m-date": date,
         "rf-m-team": team.id,
         "rf-m-attended": members.filter(() => rand() > 0.2),
         "rf-m-partner": rand() > 0.25,
-        "rf-m-notes": "Went through progress since last week and open questions.",
+        "rf-m-notes":
+          "Went through progress since last week and open questions.",
       });
     }
   });
@@ -787,7 +1376,8 @@ function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembers
     "rf-i-severity": "High",
     "rf-i-team": issueTeam.id,
     "rf-i-opened": "2026-10-14",
-    "rf-i-details": "Their main contact left the organization. Waiting to hear who takes over.",
+    "rf-i-details":
+      "Their main contact left the organization. Waiting to hear who takes over.",
   });
   add("rt-issues", "2026-10-02", {
     "rf-i-title": "Disagreement over project scope",
@@ -801,7 +1391,9 @@ function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembers
   teams.forEach((team, i) => {
     if (RECORD_PLANTED.teamsMissingReports.includes(i)) return;
     const late = RECORD_PLANTED.teamsLateReports.includes(i);
-    const date = late ? addDays("2026-10-07", i % 3) : addDays("2026-10-01", i % 4);
+    const date = late
+      ? addDays("2026-10-07", i % 3)
+      : addDays("2026-10-01", i % 4);
     add("rt-reports", date, {
       "rf-r-title": `${team.name} · September`,
       "rf-r-date": date,
@@ -810,8 +1402,88 @@ function sampleRecords(cohortId: string, teams: Team[], memberships: TeamMembers
     });
   });
 
+  // More issues, open and resolved, so the Issues lists aren't empty.
+  const issue = (
+    team: number,
+    opened: string,
+    title: string,
+    status: "Open" | "Resolved",
+    severity: "Low" | "Medium" | "High",
+    details: string,
+  ) =>
+    add("rt-issues", opened, {
+      "rf-i-title": title,
+      "rf-i-status": status,
+      "rf-i-severity": severity,
+      "rf-i-team": teams[team].id,
+      "rf-i-opened": opened,
+      "rf-i-details": details,
+    });
+  issue(
+    9,
+    "2026-10-13",
+    "Two members not answering in the group chat",
+    "Open",
+    "Medium",
+    "Two members haven't replied since Workshop 2. The rest of the team is covering their tasks for now.",
+  );
+  issue(
+    15,
+    "2026-10-09",
+    "Partner hasn't shared the data they promised",
+    "Open",
+    "High",
+    "The team needs last year's grant data to start. The partner says the export is delayed by two weeks.",
+  );
+  issue(
+    11,
+    "2026-10-15",
+    "Unclear who the main partner contact is",
+    "Open",
+    "Medium",
+    "Two people at the partner have given different directions. The team asked who has the final say.",
+  );
+  issue(
+    7,
+    "2026-09-29",
+    "Clash with the partner's weekly call",
+    "Resolved",
+    "Low",
+    "Moved the weekly partner call from Monday to Thursday afternoon.",
+  );
+  issue(
+    8,
+    "2026-10-05",
+    "Laptop stolen with interview notes on it",
+    "Resolved",
+    "Medium",
+    "Most notes were recovered from the shared drive; two interviews were redone.",
+  );
+  issue(
+    19,
+    "2026-09-24",
+    "Partner asked to change the project scope",
+    "Resolved",
+    "Medium",
+    "Agreed to keep the original scope and list the new idea as a stretch goal.",
+  );
+
+  // A few teams have already handed in their October report.
+  [1, 5, 13].forEach((i, k) => {
+    const date = addDays("2026-10-16", k);
+    add("rt-reports", date, {
+      "rf-r-title": `${teams[i].name} · October`,
+      "rf-r-date": date,
+      "rf-r-team": teams[i].id,
+      "rf-r-month": "October",
+    });
+  });
+
   return {
-    recordTypes: RECORD_TYPES.map((t) => ({ ...t, fields: t.fields.map((f) => ({ ...f })) })),
+    recordTypes: RECORD_TYPES.map((t) => ({
+      ...t,
+      fields: t.fields.map((f) => ({ ...f })),
+    })),
     records,
     calculations: CALCULATIONS.map((c) => ({ ...c })),
     rules: RULES.map((r) => ({ ...r })),

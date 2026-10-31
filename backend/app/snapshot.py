@@ -77,7 +77,9 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
             for e in enrollments
         ],
         projects=[
-            s.Project(id=p.id, cohort_id=p.cohort_id, title=p.title, partner_id=p.partner_id)
+            s.Project(
+                id=p.id, cohort_id=p.cohort_id, title=p.title, partner_id=p.partner_id, description=p.description
+            )
             for p in session.scalars(
                 select(m.Project)
                 .where(m.Project.cohort_id == cohort.id)
@@ -129,6 +131,12 @@ def build_snapshot(session: Session, cohort: m.Cohort) -> s.CohortData:
             s.StaffMember(id=u.id, name=u.name, email=u.email, role=u.role, job_title=u.job_title)
             for u in session.scalars(
                 select(m.User).where(m.User.role != "participant").order_by(m.User.created_at, m.User.id)
+            )
+        ],
+        nudges=[
+            s.Nudge(id=n.id, requirement_id=n.requirement_id, subject_id=n.subject_id, sent_by=n.sent_by, sent_on=n.sent_on)
+            for n in session.scalars(
+                select(m.Nudge).where(m.Nudge.cohort_id == cohort.id).order_by(m.Nudge.sent_on, m.Nudge.id)
             )
         ],
         notes=[

@@ -76,6 +76,8 @@ export interface Project {
   cohortId: string;
   title: string;
   partnerId?: string;
+  /** What the project is about and what the team might hand over. */
+  description?: string;
 }
 
 export interface PartnerContact {
@@ -161,7 +163,12 @@ export interface CustomRecord {
   updatedAt?: string;
 }
 
-export const CONDITION_OPS = ["is", "is_not", "is_empty", "is_not_empty"] as const;
+export const CONDITION_OPS = [
+  "is",
+  "is_not",
+  "is_empty",
+  "is_not_empty",
+] as const;
 export type ConditionOp = (typeof CONDITION_OPS)[number];
 
 export interface Condition {
@@ -170,7 +177,12 @@ export interface Condition {
   value?: string;
 }
 
-export const CALCULATION_KINDS = ["count", "latest", "days_since", "percent"] as const;
+export const CALCULATION_KINDS = [
+  "count",
+  "latest",
+  "days_since",
+  "percent",
+] as const;
 export type CalculationKind = (typeof CALCULATION_KINDS)[number];
 
 /**
@@ -314,10 +326,7 @@ export interface Attendance {
 }
 
 export type RequirementType =
-  | "attendance_min"
-  | "complete_by"
-  | "team_min_size"
-  | "record_by";
+  "attendance_min" | "complete_by" | "team_min_size" | "record_by";
 
 export type Requirement =
   | {
@@ -379,6 +388,17 @@ export interface Exemption {
   reason?: string;
 }
 
+/** Reminder activity about a rule; opening an email draft does not confirm delivery. */
+export interface Nudge {
+  id: string;
+  /** The rule it was about; empty for flags from tracked numbers. */
+  requirementId?: string;
+  /** The participant, team or partner it was about. */
+  subjectId: string;
+  sentBy?: string;
+  sentOn: string;
+}
+
 export interface CohortData {
   program: Program;
   cohort: Cohort;
@@ -398,6 +418,7 @@ export interface CohortData {
   staff: StaffMember[];
   /** Newest first. */
   notes: Note[];
+  nudges?: Nudge[];
   recordTypes: RecordType[];
   /** Oldest first. */
   records: CustomRecord[];

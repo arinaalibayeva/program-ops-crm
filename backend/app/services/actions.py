@@ -263,6 +263,26 @@ def add_note(session: Session, cohort: m.Cohort, body: s.NoteCreate, author: str
     )
 
 
+def add_nudge(session: Session, cohort: m.Cohort, body: s.NudgeIn, sent_by: str, today: dt.date) -> None:
+    if body.requirement_id is not None:
+        req = session.get(m.Requirement, body.requirement_id)
+        if req is None or req.cohort_id != cohort.id:
+            raise not_found("Requirement")
+        if not _subject_exists(session, cohort, req.scope, body.subject_id):
+            raise not_found(req.scope.capitalize())
+    elif not any(
+        _subject_exists(session, cohort, kind, body.subject_id)
+        for kind in ("participant", "team", "partner")
+    ):
+        raise not_found("Subject")
+    session.add(
+        m.Nudge(
+            id=given_id(session, m.Nudge, body.id, "nudge"), cohort_id=cohort.id,
+            requirement_id=body.requirement_id, subject_id=body.subject_id, sent_by=sent_by, sent_on=today,
+        )
+    )
+
+
 def update_note(session: Session, cohort: m.Cohort, note_id: str, patch: s.NotePatch) -> None:
     note = _note(session, cohort, note_id)
     if patch.body is not None:
