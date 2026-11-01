@@ -1,5 +1,6 @@
 "use client";
 
+import { inProgramOn } from "@/lib/requirements";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CalendarDays, List, Plus } from "lucide-react";
@@ -120,9 +121,6 @@ export default function EventsPage() {
 function EventTable() {
   const router = useRouter();
   const { data } = useCohort();
-  const activeIds = new Set(
-    data.enrollments.filter((e) => e.status === "active").map((e) => e.id),
-  );
 
   return (
     <>
@@ -141,7 +139,9 @@ function EventTable() {
             {data.events.map((event) => {
               const past = event.date < data.today;
               const count = data.attendance.filter(
-                (a) => a.eventId === event.id && activeIds.has(a.enrollmentId),
+                (a) =>
+                  a.eventId === event.id &&
+                  inProgramOn(data, event.date).has(a.enrollmentId),
               ).length;
               return (
                 <TableRow
@@ -168,7 +168,7 @@ function EventTable() {
                     {!takesAttendance(event) ? (
                       <span className="text-muted-foreground">—</span>
                     ) : past ? (
-                      `${count} / ${activeIds.size}`
+                      `${count} / ${inProgramOn(data, event.date).size}`
                     ) : (
                       <span className="text-muted-foreground">Upcoming</span>
                     )}

@@ -47,7 +47,11 @@ function daysBetween(from: string, to: string): number {
 // for every person on many dates. Cached per attendance list.
 const attendedSets = new WeakMap<CohortData["attendance"], Set<string>>();
 
-export function didAttend(data: CohortData, eventId: string, enrollmentId: string): boolean {
+export function didAttend(
+  data: CohortData,
+  eventId: string,
+  enrollmentId: string,
+): boolean {
   let set = attendedSets.get(data.attendance);
   if (!set) {
     set = new Set(data.attendance.map((a) => `${a.eventId}|${a.enrollmentId}`));
@@ -67,6 +71,23 @@ export function currentTeamId(
   )?.teamId;
 }
 
+/**
+ * Everyone who was in the program on a given day: joined by then and not yet
+ * left. Turnout for a past event is counted against these people, so someone
+ * who joined later doesn't count as missing it.
+ */
+export function inProgramOn(data: CohortData, date: string): Set<string> {
+  return new Set(
+    data.enrollments
+      .filter(
+        (e) =>
+          e.joinedAt <= date &&
+          (e.leftAt ? e.leftAt > date : e.status === "active"),
+      )
+      .map((e) => e.id),
+  );
+}
+
 export function activeMembers(data: CohortData, teamId: string): Enrollment[] {
   const ids = new Set(
     data.memberships
@@ -81,8 +102,12 @@ export function attendanceSummary(
   data: CohortData,
   enrollmentId: string,
 ): { attended: number; total: number } {
-  const past = data.events.filter((e) => takesAttendance(e) && e.date < data.today);
-  const attended = past.filter((e) => didAttend(data, e.id, enrollmentId)).length;
+  const past = data.events.filter(
+    (e) => takesAttendance(e) && e.date < data.today,
+  );
+  const attended = past.filter((e) =>
+    didAttend(data, e.id, enrollmentId),
+  ).length;
   return { attended, total: past.length };
 }
 
@@ -97,7 +122,9 @@ function evaluateAttendanceMin(
   const events = data.events.filter((e) => e.category === category);
   const past = events.filter((e) => e.date < data.today);
   const remaining = events.length - past.length;
-  const attended = past.filter((e) => didAttend(data, e.id, enrollmentId)).length;
+  const attended = past.filter((e) =>
+    didAttend(data, e.id, enrollmentId),
+  ).length;
   const missed = past.length - attended;
   const stillNeeded = minCount - attended;
   const label = categoryPlural(category);
@@ -173,7 +200,9 @@ function linkedRecords(
   return data.records.filter((r) => {
     if (r.typeId !== typeId) return false;
     const value = r.values[viaFieldId];
-    const linked = Array.isArray(value) ? value.includes(subjectId) : value === subjectId;
+    const linked = Array.isArray(value)
+      ? value.includes(subjectId)
+      : value === subjectId;
     // An optional filter, e.g. only meeting reports whose Month is October.
     return linked && (!filter || matches(data, r, filter));
   });
@@ -199,7 +228,9 @@ export function recordProgress(
         .sort()
     : [];
   // Late when the record that met the minimum came after the due date.
-  return dates.length >= minCount && dates[minCount - 1] > dueDate ? "late" : "on_time";
+  return dates.length >= minCount && dates[minCount - 1] > dueDate
+    ? "late"
+    : "on_time";
 }
 
 function evaluateRecordBy(
@@ -217,11 +248,24 @@ function evaluateRecordBy(
     status,
     reason,
   });
-  if (progress === "on_time") return result("met", `${req.name} logged (${count})`);
-  if (progress === "late") return result("met", `${req.name} logged late, after ${formatDate(dueDate)}`);
-  if (progress === "missing") return result("missing", `${req.name} overdue by ${-daysLeft} days, ${logged}`);
-  if (daysLeft <= DUE_SOON_DAYS) return result("at_risk", `${req.name} due in ${daysLeft} days, ${logged}`);
-  return result("on_track", `${req.name} due ${formatDate(dueDate)}, ${logged}`);
+  if (progress === "on_time")
+    return result("met", `${req.name} logged (${count})`);
+  if (progress === "late")
+    return result(
+      "met",
+      `${req.name} logged late, after ${formatDate(dueDate)}`,
+    );
+  if (progress === "missing")
+    return result(
+      "missing",
+      `${req.name} overdue by ${-daysLeft} days, ${logged}`,
+    );
+  if (daysLeft <= DUE_SOON_DAYS)
+    return result("at_risk", `${req.name} due in ${daysLeft} days, ${logged}`);
+  return result(
+    "on_track",
+    `${req.name} due ${formatDate(dueDate)}, ${logged}`,
+  );
 }
 
 function evaluateTeamMinSize(
@@ -325,7 +369,10 @@ export function teamStatus(data: CohortData, team: Team): SubjectStatus {
   return summary;
 }
 
-export function describeRequirement(req: Requirement, data: CohortData): string {
+export function describeRequirement(
+  req: Requirement,
+  data: CohortData,
+): string {
   switch (req.type) {
     case "attendance_min":
       return `Attend at least ${req.params.minCount} ${categoryPlural(req.params.category)}`;

@@ -25,7 +25,7 @@ import {
 import { PageHeader } from "@/components/page-header";
 import { LinkedRecords, TrackedNumbers } from "@/components/records/related";
 import { useCohort, usePeopleIndex } from "@/lib/store";
-import { currentTeamId } from "@/lib/requirements";
+import { currentTeamId, inProgramOn } from "@/lib/requirements";
 import {
   EVENT_CATEGORY_LABELS,
   formatEventTime,
@@ -111,8 +111,10 @@ function AttendanceCard({ event }: { event: ProgramEvent }) {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
 
+  // Everyone in the program that day, so later joiners aren't marked absent.
+  const inProgram = event ? inProgramOn(data, event.date) : new Set<string>();
   const everyone = data.enrollments
-    .filter((e) => e.status === "active")
+    .filter((e) => inProgram.has(e.id))
     .map((e) => {
       const teamId = currentTeamId(data, e.id);
       return {

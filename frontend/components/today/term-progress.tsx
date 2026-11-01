@@ -9,6 +9,7 @@ import {
   relativeDay,
   ruleRows,
 } from "@/lib/requirement-insights";
+import { inProgramOn } from "@/lib/requirements";
 import { useCohort } from "@/lib/store";
 
 /** How many to show in each list: everything so far would get long by December. */
@@ -34,9 +35,6 @@ interface Row {
 export function TermProgress() {
   const { data, participantStatuses, teamStatuses } = useCohort();
   const statuses = { participantStatuses, teamStatuses };
-  const active = new Set(
-    data.enrollments.filter((e) => e.status === "active").map((e) => e.id),
-  );
 
   // Every event an attendance rule counts, with how many must attend the next one.
   const mustAttend = new Map<string, number>();
@@ -54,6 +52,8 @@ export function TermProgress() {
   }
   const workshops: Row[] = [...counted.values()].map((e) => {
     const upcoming = e.date >= data.today;
+    // Counted against who was in the program that day.
+    const active = inProgramOn(data, upcoming ? data.today : e.date);
     const n = mustAttend.get(e.id);
     return {
       id: e.id,
