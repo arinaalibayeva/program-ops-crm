@@ -1939,11 +1939,6 @@
       "status": "on_track",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 13"
@@ -1989,11 +1984,6 @@
     "team-2": {
       "status": "at_risk",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2042,11 +2032,6 @@
     "team-3": {
       "status": "at_risk",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2103,11 +2088,6 @@
       "status": "at_risk",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 11"
@@ -2155,11 +2135,6 @@
     "team-5": {
       "status": "at_risk",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2216,11 +2191,6 @@
       "status": "on_track",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 12"
@@ -2266,11 +2236,6 @@
     "team-7": {
       "status": "at_risk",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2320,11 +2285,6 @@
       "status": "at_risk",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 14"
@@ -2373,11 +2333,6 @@
       "status": "on_track",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 13"
@@ -2423,11 +2378,6 @@
     "team-10": {
       "status": "missing",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "missing",
@@ -2492,11 +2442,6 @@
       "status": "at_risk",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 14"
@@ -2544,11 +2489,6 @@
     "team-12": {
       "status": "at_risk",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2611,11 +2551,6 @@
       "status": "on_track",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 14"
@@ -2661,11 +2596,6 @@
     "team-14": {
       "status": "on_track",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2713,11 +2643,6 @@
       "status": "on_track",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 13"
@@ -2763,11 +2688,6 @@
     "team-16": {
       "status": "missing",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2825,11 +2745,6 @@
       "status": "on_track",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 12"
@@ -2875,11 +2790,6 @@
     "team-18": {
       "status": "on_track",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
@@ -2927,11 +2837,6 @@
       "status": "on_track",
       "results": [
         {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
-        {
           "requirementId": "req-5",
           "status": "met",
           "reason": "Project brief done on Oct 14"
@@ -2977,11 +2882,6 @@
     "team-20": {
       "status": "on_track",
       "results": [
-        {
-          "requirementId": "req-4",
-          "status": "met",
-          "reason": "6 active members"
-        },
         {
           "requirementId": "req-5",
           "status": "met",
