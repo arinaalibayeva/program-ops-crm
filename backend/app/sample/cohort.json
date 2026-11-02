@@ -1940,121 +1940,141 @@
       "id": "proj-1",
       "cohortId": "c-fall-2026",
       "title": "Volunteer shift scheduling",
-      "partnerId": "partner-bayview-community-pantry"
+      "partnerId": "partner-bayview-community-pantry",
+      "description": "Bayview Community Pantry runs its weekly food distribution with about 60 volunteers, coordinated through a shared spreadsheet and group texts. Shifts are often double-booked or left empty, and the coordinator spends hours each week chasing replacements. The team will map how volunteers currently sign up and swap shifts, then design a simpler way to see open slots and get reminders. Likely deliverables are a working sign-up prototype, a one-page guide for the coordinator, and a short report on what volunteers said they need."
     },
     {
       "id": "proj-2",
       "cohortId": "c-fall-2026",
       "title": "Tenant rights info hub",
-      "partnerId": "partner-mission-housing-collective"
+      "partnerId": "partner-mission-housing-collective",
+      "description": "Mission Housing Collective answers the same tenant questions every week: rent increases, repairs, deposits and eviction notices. The information exists, but it is spread across legal PDFs that most tenants find hard to read. The team will interview tenants and staff to find the most common questions and rewrite the answers in plain language, in English and Spanish. Deliverables could include a mobile-friendly info site, printable one-page handouts, and a plan for keeping the content up to date."
     },
     {
       "id": "proj-3",
       "cohortId": "c-fall-2026",
       "title": "Youth coding club curriculum",
-      "partnerId": "partner-eastside-learning-center"
+      "partnerId": "partner-eastside-learning-center",
+      "description": "Eastside Learning Center wants to start an after-school coding club for 12 to 15 year olds but has no curriculum and volunteer teachers with mixed experience. The team will research beginner-friendly approaches, test sample lessons with a small group of students, and see what keeps them coming back. The aim is an eight-week curriculum that a non-expert volunteer can run. Deliverables are lesson plans with slides, a starter project for each week, and a short facilitator guide."
     },
     {
       "id": "proj-4",
       "cohortId": "c-fall-2026",
       "title": "Library e-resource onboarding",
-      "partnerId": "partner-northgate-public-library"
+      "partnerId": "partner-northgate-public-library",
+      "description": "Northgate Public Library pays for e-books, language courses and research databases, but most members don't know they exist or give up at the login step. The team will watch members try to get started, find where they get stuck, and work with librarians on what to promote first. Deliverables could include a redesigned getting-started page, short how-to videos or guides, and a sign-up flow tested with real members."
     },
     {
       "id": "proj-5",
       "cohortId": "c-fall-2026",
       "title": "Urban garden plot booking",
-      "partnerId": "partner-green-blocks-initiative"
+      "partnerId": "partner-green-blocks-initiative",
+      "description": "Green Blocks Initiative manages 40 community garden plots across three sites, with bookings tracked on paper and a long waitlist kept by email. Gardeners don't know when plots free up, and staff can't easily see who is using what. The team will design a fair, simple way to join the waitlist, claim a plot and renew each season. Deliverables are a booking prototype, a proposal for waitlist rules, and a handover guide for staff."
     },
     {
       "id": "proj-6",
       "cohortId": "c-fall-2026",
       "title": "Senior tech help desk",
-      "partnerId": "partner-golden-years-network"
+      "partnerId": "partner-golden-years-network",
+      "description": "Golden Years Network gets constant requests from older members for help with phones, video calls, scams and online forms. Volunteers help when they can, but there is no way to track requests or share answers to common problems. The team will look at what members ask for most and how help is given today, then design a drop-in and phone help-desk process. Deliverables could include a request-tracking setup, a library of large-print how-to guides, and training notes for volunteers."
     },
     {
       "id": "proj-7",
       "cohortId": "c-fall-2026",
       "title": "Bike repair co-op inventory",
-      "partnerId": "partner-spokes-together"
+      "partnerId": "partner-spokes-together",
+      "description": "Spokes Together repairs donated bikes and sells parts at low cost, but its inventory lives in volunteers' heads and a whiteboard. Parts are reordered twice or run out mid-repair, and nobody knows what stock is worth. The team will spend time in the shop to understand how parts move, then build a simple way to log what comes in and goes out. Deliverables are an inventory tool suited to a busy workshop, a labeling system for shelves, and a monthly stock report template."
     },
     {
       "id": "proj-8",
       "cohortId": "c-fall-2026",
       "title": "Refugee job board",
-      "partnerId": "partner-new-roots-alliance"
+      "partnerId": "partner-new-roots-alliance",
+      "description": "New Roots Alliance helps newly arrived refugees find work, but job leads arrive by phone, email and word of mouth and are hard to match to the right person. Many clients are still learning English and use a phone as their only device. The team will interview caseworkers, clients and local employers to understand what a good match looks like. Deliverables could include a mobile-first job board prototype, a simple process for employers to post roles, and translated guides for clients."
     },
     {
       "id": "proj-9",
       "cohortId": "c-fall-2026",
       "title": "Clinic wait-time tracker",
-      "partnerId": "partner-harborview-free-clinic"
+      "partnerId": "partner-harborview-free-clinic",
+      "description": "Harborview Free Clinic sees walk-in patients on a first-come basis, and people often wait hours without knowing how long it will be. Some leave before being seen, and front-desk staff field constant questions. The team will observe intake on clinic days and talk to patients and staff about what would help. Deliverables are a prototype that shows estimated wait times by text or on a screen, a revised intake process, and data on how wait times change through the day."
     },
     {
       "id": "proj-10",
       "cohortId": "c-fall-2026",
       "title": "Neighborhood safety map",
-      "partnerId": "partner-westside-residents-assoc"
+      "partnerId": "partner-westside-residents-assoc",
+      "description": "Westside Residents Association hears about broken streetlights, unsafe crossings and dumping, but reports go to different city departments and residents rarely hear back. The association wants a clear picture of where the problems are so it can push for fixes. The team will gather existing reports, run a short resident survey, and design a way to collect and map new ones. Deliverables could include an interactive map, a reporting form, and a summary of the top issues for the association to bring to the city."
     },
     {
       "id": "proj-11",
       "cohortId": "c-fall-2026",
       "title": "Food waste pickup routing",
-      "partnerId": "partner-second-plate"
+      "partnerId": "partner-second-plate",
+      "description": "Second Plate collects surplus food from restaurants and grocery stores and delivers it to shelters, using volunteer drivers and routes planned by hand each morning. Pickups are missed when plans change, and drivers often cross the city twice. The team will study a few weeks of pickup data and ride along with drivers to understand the constraints. Deliverables are a routing approach that reduces driving time, a simple daily schedule view for drivers, and a short report on the savings."
     },
     {
       "id": "proj-12",
       "cohortId": "c-fall-2026",
       "title": "Arts grant application helper",
-      "partnerId": "partner-city-arts-fund"
+      "partnerId": "partner-city-arts-fund",
+      "description": "City Arts Fund offers small grants to local artists, but many first-time applicants give up or submit incomplete applications. Staff spend a lot of time answering the same questions about eligibility and budgets. The team will review past applications, interview artists who applied and some who didn't, and find where the process loses people. Deliverables could include a step-by-step application guide, an eligibility checker, and recommendations to simplify the form itself."
     },
     {
       "id": "proj-13",
       "cohortId": "c-fall-2026",
       "title": "Transit access guide",
-      "partnerId": "partner-bay-rides-coalition"
+      "partnerId": "partner-bay-rides-coalition",
+      "description": "Bay Rides Coalition advocates for riders with disabilities, who often can't tell in advance whether a station has a working elevator or step-free access. Information is scattered across agency websites and is often out of date. The team will audit a set of key stations and interview riders about how they plan trips today. Deliverables are an accessible station guide, a way for riders to report broken elevators, and a summary of findings the coalition can share with transit agencies."
     },
     {
       "id": "proj-14",
       "cohortId": "c-fall-2026",
       "title": "Shelter bed availability board",
-      "partnerId": "partner-oakland-open-door"
+      "partnerId": "partner-oakland-open-door",
+      "description": "Oakland Open Door works with several local shelters, and outreach workers spend hours calling around each evening to find an open bed for someone. By the time a bed is found it is sometimes already gone. The team will talk to shelter staff and outreach workers to understand how beds are held and released. Deliverables could include a shared availability board shelters can update in seconds, a phone-friendly view for outreach workers, and an agreement on how often counts are refreshed."
     },
     {
       "id": "proj-15",
       "cohortId": "c-fall-2026",
       "title": "After-school tutor matching",
-      "partnerId": "partner-richmond-reads"
+      "partnerId": "partner-richmond-reads",
+      "description": "Richmond Reads pairs volunteer tutors with elementary students who are behind in reading, but matching is done by one staff member using a spreadsheet. Pairs are often poorly matched on schedule or language, and many end in the first month. The team will look at past matches and interview tutors, families and teachers. Deliverables are a matching process with clear criteria, a sign-up form for tutors and families, and a check-in routine to catch struggling pairs early."
     },
     {
       "id": "proj-16",
       "cohortId": "c-fall-2026",
       "title": "Small business grant finder",
-      "partnerId": "partner-fruitvale-merchants-group"
+      "partnerId": "partner-fruitvale-merchants-group",
+      "description": "Fruitvale Merchants Group supports small, mostly family-run businesses that miss out on grants because they don't hear about them or find the paperwork overwhelming. Opportunities are posted in many places with different rules. The team will gather current local, state and federal programs and interview business owners about what stops them applying. Deliverables could include a searchable grant finder, plain-language summaries of the top programs, and a calendar of upcoming deadlines."
     },
     {
       "id": "proj-17",
       "cohortId": "c-fall-2026",
       "title": "Community fridge tracker",
-      "partnerId": "partner-sunset-mutual-aid"
+      "partnerId": "partner-sunset-mutual-aid",
+      "description": "Sunset Mutual Aid runs four community fridges that neighbors stock and use freely. Volunteers have no easy way to know which fridges are empty, full or need cleaning, so some sit bare while others overflow. The team will visit the fridges, talk to volunteers and users, and design a light-touch way to report status. Deliverables are a status-reporting prototype such as a QR code at each fridge, a volunteer rota, and a short guide for setting up new fridges."
     },
     {
       "id": "proj-18",
       "cohortId": "c-fall-2026",
       "title": "Wetlands volunteer log",
-      "partnerId": "partner-baylands-stewards"
+      "partnerId": "partner-baylands-stewards",
+      "description": "Baylands Stewards runs weekend restoration days where volunteers remove invasive plants and plant natives, but hours and work done are recorded on paper sign-in sheets. The organization needs better records to report to funders and track restoration over time. The team will go to a workday and design a quick way to log volunteers, hours and areas worked. Deliverables could include a mobile logging tool that works with weak signal, a dashboard of hours and acres, and a funder report template."
     },
     {
       "id": "proj-19",
       "cohortId": "c-fall-2026",
       "title": "Immigrant legal clinic intake",
-      "partnerId": "partner-san-jose-legal-access"
+      "partnerId": "partner-san-jose-legal-access",
+      "description": "San Jose Legal Access holds free immigration clinics where volunteers collect long intake forms by hand before clients can see a lawyer. The process takes so long that some clients leave before their consultation. The team will observe a clinic and work with staff on which questions are really needed up front. Deliverables are a shorter, multilingual intake form, a process that lets clients start before arriving, and guidance for handling sensitive information safely."
     },
     {
       "id": "proj-20",
       "cohortId": "c-fall-2026",
       "title": "Veteran benefits navigator",
-      "partnerId": "partner-marin-veterans-hub"
+      "partnerId": "partner-marin-veterans-hub",
+      "description": "Marin Veterans Hub helps veterans and their families claim benefits for healthcare, housing and education, but the eligibility rules are complex and change often. Many veterans don't know what they qualify for until a caseworker sits down with them. The team will interview veterans and caseworkers and map the most common benefit journeys. Deliverables could include a guided questionnaire that suggests likely benefits, plain-language guides for the top programs, and a checklist of documents to bring."
     }
   ],
   "teams": [
@@ -6558,7 +6578,13 @@
       "completedAt": "2026-10-17"
     }
   ],
-  "exemptions": [],
+  "exemptions": [
+    {
+      "requirementId": "req-2",
+      "subjectId": "enr-51",
+      "reason": "Medical leave Oct 5 to 12, approved by the program director"
+    }
+  ],
   "fields": [
     {
       "id": "field-role",
@@ -6891,7 +6917,7 @@
   "staff": [
     {
       "id": "staff-demo",
-      "name": "Demo Admin",
+      "name": "Arina Alibayeva",
       "email": "admin@demo.test",
       "role": "manager",
       "jobTitle": "Program coordinator"
@@ -6927,12 +6953,61 @@
   ],
   "notes": [
     {
+      "id": "note-14",
+      "subjectType": "team",
+      "subjectId": "team-10",
+      "body": "Talked to the intern about this team. If the brief isn't in by Wednesday, set up a call with the partner.",
+      "author": "Arina Alibayeva",
+      "followUpDate": "2026-10-21",
+      "followUpDone": false,
+      "createdAt": "2026-10-18T16:00:00.000Z"
+    },
+    {
+      "id": "note-8",
+      "subjectType": "team",
+      "subjectId": "team-4",
+      "body": "User research plan is about half done. Two members are running interviews this weekend.",
+      "author": "Maya Lindgren",
+      "followUpDate": "2026-10-23",
+      "followUpDone": false,
+      "createdAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
+      "id": "note-18",
+      "subjectType": "partner",
+      "subjectId": "partner-westside-residents-assoc",
+      "body": "Invited the team to their November community meeting to hear from residents directly.",
+      "author": "Lucia Ferrante",
+      "followUpDate": "2026-10-28",
+      "followUpDone": false,
+      "createdAt": "2026-10-17T16:00:00.000Z"
+    },
+    {
       "id": "note-1",
       "subjectType": "team",
       "subjectId": "team-10",
       "body": "Brief is late. They said the partner hasn't confirmed scope yet, so ask again on Monday.",
-      "author": "Maya Lindgren",
+      "author": "Lucia Ferrante",
       "followUpDate": "2026-10-19",
+      "followUpDone": false,
+      "createdAt": "2026-10-16T16:00:00.000Z"
+    },
+    {
+      "id": "note-6",
+      "subjectType": "team",
+      "subjectId": "team-2",
+      "body": "Checked in after Workshop 3. They've narrowed it to two prototype ideas and want the partner's view before choosing.",
+      "author": "Jonah Reyes",
+      "followUpDone": false,
+      "createdAt": "2026-10-16T16:00:00.000Z"
+    },
+    {
+      "id": "note-15",
+      "subjectType": "participant",
+      "subjectId": "enr-4",
+      "body": "Missed Workshop 3 because of a midterm. Says they'll be at Workshop 4.",
+      "author": "Arina Alibayeva",
+      "followUpDate": "2026-10-27",
       "followUpDone": false,
       "createdAt": "2026-10-16T16:00:00.000Z"
     },
@@ -6941,7 +7016,17 @@
       "subjectType": "participant",
       "subjectId": "enr-12",
       "body": "Missed two workshops. Emailed to ask if something's going on.",
-      "author": "Demo Admin",
+      "author": "Arina Alibayeva",
+      "followUpDate": "2026-10-21",
+      "followUpDone": false,
+      "createdAt": "2026-10-15T16:00:00.000Z"
+    },
+    {
+      "id": "note-11",
+      "subjectType": "team",
+      "subjectId": "team-11",
+      "body": "Research plan is waiting on the partner to approve the survey questions.",
+      "author": "Jonah Reyes",
       "followUpDate": "2026-10-21",
       "followUpDone": false,
       "createdAt": "2026-10-15T16:00:00.000Z"
@@ -6957,14 +7042,73 @@
       "createdAt": "2026-10-14T16:00:00.000Z"
     },
     {
+      "id": "note-7",
+      "subjectType": "team",
+      "subjectId": "team-3",
+      "body": "No partner meeting since Oct 2. The partner is traveling until the 20th; the team will meet them on the 22nd.",
+      "author": "Jonah Reyes",
+      "followUpDate": "2026-10-22",
+      "followUpDone": false,
+      "createdAt": "2026-10-14T16:00:00.000Z"
+    },
+    {
+      "id": "note-16",
+      "subjectType": "participant",
+      "subjectId": "enr-37",
+      "body": "No reply to two emails. Asked their team manager to check in with them.",
+      "author": "Arina Alibayeva",
+      "followUpDate": "2026-10-20",
+      "followUpDone": false,
+      "createdAt": "2026-10-14T16:00:00.000Z"
+    },
+    {
+      "id": "note-10",
+      "subjectType": "team",
+      "subjectId": "team-8",
+      "body": "Asked for help finding people to interview. Put them in touch with the partner's volunteer coordinator.",
+      "author": "Maya Lindgren",
+      "followUpDone": false,
+      "createdAt": "2026-10-13T16:00:00.000Z"
+    },
+    {
+      "id": "note-17",
+      "subjectType": "partner",
+      "subjectId": "partner-fruitvale-merchants-group",
+      "body": "The data export they promised is two weeks late. The team is working from public data in the meantime.",
+      "author": "Maya Lindgren",
+      "followUpDate": "2026-10-26",
+      "followUpDone": false,
+      "createdAt": "2026-10-13T16:00:00.000Z"
+    },
+    {
       "id": "note-4",
       "subjectType": "team",
       "subjectId": "team-12",
       "body": "No partner meetings logged yet. Check whether they're meeting and not logging it.",
-      "author": "Demo Admin",
+      "author": "Arina Alibayeva",
       "followUpDate": "2026-10-23",
       "followUpDone": false,
       "createdAt": "2026-10-12T16:00:00.000Z"
+    },
+    {
+      "id": "note-12",
+      "subjectType": "team",
+      "subjectId": "team-16",
+      "body": "Missed the September report. They say it went to the wrong Forum thread; asked them to resubmit it.",
+      "author": "Maya Lindgren",
+      "followUpDate": "2026-10-20",
+      "followUpDone": false,
+      "createdAt": "2026-10-12T16:00:00.000Z"
+    },
+    {
+      "id": "note-9",
+      "subjectType": "team",
+      "subjectId": "team-7",
+      "body": "September report came in late. Reminded them about the Oct 31 deadline and that each meeting needs a photo.",
+      "author": "Maya Lindgren",
+      "followUpDate": "2026-10-30",
+      "followUpDone": false,
+      "createdAt": "2026-10-09T16:00:00.000Z"
     },
     {
       "id": "note-5",
@@ -6974,6 +7118,38 @@
       "author": "Theo Okonkwo",
       "followUpDone": false,
       "createdAt": "2026-10-08T16:00:00.000Z"
+    },
+    {
+      "id": "note-13",
+      "subjectType": "team",
+      "subjectId": "team-13",
+      "body": "Strong relationship with the partner, who wants to co-present with them at the midpoint showcase.",
+      "author": "Jonah Reyes",
+      "followUpDone": false,
+      "createdAt": "2026-10-07T16:00:00.000Z"
+    }
+  ],
+  "nudges": [
+    {
+      "id": "nudge-1",
+      "requirementId": "req-7",
+      "subjectId": "team-16",
+      "sentBy": "Maya Lindgren",
+      "sentOn": "2026-10-16"
+    },
+    {
+      "id": "nudge-2",
+      "requirementId": "req-1",
+      "subjectId": "enr-12",
+      "sentBy": "Arina Alibayeva",
+      "sentOn": "2026-10-15"
+    },
+    {
+      "id": "nudge-3",
+      "requirementId": "req-5",
+      "subjectId": "team-10",
+      "sentBy": "Arina Alibayeva",
+      "sentOn": "2026-10-17"
     }
   ],
   "recordTypes": [
@@ -9425,6 +9601,126 @@
         "rf-r-month": "September"
       },
       "createdAt": "2026-10-04T18:00:00.000Z"
+    },
+    {
+      "id": "rec-125",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Two members not answering in the group chat",
+        "rf-i-status": "Open",
+        "rf-i-severity": "Medium",
+        "rf-i-team": "team-10",
+        "rf-i-opened": "2026-10-13",
+        "rf-i-details": "Two members haven't replied since Workshop 2. The rest of the team is covering their tasks for now."
+      },
+      "createdAt": "2026-10-13T18:00:00.000Z"
+    },
+    {
+      "id": "rec-126",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Partner hasn't shared the data they promised",
+        "rf-i-status": "Open",
+        "rf-i-severity": "High",
+        "rf-i-team": "team-16",
+        "rf-i-opened": "2026-10-09",
+        "rf-i-details": "The team needs last year's grant data to start. The partner says the export is delayed by two weeks."
+      },
+      "createdAt": "2026-10-09T18:00:00.000Z"
+    },
+    {
+      "id": "rec-127",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Unclear who the main partner contact is",
+        "rf-i-status": "Open",
+        "rf-i-severity": "Medium",
+        "rf-i-team": "team-12",
+        "rf-i-opened": "2026-10-15",
+        "rf-i-details": "Two people at the partner have given different directions. The team asked who has the final say."
+      },
+      "createdAt": "2026-10-15T18:00:00.000Z"
+    },
+    {
+      "id": "rec-128",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Clash with the partner's weekly call",
+        "rf-i-status": "Resolved",
+        "rf-i-severity": "Low",
+        "rf-i-team": "team-8",
+        "rf-i-opened": "2026-09-29",
+        "rf-i-details": "Moved the weekly partner call from Monday to Thursday afternoon."
+      },
+      "createdAt": "2026-09-29T18:00:00.000Z"
+    },
+    {
+      "id": "rec-129",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Laptop stolen with interview notes on it",
+        "rf-i-status": "Resolved",
+        "rf-i-severity": "Medium",
+        "rf-i-team": "team-9",
+        "rf-i-opened": "2026-10-05",
+        "rf-i-details": "Most notes were recovered from the shared drive; two interviews were redone."
+      },
+      "createdAt": "2026-10-05T18:00:00.000Z"
+    },
+    {
+      "id": "rec-130",
+      "typeId": "rt-issues",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-i-title": "Partner asked to change the project scope",
+        "rf-i-status": "Resolved",
+        "rf-i-severity": "Medium",
+        "rf-i-team": "team-20",
+        "rf-i-opened": "2026-09-24",
+        "rf-i-details": "Agreed to keep the original scope and list the new idea as a stretch goal."
+      },
+      "createdAt": "2026-09-24T18:00:00.000Z"
+    },
+    {
+      "id": "rec-131",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "Lantern · October",
+        "rf-r-date": "2026-10-16",
+        "rf-r-team": "team-2",
+        "rf-r-month": "October"
+      },
+      "createdAt": "2026-10-16T18:00:00.000Z"
+    },
+    {
+      "id": "rec-132",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "Beacon · October",
+        "rf-r-date": "2026-10-17",
+        "rf-r-team": "team-6",
+        "rf-r-month": "October"
+      },
+      "createdAt": "2026-10-17T18:00:00.000Z"
+    },
+    {
+      "id": "rec-133",
+      "typeId": "rt-reports",
+      "cohortId": "c-fall-2026",
+      "values": {
+        "rf-r-title": "Cypress · October",
+        "rf-r-date": "2026-10-18",
+        "rf-r-team": "team-14",
+        "rf-r-month": "October"
+      },
+      "createdAt": "2026-10-18T18:00:00.000Z"
     }
   ],
   "calculations": [

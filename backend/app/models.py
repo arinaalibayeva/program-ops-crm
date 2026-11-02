@@ -83,6 +83,7 @@ class Project(Base):
     cohort_id: Mapped[str] = mapped_column(ForeignKey("cohorts.id"), index=True)
     title: Mapped[str]
     partner_id: Mapped[str | None] = mapped_column(ForeignKey("partners.id"), index=True)
+    description: Mapped[str | None]
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
@@ -123,6 +124,22 @@ class Team(Base):
     # The staff member who looks after this team.
     owner_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), index=True)
     created_at: Mapped[dt.datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
+class Nudge(Base):
+    """Reminder activity about a rule. Opening an email draft does not confirm delivery."""
+
+    __tablename__ = "nudges"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    cohort_id: Mapped[str] = mapped_column(ForeignKey("cohorts.id"), index=True)
+    # The rule it was about. Empty for flags from tracked numbers.
+    requirement_id: Mapped[str | None] = mapped_column(String, index=True)
+    # The participant, team or partner it was about.
+    subject_id: Mapped[str] = mapped_column(String, index=True)
+    sent_by: Mapped[str | None]
+    # The program's date, so the demo's fixed "today" shows on it too.
+    sent_on: Mapped[dt.date] = mapped_column(Date)
 
 
 class Note(Base):

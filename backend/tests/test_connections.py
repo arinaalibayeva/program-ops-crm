@@ -306,3 +306,22 @@ def test_a_requirement_can_be_edited_but_not_change_kind(client):
     assert client.put("/api/requirements/req-5", json={**body, "scope": "participant"}).status_code == 400
     assert client.put("/api/requirements/req-5", json={**body, "params": {}}).status_code == 400
     assert client.put("/api/requirements/nope", json=body).status_code == 404
+
+
+def test_nudges_are_saved_with_the_program_date(client):
+    sample = {n["id"] for n in client.get("/api/cohort").json()["nudges"]}
+    assert sample, "the sample cohort comes with a few nudges"
+    data = client.post("/api/nudges", json={"id": "nudge-abcdef12", "requirementId": "req-5", "subjectId": TEAM}).json()
+    nudge = next(n for n in data["nudges"] if n["id"] == "nudge-abcdef12")
+    assert nudge["requirementId"] == "req-5" and nudge["subjectId"] == TEAM
+    assert nudge["sentBy"] == "Test Admin" and nudge["sentOn"] == data["today"]
+    # Flags from tracked numbers aren't tied to a rule.
+    flag = client.post("/api/nudges", json={"subjectId": TEAM}).json()["nudges"]
+    assert any(n["subjectId"] == TEAM and "requirementId" not in n for n in flag)
+    assert client.post("/api/nudges", json={"requirementId": "nope", "subjectId": TEAM}).status_code == 404
+
+
+def test_nudges_require_a_valid_subject_in_the_requirement_scope(client):
+    assert client.post("/api/nudges", json={"subjectId": "missing-subject"}).status_code == 404
+    assert client.post("/api/nudges", json={"requirementId": "req-5", "subjectId": ENROLLMENT}).status_code == 404
+    assert client.post("/api/nudges", json={"requirementId": "req-5", "subjectId": "missing-team"}).status_code == 404

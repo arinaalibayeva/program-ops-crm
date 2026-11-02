@@ -15,7 +15,7 @@ import {
   relativeDay,
   type SubjectRow,
 } from "@/lib/requirement-insights";
-import { activeMembers } from "@/lib/requirements";
+import { activeMembers, inProgramOn } from "@/lib/requirements";
 import { staffName } from "@/lib/staff";
 import { useCohort } from "@/lib/store";
 import type { CohortData, Requirement } from "@/lib/types";
@@ -64,7 +64,14 @@ export function RuleDetail({
   rows: SubjectRow[];
 }) {
   const router = useRouter();
-  const { deleteRequirement, toggleCompletion } = useCohort();
+  const { deleteRequirement, toggleCompletion, addNudge } = useCohort();
+  // When each person or team was last reminded about this rule.
+  const lastNudge = new Map<string, string>();
+  for (const n of data.nudges ?? []) {
+    if (n.requirementId !== req.id) continue;
+    if ((lastNudge.get(n.subjectId) ?? "") < n.sentOn)
+      lastNudge.set(n.subjectId, n.sentOn);
+  }
   const [editing, setEditing] = useState(false);
   const affected = rows.filter((r) => r.bucket !== "ok");
   const allEmails = emailsFor(data, req, affected);
@@ -130,6 +137,7 @@ export function RuleDetail({
           {allEmails.length > 0 && (
             <a
               href={mailto(req, allEmails)}
+              onClick={() => affected.forEach((r) => addNudge(r.id, req.id))}
               className={buttonVariants({ size: "sm", variant: "outline" })}
             >
               <Mail /> Nudge all {affected.length}
@@ -195,15 +203,23 @@ export function RuleDetail({
                           </Button>
                         ) : (
                           emails.length > 0 && (
-                            <a
-                              href={mailto(req, emails, r.result.reason)}
-                              className={buttonVariants({
-                                size: "xs",
-                                variant: "outline",
-                              })}
-                            >
-                              Nudge
-                            </a>
+                            <span className="inline-flex items-center gap-2">
+                              {lastNudge.has(r.id) && (
+                                <span className="text-xs">
+                                  Reminder opened {formatDate(lastNudge.get(r.id)!)}
+                                </span>
+                              )}
+                              <a
+                                href={mailto(req, emails, r.result.reason)}
+                                onClick={() => addNudge(r.id, req.id)}
+                                className={buttonVariants({
+                                  size: "xs",
+                                  variant: "outline",
+                                })}
+                              >
+                                {lastNudge.has(r.id) ? "Again" : "Nudge"}
+                              </a>
+                            </span>
                           )
                         )}
                       </td>
@@ -233,9 +249,6 @@ function Counted({
 }) {
   if (req.type === "attendance_min") {
     const events = countedEvents(data, req);
-    const active = new Set(
-      data.enrollments.filter((e) => e.status === "active").map((e) => e.id),
-    );
     const next = events.find((e) => e.date >= data.today);
     const mustAttend = rows.filter((r) => r.bucket === "at_risk").length;
     return (
@@ -244,6 +257,8 @@ function Counted({
         <div className="grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-2">
           {events.map((e) => {
             const upcoming = e.date >= data.today;
+            // Counted against who was in the program that day.
+            const active = inProgramOn(data, upcoming ? data.today : e.date);
             const came = data.attendance.filter(
               (a) => a.eventId === e.id && active.has(a.enrollmentId),
             ).length;

@@ -813,7 +813,7 @@
       "flags": []
     },
     "enr-51": {
-      "status": "on_track",
+      "status": "met",
       "results": [
         {
           "requirementId": "req-1",
@@ -822,8 +822,9 @@
         },
         {
           "requirementId": "req-2",
-          "status": "on_track",
-          "reason": "Attended 1 of 1 all hands so far"
+          "status": "met",
+          "reason": "Excused: Medical leave Oct 5 to 12, approved by the program director",
+          "excused": true
         }
       ],
       "flags": []
@@ -2010,8 +2011,8 @@
         },
         {
           "requirementId": "req-8",
-          "status": "on_track",
-          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+          "status": "met",
+          "reason": "October Meeting Report logged (1)"
         },
         {
           "requirementId": "req-9",
@@ -2236,8 +2237,8 @@
         },
         {
           "requirementId": "req-8",
-          "status": "on_track",
-          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+          "status": "met",
+          "reason": "October Meeting Report logged (1)"
         },
         {
           "requirementId": "req-9",
@@ -2471,13 +2472,19 @@
       "flags": [
         "Project brief overdue by 3 days",
         "September Meeting Report overdue by 14 days, 0 of 1 logged",
-        "No partner meeting in over 2 weeks"
+        "No partner meeting in over 2 weeks",
+        "Has an open issue"
       ],
       "ruleResults": [
         {
           "ruleId": "rule-meeting-gap",
           "status": "at_risk",
           "reason": "No partner meeting in over 2 weeks"
+        },
+        {
+          "ruleId": "rule-open-issue",
+          "status": "at_risk",
+          "reason": "Has an open issue"
         }
       ]
     },
@@ -2584,13 +2591,19 @@
         }
       ],
       "flags": [
-        "No partner meeting in over 2 weeks"
+        "No partner meeting in over 2 weeks",
+        "Has an open issue"
       ],
       "ruleResults": [
         {
           "ruleId": "rule-meeting-gap",
           "status": "at_risk",
           "reason": "No partner meeting in over 2 weeks"
+        },
+        {
+          "ruleId": "rule-open-issue",
+          "status": "at_risk",
+          "reason": "Has an open issue"
         }
       ]
     },
@@ -2670,8 +2683,8 @@
         },
         {
           "requirementId": "req-8",
-          "status": "on_track",
-          "reason": "October Meeting Report due Oct 31, 0 of 1 logged"
+          "status": "met",
+          "reason": "October Meeting Report logged (1)"
         },
         {
           "requirementId": "req-9",
@@ -2797,7 +2810,15 @@
         }
       ],
       "flags": [
-        "September Meeting Report overdue by 14 days, 0 of 1 logged"
+        "September Meeting Report overdue by 14 days, 0 of 1 logged",
+        "Has an open issue"
+      ],
+      "ruleResults": [
+        {
+          "ruleId": "rule-open-issue",
+          "status": "at_risk",
+          "reason": "Has an open issue"
+        }
       ]
     },
     "team-17": {

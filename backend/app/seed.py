@@ -22,7 +22,7 @@ SAMPLE = Path(__file__).parent / "sample" / "cohort.json"
 # sessions aren't sample data, so resetting leaves them alone.
 TABLES = [
     m.Rule, m.Calculation, m.RecordForm, m.CustomRecord, m.RecordField, m.RecordType,
-    m.Note, m.Attendance, m.Completion, m.Exemption, m.TeamMembership, m.Event, m.Requirement,
+    m.Nudge, m.Note, m.Attendance, m.Completion, m.Exemption, m.TeamMembership, m.Event, m.Requirement,
     m.Enrollment, m.Team, m.Project, m.PartnerContact, m.Partner, m.Person, m.FieldDefinition,
     m.Cohort, m.Program,
 ]
@@ -92,7 +92,10 @@ def seed(session: Session, data: CohortData) -> None:
         for i, c in enumerate(p.contacts)
     )
     session.add_all(
-        m.Project(id=p.id, cohort_id=p.cohort_id, title=p.title, partner_id=p.partner_id, created_at=at(i))
+        m.Project(
+            id=p.id, cohort_id=p.cohort_id, title=p.title, partner_id=p.partner_id,
+            description=p.description, created_at=at(i),
+        )
         for i, p in enumerate(data.projects)
     )
     session.flush()
@@ -141,6 +144,13 @@ def seed(session: Session, data: CohortData) -> None:
             follow_up_date=n.follow_up_date, follow_up_done=n.follow_up_done, created_at=n.created_at,
         )
         for n in data.notes
+    )
+    session.add_all(
+        m.Nudge(
+            id=n.id, cohort_id=c.id, requirement_id=n.requirement_id, subject_id=n.subject_id,
+            sent_by=n.sent_by, sent_on=n.sent_on,
+        )
+        for n in data.nudges
     )
     session.flush()
     seed_records(session, data)

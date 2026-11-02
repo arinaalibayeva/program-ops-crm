@@ -121,6 +121,17 @@ def delete_requirement(
 # ---- Notes ----
 
 
+@admin.post("/api/nudges", response_model=s.CohortData, **api)
+def add_nudge(
+    body: s.NudgeIn,
+    session: Session = Depends(get_session),
+    cohort: m.Cohort = Depends(cohort_dep),
+    user: m.User = Depends(require_admin),
+):
+    actions.add_nudge(session, cohort, body, user.name, settings.today())
+    return saved(session, cohort)
+
+
 @admin.post("/api/notes", response_model=s.CohortData, **api)
 def add_note(
     body: s.NoteCreate,

@@ -174,7 +174,12 @@ export default function RequirementsPage() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        <RuleTimeline data={data} rules={shown} rowsById={rowsById} />
+        <RuleTimeline
+          data={data}
+          rules={shown}
+          rowsById={rowsById}
+          onSelect={setPicked}
+        />
         <StatusChanges data={data} changes={changes} />
       </div>
     </div>

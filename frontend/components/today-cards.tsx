@@ -16,6 +16,9 @@ const removeButton =
   "shrink-0 rounded p-0.5 text-muted-foreground hover:text-foreground [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-focus-within:opacity-100 [@media(hover:hover)]:group-hover:opacity-100";
 
 type Personal = ReturnType<typeof usePersonalItems>;
+
+/** How many open items the to-do list shows before "Show all". */
+const SHOWN = 6;
 type FollowUp = ReturnType<typeof followUpsOf>[number];
 type Todo = NonNullable<Personal["items"]>[number];
 
@@ -116,6 +119,7 @@ function TodoList({
   const doneFollowUps = followUps.filter((n) => n.followUpDone);
   // Finished items stay out of the way until asked for.
   const [showDone, setShowDone] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const doneCount = done.length + doneFollowUps.length;
 
   function save() {
@@ -171,12 +175,15 @@ function TodoList({
       </form>
 
       <ul className="divide-y">
-        {openFollowUps.map((note) => (
-          <FollowUpRow key={note.id} note={note} />
-        ))}
-        {open.map((todo) => (
+        {/* Your own to-dos first, then follow-ups; long lists fold up. */}
+        {open.slice(0, showAll ? undefined : SHOWN).map((todo) => (
           <TodoRow key={todo.id} todo={todo} personal={personal} />
         ))}
+        {openFollowUps
+          .slice(0, showAll ? undefined : Math.max(0, SHOWN - open.length))
+          .map((note) => (
+            <FollowUpRow key={note.id} note={note} />
+          ))}
         {showDone && (
           <>
             {doneFollowUps.map((note) => (
@@ -192,6 +199,17 @@ function TodoList({
         <p className="text-sm text-muted-foreground">
           {doneCount ? "All done." : "Nothing to do yet."}
         </p>
+      )}
+      {open.length + openFollowUps.length > SHOWN && (
+        <button
+          type="button"
+          onClick={() => setShowAll(!showAll)}
+          className="block text-left text-xs font-medium text-ocean-600 hover:underline"
+        >
+          {showAll
+            ? "Show fewer"
+            : `Show all ${open.length + openFollowUps.length}`}
+        </button>
       )}
       {doneCount > 0 && (
         <button

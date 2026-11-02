@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { formatDate } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { bucketOf, ruleRows, type Bucket } from "@/lib/requirement-insights";
 import { activeMembers } from "@/lib/requirements";
@@ -12,7 +13,7 @@ import { useCohort } from "@/lib/store";
 import type { CohortData, Requirement } from "@/lib/types";
 import { Pill, LABEL } from "@/components/requirements/status-styles";
 
-const SHOWN = 5;
+const SHOWN = 8;
 
 interface Problem {
   key: string;
@@ -34,8 +35,19 @@ function emailOf(data: CohortData, enrollmentId: string): string | undefined {
 
 /** Every problem the rules found, grouped by team, worst teams first, each with a next step. */
 export function Attention({ className }: { className?: string }) {
-  const { data, participantStatuses, teamStatuses, toggleCompletion } =
-    useCohort();
+  const {
+    data,
+    participantStatuses,
+    teamStatuses,
+    toggleCompletion,
+    addNudge,
+  } = useCohort();
+  // The latest reminder for each problem, so it shows "Reminder opened Oct 17".
+  const lastNudge = new Map<string, string>();
+  for (const n of data.nudges ?? []) {
+    const key = `${n.requirementId ?? ""}:${n.subjectId}`;
+    if ((lastNudge.get(key) ?? "") < n.sentOn) lastNudge.set(key, n.sentOn);
+  }
   const [showAll, setShowAll] = useState(false);
   const statuses = { participantStatuses, teamStatuses };
 
@@ -72,10 +84,15 @@ export function Attention({ className }: { className?: string }) {
         bucket: bucketOf(r.status),
         reason: r.reason,
         subjectId: teamId,
-        emails: [],
+        emails: activeMembers(data, teamId).flatMap(
+          (e) => emailOf(data, e.id) ?? [],
+        ),
       });
     }
   }
+
+  const nudged = (p: Problem) =>
+    lastNudge.get(`${p.req?.id ?? ""}:${p.subjectId}`);
 
   const teams = [...byTeam]
     .map(([teamId, problems]) => ({
@@ -140,17 +157,25 @@ export function Attention({ className }: { className?: string }) {
                       Mark done
                     </Button>
                   ) : p.emails.length > 0 ? (
-                    <a
-                      href={`mailto:${p.emails.length === 1 ? p.emails[0] : `?bcc=${p.emails.join(",")}`}${
-                        p.emails.length === 1 ? "?" : "&"
-                      }subject=${encodeURIComponent(`Reminder: ${p.req?.name ?? "CCP"}`)}&body=${encodeURIComponent(p.reason)}`}
-                      className={buttonVariants({
-                        size: "xs",
-                        variant: "outline",
-                      })}
-                    >
-                      Nudge
-                    </a>
+                    <span className="flex shrink-0 items-center gap-2">
+                      {nudged(p) && (
+                        <span className="text-xs whitespace-nowrap">
+                          Reminder opened {formatDate(nudged(p)!)}
+                        </span>
+                      )}
+                      <a
+                        href={`mailto:${p.emails.length === 1 ? p.emails[0] : `?bcc=${p.emails.join(",")}`}${
+                          p.emails.length === 1 ? "?" : "&"
+                        }subject=${encodeURIComponent(`Reminder: ${p.req?.name ?? "CCP"}`)}&body=${encodeURIComponent(p.reason)}`}
+                        onClick={() => addNudge(p.subjectId, p.req?.id)}
+                        className={buttonVariants({
+                          size: "xs",
+                          variant: "outline",
+                        })}
+                      >
+                        {nudged(p) ? "Nudge again" : "Nudge"}
+                      </a>
+                    </span>
                   ) : null}
                 </li>
               ))}
