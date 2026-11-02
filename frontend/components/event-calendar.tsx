@@ -79,10 +79,6 @@ function span(event: ProgramEvent): { start: number; end: number } {
   return { start, end: event.endTime ? minutes(event.endTime) : Math.min(start + 60, 24 * 60) };
 }
 
-function daysUntil(from: string, to: string): number {
-  return Math.round((Date.parse(to) - Date.parse(from)) / 86_400_000);
-}
-
 function rangeLabel(view: View, anchor: string): string {
   if (view === "day") return formatDate(anchor, { weekday: true });
   if (view === "month") return monthLabel(monthOf(anchor));
@@ -91,7 +87,7 @@ function rangeLabel(view: View, anchor: string): string {
 }
 
 export function EventCalendar({ events, today }: { events: ProgramEvent[]; today: string }) {
-  const [view, setView] = useState<View>("week");
+  const [view, setView] = useState<View>("month");
   const [anchor, setAnchor] = useState(today);
   const [opened, setOpened] = useState<{ event: ProgramEvent; element: HTMLElement }>();
   const closeEvent = useCallback(() => setOpened(undefined), []);
@@ -115,9 +111,6 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
     return Array.from({ length: 7 }, (_, i) => addDays(monday, i));
   }, [view, anchor]);
 
-  const thisWeek = mondayOf(today);
-  const eventsThisWeek = events.filter((e) => e.date >= thisWeek && e.date <= addDays(thisWeek, 6)).length;
-  const nextDeadline = events.find((e) => !takesAttendance(e) && !e.completed && e.date >= today);
   // Only what's on screen, so the key stays short and always matches.
   const visible = view === "month"
     ? events.filter((e) => gridDays(monthOf(anchor)).some((d) => onDay(e, d)))
@@ -144,21 +137,6 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
             </button>
           ))}
         </div>
-        <dl className="flex gap-8">
-          <div>
-            <dt className="text-xs text-secondary-foreground">Events this week</dt>
-            <dd className="text-2xl font-semibold tabular-nums">{eventsThisWeek}</dd>
-          </div>
-          {nextDeadline && (
-            <div className="border-l border-primary/15 pl-8">
-              <dt className="text-xs text-secondary-foreground">Next deadline</dt>
-              <dd className="text-2xl font-semibold tabular-nums">
-                {daysUntil(today, nextDeadline.date)}{" "}
-                <span className="text-sm font-medium">days</span>
-              </dd>
-            </div>
-          )}
-        </dl>
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[17rem_minmax(0,1fr)]">
