@@ -13,7 +13,7 @@ const LABEL: Record<Status, string> = {
   met: "Done",
   on_track: "On track",
   at_risk: "At risk",
-  missing: "Missing",
+  missing: "Can't meet",
 };
 
 export function StatusBadge({

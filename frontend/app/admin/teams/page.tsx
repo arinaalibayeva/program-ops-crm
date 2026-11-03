@@ -16,7 +16,7 @@ import type { Status } from "@/lib/types";
 
 const FILTERS: { value: "all" | Status; label: string }[] = [
   { value: "all", label: "All" },
-  { value: "missing", label: "Missing" },
+  { value: "missing", label: "Can't meet" },
   { value: "at_risk", label: "At risk" },
   { value: "on_track", label: "On track" },
 ];
@@ -115,7 +115,7 @@ export default function TeamsPage() {
                       `${partnerById.get(project.partnerId)?.name} · `}
                     {staffName(data, team.ownerId)}
                   </div>
-                  <div className="flex -space-x-1.5">
+                  <div className="flex flex-wrap gap-1">
                     {members.map((m) => {
                       const s = participantStatuses.get(m.id)?.status;
                       const ring =
@@ -128,7 +128,7 @@ export default function TeamsPage() {
                         <div
                           key={m.id}
                           title={personFor(m.id)?.name}
-                          className={`flex size-7 items-center justify-center rounded-full bg-ocean-100 text-[10px] font-medium text-ocean-800 ring-2 ${ring}`}
+                          className={`flex size-8 items-center justify-center rounded-full bg-ocean-100 text-[10px] font-medium text-ocean-800 ring-2 ${ring}`}
                         >
                           {initials(personFor(m.id)?.name ?? "?")}
                         </div>

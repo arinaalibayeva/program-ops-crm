@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 import { StatusBadge } from "@/components/status-badge";
 import { useCohort } from "@/lib/store";
 import type { Status, SubjectStatus } from "@/lib/types";
@@ -37,13 +37,23 @@ function Row({
 }
 
 /** Why a participant or team has the status it has, with a way to tick off what's done. */
-export function StatusCard({ subjectId, status }: { subjectId: string; status: SubjectStatus }) {
+export function StatusCard({
+  subjectId,
+  status,
+}: {
+  subjectId: string;
+  status: SubjectStatus;
+}) {
   const { data, toggleCompletion } = useCohort();
   const rules = status.ruleResults ?? [];
-  const explained = new Set([...status.results.map((r) => r.reason), ...rules.map((r) => r.reason)]);
+  const explained = new Set([
+    ...status.results.map((r) => r.reason),
+    ...rules.map((r) => r.reason),
+  ]);
   // Worked out from the team's members rather than one requirement of its own.
   const others = status.flags.filter((flag) => !explained.has(flag));
-  const empty = status.results.length === 0 && rules.length === 0 && others.length === 0;
+  const empty =
+    status.results.length === 0 && rules.length === 0 && others.length === 0;
 
   return (
     <Card>
@@ -61,9 +71,13 @@ export function StatusCard({ subjectId, status }: { subjectId: string; status: S
         ) : (
           <ul className="divide-y">
             {status.results.map((result) => {
-              const req = data.requirements.find((r) => r.id === result.requirementId);
+              const req = data.requirements.find(
+                (r) => r.id === result.requirementId,
+              );
               if (!req) return null;
-              const done = data.completions.some((c) => c.requirementId === req.id && c.subjectId === subjectId);
+              const done = data.completions.some(
+                (c) => c.requirementId === req.id && c.subjectId === subjectId,
+              );
               return (
                 <Row
                   key={req.id}
@@ -72,26 +86,41 @@ export function StatusCard({ subjectId, status }: { subjectId: string; status: S
                   reason={result.reason}
                   status={result.status}
                 >
-                  {req.type === "complete_by" && !result.excused && (
-                    <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <Checkbox
-                        checked={done}
-                        onCheckedChange={() => toggleCompletion(req.id, subjectId)}
-                        aria-label={`${req.name} done`}
-                      />
-                      {!done && "Mark done"}
-                    </label>
-                  )}
+                  {/* One control: mark it done, or take it back if it was ticked by mistake. */}
+                  {req.type === "complete_by" &&
+                    !result.excused &&
+                    (done ? (
+                      <button
+                        type="button"
+                        onClick={() => toggleCompletion(req.id, subjectId)}
+                        className="text-xs underline-offset-2 hover:underline"
+                      >
+                        Undo
+                      </button>
+                    ) : (
+                      <Button
+                        size="xs"
+                        variant="outline"
+                        onClick={() => toggleCompletion(req.id, subjectId)}
+                      >
+                        Mark done
+                      </Button>
+                    ))}
                 </Row>
               );
             })}
             {rules.map((rule) => {
-              const calculationId = data.rules.find((r) => r.id === rule.ruleId)?.calculationId;
+              const calculationId = data.rules.find(
+                (r) => r.id === rule.ruleId,
+              )?.calculationId;
               return (
                 <Row
                   key={rule.ruleId}
                   href={`/admin/requirements/${rule.ruleId}`}
-                  name={data.calculations.find((c) => c.id === calculationId)?.label ?? "Flag"}
+                  name={
+                    data.calculations.find((c) => c.id === calculationId)
+                      ?.label ?? "Flag"
+                  }
                   reason={rule.reason}
                   status={rule.status}
                 />

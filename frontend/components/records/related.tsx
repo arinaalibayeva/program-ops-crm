@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { StatusBadge } from "@/components/status-badge";
 import {
   calculate,
   evaluateRules,
@@ -138,14 +137,15 @@ export function TrackedNumbers({ on, id }: { on: string; id: string }) {
               <div key={c.id} className="text-sm">
                 <div className="flex items-baseline justify-between gap-3">
                   <dt className="text-muted-foreground">{c.label}</dt>
-                  <dd className="shrink-0 font-medium">{formatCalculation(c, calculate(data, c, id))}</dd>
-                </div>
-                {flag && (
-                  <dd className="mt-0.5 flex items-center gap-1.5 text-xs">
-                    <StatusBadge status={flag.status} />
-                    <span className="text-muted-foreground">{flag.reason}</span>
+                  {/* The reason is in Requirements; here a dot just marks the number behind it. */}
+                  <dd className="shrink-0 font-medium" title={flag?.reason}>
+                    {flag && (
+                      <span className={`mr-1.5 inline-block size-1.5 rounded-full align-middle ${flag.status === "missing" ? "bg-ocean-900" : "bg-ocean-500"}`} />
+                    )}
+                    {formatCalculation(c, calculate(data, c, id))}
                   </dd>
-                )}
+                </div>
+
               </div>
             );
           })}

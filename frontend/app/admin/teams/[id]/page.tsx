@@ -63,63 +63,65 @@ export default function TeamPage({
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <Card size="sm" className="gap-2 px-5">
-            <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h2 className="font-semibold">
-                {project?.title ?? "No project assigned"}
-              </h2>
-              {partner && (
-                <Link
-                  href={`/admin/partners/${partner.id}`}
-                  className="text-sm hover:underline"
-                >
-                  {partner.name}
-                </Link>
+          {/* The project and the people on it, side by side. */}
+          <div className="grid gap-6 md:grid-cols-2">
+            <Card size="sm" className="gap-2 px-5">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h2 className="font-semibold">
+                  {project?.title ?? "No project assigned"}
+                </h2>
+                {partner && (
+                  <Link
+                    href={`/admin/partners/${partner.id}`}
+                    className="text-sm hover:underline"
+                  >
+                    {partner.name}
+                  </Link>
+                )}
+              </div>
+              {project?.description && (
+                <p className="text-sm leading-relaxed">{project.description}</p>
               )}
-            </div>
-            {project?.description && (
-              <p className="text-sm leading-relaxed">{project.description}</p>
-            )}
-          </Card>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle>Members ({members.length})</CardTitle>
+              </CardHeader>
+              <CardContent className="px-0">
+                <ul className="divide-y">
+                  {members.map((m) => {
+                    const person = personFor(m.id)!;
+                    const s = participantStatuses.get(m.id);
+                    return (
+                      <li key={m.id}>
+                        <Link
+                          href={`/admin/participants/${m.id}`}
+                          className="flex items-start justify-between gap-4 px-4 py-2.5 hover:bg-muted/50"
+                        >
+                          <div>
+                            <div className="text-sm font-medium">
+                              {person.name}
+                            </div>
+                            {s?.flags.map((flag) => (
+                              <div
+                                key={flag}
+                                className="text-xs text-muted-foreground"
+                              >
+                                {flag}
+                              </div>
+                            ))}
+                          </div>
+                          {s && <StatusBadge status={s.status} overall />}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
 
           <StatusCard subjectId={id} status={status} />
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Members ({members.length})</CardTitle>
-            </CardHeader>
-            <CardContent className="px-0">
-              <ul className="divide-y">
-                {members.map((m) => {
-                  const person = personFor(m.id)!;
-                  const s = participantStatuses.get(m.id);
-                  return (
-                    <li key={m.id}>
-                      <Link
-                        href={`/admin/participants/${m.id}`}
-                        className="flex items-start justify-between gap-4 px-4 py-2.5 hover:bg-muted/50"
-                      >
-                        <div>
-                          <div className="text-sm font-medium">
-                            {person.name}
-                          </div>
-                          {s?.flags.map((flag) => (
-                            <div
-                              key={flag}
-                              className="text-xs text-muted-foreground"
-                            >
-                              {flag}
-                            </div>
-                          ))}
-                        </div>
-                        {s && <StatusBadge status={s.status} overall />}
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </CardContent>
-          </Card>
 
           <LinkedRecords target="team" id={id} />
         </div>
