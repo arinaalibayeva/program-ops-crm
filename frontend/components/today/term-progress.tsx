@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
-import { formatDate } from "@/lib/format";
-import {
-  countedEvents,
-  dueDateOf,
-  relativeDay,
-  ruleRows,
-} from "@/lib/requirement-insights";
+import { countedEvents, dueDateOf, ruleRows } from "@/lib/requirement-insights";
 import { inProgramOn } from "@/lib/requirements";
 import { useCohort } from "@/lib/store";
 
@@ -22,58 +16,41 @@ interface Row {
   date: string;
   done: number;
   of: number;
-  upcoming: boolean;
-  /** For upcoming rows, what to say instead of a count. */
-  note?: string;
 }
 
 /**
  * The two things the program runs on: people turning up to workshops, and
- * teams handing work in. One bar per workshop and per deadline, oldest first,
- * ending with what's next.
+ * teams handing work in. One bar per workshop and per deadline that has
+ * passed; what's next is already in Coming up.
  */
 export function TermProgress() {
   const { data, participantStatuses, teamStatuses } = useCohort();
   const statuses = { participantStatuses, teamStatuses };
 
-  // Every event an attendance rule counts, with how many must attend the next one.
-  const mustAttend = new Map<string, number>();
+  // Every event an attendance rule counts.
   const counted = new Map<string, (typeof data.events)[number]>();
-  for (const req of data.requirements) {
-    const events = countedEvents(data, req);
-    events.forEach((e) => counted.set(e.id, e));
-    const next = events.find((e) => e.date >= data.today);
-    if (next) {
-      const n = ruleRows(data, req, statuses).filter(
-        (r) => r.bucket === "at_risk",
-      ).length;
-      mustAttend.set(next.id, (mustAttend.get(next.id) ?? 0) + n);
-    }
-  }
-  const workshops: Row[] = [...counted.values()].map((e) => {
-    const upcoming = e.date >= data.today;
-    // Counted against who was in the program that day.
-    const active = inProgramOn(data, upcoming ? data.today : e.date);
-    const n = mustAttend.get(e.id);
-    return {
-      id: e.id,
-      href: `/admin/events/${e.id}`,
-      label: e.title.split(":")[0],
-      date: e.date,
-      done: upcoming
-        ? 0
-        : data.attendance.filter(
-            (a) => a.eventId === e.id && active.has(a.enrollmentId),
-          ).length,
-      of: active.size,
-      upcoming,
-      note: n ? `${n} must attend` : undefined,
-    };
-  });
+  for (const req of data.requirements)
+    countedEvents(data, req).forEach((e) => counted.set(e.id, e));
+  const workshops: Row[] = [...counted.values()]
+    .filter((e) => e.date < data.today)
+    .map((e) => {
+      // Counted against who was in the program that day.
+      const active = inProgramOn(data, e.date);
+      return {
+        id: e.id,
+        href: `/admin/events/${e.id}`,
+        label: e.title.split(":")[0],
+        date: e.date,
+        done: data.attendance.filter(
+          (a) => a.eventId === e.id && active.has(a.enrollmentId),
+        ).length,
+        of: active.size,
+      };
+    });
 
   const handIns: Row[] = data.requirements.flatMap((req) => {
     const due = dueDateOf(req);
-    if (!due) return [];
+    if (!due || due >= data.today) return [];
     const rows = ruleRows(data, req, statuses);
     return [
       {
@@ -83,7 +60,6 @@ export function TermProgress() {
         date: due,
         done: rows.filter((r) => r.result.status === "met").length,
         of: rows.length,
-        upcoming: due >= data.today,
       },
     ];
   });
@@ -93,37 +69,26 @@ export function TermProgress() {
       <Section
         title="Workshop turnout"
         unit="people came"
-        rows={recentAndNext(workshops)}
-        today={data.today}
+        rows={recent(workshops)}
       />
-      <Section
-        title="Hand-ins"
-        unit="teams in"
-        rows={recentAndNext(handIns)}
-        today={data.today}
-      />
+      <Section title="Hand-ins" unit="teams in" rows={recent(handIns)} />
     </Card>
   );
 }
 
-/** The last few that happened, then the next one coming. */
-function recentAndNext(rows: Row[]): Row[] {
-  const sorted = [...rows].sort((a, b) => a.date.localeCompare(b.date));
-  const past = sorted.filter((r) => !r.upcoming).slice(-PAST);
-  const next = sorted.find((r) => r.upcoming);
-  return next ? [...past, next] : past;
+/** The last few that happened, oldest first. */
+function recent(rows: Row[]): Row[] {
+  return [...rows].sort((a, b) => a.date.localeCompare(b.date)).slice(-PAST);
 }
 
 function Section({
   title,
   unit,
   rows,
-  today,
 }: {
   title: string;
   unit: string;
   rows: Row[];
-  today: string;
 }) {
   return (
     <section className="min-w-0 space-y-2.5">
@@ -140,39 +105,20 @@ function Section({
                     {r.label}
                   </span>
                   <span className="shrink-0 tabular-nums">
-                    {r.upcoming ? (
-                      <span className="text-xs">
-                        {formatDate(r.date)} · {relativeDay(today, r.date)}
-                      </span>
-                    ) : (
-                      <>
-                        <span className="font-semibold">{r.done}</span>
-                        <span className="text-xs"> / {r.of}</span>
-                      </>
-                    )}
+                    <span className="font-semibold">{r.done}</span>
+                    <span className="text-xs"> / {r.of}</span>
                   </span>
                 </div>
-                {r.upcoming ? (
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 flex-1 rounded-full border border-dashed border-neutral-300" />
-                    {r.note && (
-                      <span className="shrink-0 text-xs font-semibold">
-                        {r.note}
-                      </span>
-                    )}
-                  </div>
-                ) : (
+                <div
+                  className="h-2 overflow-hidden rounded-full bg-neutral-200"
+                  role="img"
+                  aria-label={`${r.done} of ${r.of} ${unit}`}
+                >
                   <div
-                    className="h-2 overflow-hidden rounded-full bg-neutral-200"
-                    role="img"
-                    aria-label={`${r.done} of ${r.of} ${unit}`}
-                  >
-                    <div
-                      className="h-full rounded-full bg-neutral-500"
-                      style={{ width: `${share * 100}%` }}
-                    />
-                  </div>
-                )}
+                    className="h-full rounded-full bg-neutral-500"
+                    style={{ width: `${share * 100}%` }}
+                  />
+                </div>
               </Link>
             </li>
           );

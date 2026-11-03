@@ -7,14 +7,11 @@ import { PageHeader } from "@/components/page-header";
 import { NewRequirementDialog } from "@/components/requirements/new-requirement-dialog";
 import { RuleDetail } from "@/components/requirements/rule-detail";
 import { RuleList } from "@/components/requirements/rule-list";
-import { RuleTimeline } from "@/components/requirements/rule-timeline";
 import { SideCards } from "@/components/requirements/side-cards";
-import { StatusChanges } from "@/components/requirements/status-changes";
 import { cn } from "@/lib/utils";
 import {
   problemScore,
   ruleRows,
-  statusChanges,
   weeklyHistory,
   type SubjectRow,
 } from "@/lib/requirement-insights";
@@ -87,7 +84,6 @@ export default function RequirementsPage() {
     [data, statuses],
   );
   const history = useMemo(() => weeklyHistory(data), [data]);
-  const changes = useMemo(() => statusChanges(data), [data]);
 
   const sorted = [...data.requirements].sort(
     (a, b) =>
@@ -137,19 +133,18 @@ export default function RequirementsPage() {
       />
 
       {/*
-        The rules on the left; the chosen rule and its breakdown on the right.
-        The right side sets the height; on wide screens the list scrolls
-        inside it, so neither side leaves empty space.
+        The rules on the left; the chosen rule on the right. On wide screens
+        the list stays in view and scrolls on its own.
       */}
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] 2xl:grid-cols-[24.5rem_minmax(0,1fr)]">
-        <div className="relative min-w-0 lg:min-h-[28rem]">
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)] 2xl:grid-cols-[24.5rem_minmax(0,1fr)]">
+        <div className="min-w-0 lg:sticky lg:top-6">
           <RuleList
             data={data}
             rules={shown}
             rowsById={rowsById}
             selectedId={selected?.id}
             onSelect={setPicked}
-            className="lg:absolute lg:inset-0 lg:overflow-y-auto"
+            className="lg:max-h-[calc(100vh-11rem)] lg:overflow-y-auto"
           />
         </div>
         {selected ? (
@@ -171,16 +166,6 @@ export default function RequirementsPage() {
             Add a requirement to see who meets it.
           </p>
         )}
-      </div>
-
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        <RuleTimeline
-          data={data}
-          rules={shown}
-          rowsById={rowsById}
-          onSelect={setPicked}
-        />
-        <StatusChanges data={data} changes={changes} />
       </div>
     </div>
   );

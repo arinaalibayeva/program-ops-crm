@@ -14,6 +14,8 @@ import type { CohortData, Requirement } from "@/lib/types";
 import { Pill, LABEL } from "@/components/requirements/status-styles";
 
 const SHOWN = 8;
+/** Reasons listed per team before "+N more", which opens the team. */
+const REASONS = 3;
 
 interface Problem {
   key: string;
@@ -133,16 +135,17 @@ export function Attention({ className }: { className?: string }) {
                 {staffName(data, team.ownerId).split(" ")[0]}
               </span>
             </div>
-            <ul className="mt-1.5 space-y-1.5">
-              {problems.map((p) => (
+            <ul className="mt-1.5 space-y-2 sm:space-y-1.5">
+              {problems.slice(0, REASONS).map((p) => (
+                // On phones the button drops under the reason instead of squeezing it.
                 <li
                   key={p.key}
-                  className="flex items-baseline gap-2 text-[13px]"
+                  className="grid grid-cols-[4.75rem_minmax(0,1fr)] items-baseline gap-x-2 gap-y-1 text-[13px] sm:grid-cols-[4.75rem_minmax(0,1fr)_auto]"
                 >
-                  <span className="w-20 shrink-0">
+                  <span>
                     <Pill bucket={p.bucket}>{LABEL[p.bucket]}</Pill>
                   </span>
-                  <span className="min-w-0 flex-1">
+                  <span className="min-w-0">
                     {p.person && (
                       <span className="font-medium">{p.person}: </span>
                     )}
@@ -152,17 +155,13 @@ export function Attention({ className }: { className?: string }) {
                     <Button
                       size="xs"
                       variant="outline"
+                      className="col-start-2 justify-self-start sm:col-start-auto sm:justify-self-end"
                       onClick={() => toggleCompletion(p.req!.id, p.subjectId)}
                     >
                       Mark done
                     </Button>
                   ) : p.emails.length > 0 ? (
-                    <span className="flex shrink-0 items-center gap-2">
-                      {nudged(p) && (
-                        <span className="text-xs whitespace-nowrap">
-                          Reminder opened {formatDate(nudged(p)!)}
-                        </span>
-                      )}
+                    <span className="col-start-2 flex flex-wrap items-center gap-x-2 gap-y-0.5 sm:col-start-auto sm:flex-col sm:items-end">
                       <a
                         href={`mailto:${p.emails.length === 1 ? p.emails[0] : `?bcc=${p.emails.join(",")}`}${
                           p.emails.length === 1 ? "?" : "&"
@@ -175,10 +174,25 @@ export function Attention({ className }: { className?: string }) {
                       >
                         {nudged(p) ? "Nudge again" : "Nudge"}
                       </a>
+                      {nudged(p) && (
+                        <span className="text-[11px] whitespace-nowrap text-muted-foreground">
+                          Reminder opened {formatDate(nudged(p)!)}
+                        </span>
+                      )}
                     </span>
                   ) : null}
                 </li>
               ))}
+              {problems.length > REASONS && (
+                <li className="pl-[5.25rem] text-xs">
+                  <Link
+                    href={`/admin/teams/${team.id}`}
+                    className="font-medium text-ocean-600 hover:underline"
+                  >
+                    +{problems.length - REASONS} more
+                  </Link>
+                </li>
+              )}
             </ul>
           </li>
         ))}

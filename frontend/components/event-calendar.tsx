@@ -86,8 +86,12 @@ function rangeLabel(view: View, anchor: string): string {
   return `${formatDate(monday)} – ${formatDate(addDays(monday, 6))}, ${monday.slice(0, 4)}`;
 }
 
-export function EventCalendar({ events, today }: { events: ProgramEvent[]; today: string }) {
+export function EventCalendar({ events: allEvents, today }: { events: ProgramEvent[]; today: string }) {
   const [view, setView] = useState<View>("month");
+  // Records teams log (partner meetings, reports) fill most days, so they stay hidden until asked for.
+  const [showLogged, setShowLogged] = useState(false);
+  const events = showLogged ? allEvents : allEvents.filter((e) => e.derived !== "records");
+  const loggedCount = allEvents.filter((e) => e.derived === "records").length;
   const [anchor, setAnchor] = useState(today);
   const [opened, setOpened] = useState<{ event: ProgramEvent; element: HTMLElement }>();
   const closeEvent = useCallback(() => setOpened(undefined), []);
@@ -137,6 +141,17 @@ export function EventCalendar({ events, today }: { events: ProgramEvent[]; today
             </button>
           ))}
         </div>
+        {loggedCount > 0 && (
+          <label className="flex items-center gap-2 text-sm text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={showLogged}
+              onChange={(e) => setShowLogged(e.target.checked)}
+              className="size-4 accent-primary"
+            />
+            Show what teams logged
+          </label>
+        )}
       </div>
 
       <div className="grid gap-5 lg:grid-cols-[17rem_minmax(0,1fr)]">

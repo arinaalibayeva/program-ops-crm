@@ -43,7 +43,7 @@ import type { FieldValue, Status } from "@/lib/types";
 const FILTERS: { value: "all" | Status | "attention"; label: string }[] = [
   { value: "all", label: "All" },
   { value: "attention", label: "Needs attention" },
-  { value: "missing", label: "Missing" },
+  { value: "missing", label: "Can't meet" },
   { value: "at_risk", label: "At risk" },
   { value: "on_track", label: "On track" },
 ];
@@ -105,7 +105,8 @@ export default function ParticipantsPage() {
           if (Array.isArray(v) ? !v.includes(wanted) : v !== wanted)
             return false;
         }
-        if (filter === "all") return true;
+        // A search looks through everyone, whatever the status filter.
+        if (filter === "all" || q) return true;
         const s = status?.status;
         if (filter === "attention") return s === "missing" || s === "at_risk";
         if (filter === "on_track") return s === "on_track" || s === "met";
@@ -139,12 +140,12 @@ export default function ParticipantsPage() {
     id !== "field-role" ? narrow : openId ? "xl:max-[90rem]:hidden" : undefined;
 
   return (
-    // Centered in the page. On wide screens it slides left when a profile opens,
-    // into the space beside the panel (40rem wide).
+    // Full width like every other page; on wide screens it narrows when a
+    // profile opens, into the space beside the panel (40rem wide).
     <div
       className={cn(
-        "ml-[max(0px,calc((100%-72rem)/2))] max-w-6xl transition-[margin,max-width] duration-200 ease-out motion-reduce:transition-none",
-        openId && "xl:ml-0 xl:max-w-[calc(100%-41.5rem)]",
+        "transition-[max-width] duration-200 ease-out motion-reduce:transition-none",
+        openId && "xl:max-w-[calc(100%-41.5rem)]",
       )}
     >
       <PageHeader

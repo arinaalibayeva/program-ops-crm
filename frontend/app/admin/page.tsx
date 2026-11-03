@@ -25,10 +25,9 @@ export default function DashboardPage() {
       />
 
       {/*
-        Two columns that end at the same line: the people you manage, then what
-        needs a decision and what's coming; your calendar, list and charts on
-        the right. The last card in each column stretches to fill the gap.
-        Below xl the right column becomes a row of cards under the rest.
+        The people you manage, then what needs a decision and what's coming;
+        your calendar, list and charts on the right. Both columns end on the
+        same line. Below xl the right column becomes a row of cards under the rest.
       */}
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="flex min-w-0 flex-col gap-5">

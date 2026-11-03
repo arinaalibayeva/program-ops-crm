@@ -136,7 +136,6 @@ export function RequirementsSection({ view, enrollment, draft, update }: Section
 }
 
 export function AttendanceSection({ view, enrollment, draft, update }: SectionProps) {
-  const { toggleAttendance } = useCohort();
   const attended = new Set(
     view.attendance.filter((a) => a.enrollmentId === enrollment.id).map((a) => a.eventId),
   );
@@ -235,36 +234,16 @@ export function AttendanceSection({ view, enrollment, draft, update }: SectionPr
                 {isUpcoming ? (
                   <span className="text-xs">Upcoming</span>
                 ) : (
-                  // Quick edit outside edit mode: saved as soon as it's clicked.
-                  <div
-                    role="radiogroup"
-                    aria-label={`Attendance for ${event.title}`}
-                    className="inline-flex rounded-md border p-0.5 text-xs"
+                  // Read-only here so a stray click can't change it; Edit participant changes it.
+                  <span
+                    className={cn(
+                      "inline-flex items-center gap-1.5 text-xs",
+                      didAttend ? "text-muted-foreground" : "font-medium",
+                    )}
                   >
-                    {[true, false].map((present) => {
-                      const selected = present === didAttend;
-                      return (
-                        <button
-                          key={String(present)}
-                          type="button"
-                          role="radio"
-                          aria-checked={selected}
-                          onClick={() => !selected && toggleAttendance(event.id, enrollment.id)}
-                          className={cn(
-                            "inline-flex items-center gap-1.5 rounded px-2 py-0.5 transition-colors",
-                            selected
-                              ? "bg-muted font-medium text-foreground"
-                              : "text-muted-foreground hover:text-foreground",
-                          )}
-                        >
-                          {!present && selected && (
-                            <span className="size-1.5 rounded-full bg-ocean-900" />
-                          )}
-                          {present ? "Present" : "Absent"}
-                        </button>
-                      );
-                    })}
-                  </div>
+                    {!didAttend && <span className="size-1.5 rounded-full bg-ocean-900" />}
+                    {didAttend ? "Present" : "Absent"}
+                  </span>
                 )}
               </li>
             );

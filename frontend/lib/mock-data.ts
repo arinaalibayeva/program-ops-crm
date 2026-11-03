@@ -719,13 +719,6 @@ export function buildMockCohort(): CohortData {
       params: { category: "all-hands", minCount: 2 },
     },
     {
-      id: "req-4",
-      name: "Minimum team size",
-      scope: "team",
-      type: "team_min_size",
-      params: { minActive: 3 },
-    },
-    {
       id: "req-5",
       name: "Project brief",
       scope: "team",
