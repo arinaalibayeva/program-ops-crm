@@ -6,12 +6,19 @@ from sqlalchemy.pool import StaticPool
 
 from app import models as m
 from app.auth import hash_password
+from app.config import settings
 from app.db import Base, get_session
 from app.main import app
 from app.seed import load_sample, seed
 
 
 PASSWORD = "correct horse battery"
+
+
+@pytest.fixture(autouse=True)
+def sign_in_required(monkeypatch):
+    # The tests cover the real sign-in rules, which the hosted demo turns off.
+    monkeypatch.setattr(settings, "require_sign_in", True)
 
 
 @pytest.fixture
@@ -21,11 +28,12 @@ def session_factory():
     Base.metadata.create_all(engine)
     factory = sessionmaker(engine, expire_on_commit=False)
     with factory() as session:
-        seed(session, load_sample())
         session.add(m.User(id="user-admin", name="Test Admin", email="admin@example.edu", role="manager",
                            password_hash=hash_password(PASSWORD)))
         session.add(m.User(id="user-p", name="Pat Participant", email="pat@example.edu", role="participant",
                            password_hash=hash_password(PASSWORD)))
+        session.flush()
+        seed(session, load_sample())
         session.commit()
     return factory
 

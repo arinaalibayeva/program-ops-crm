@@ -15,6 +15,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from . import models as m
+from .config import settings
 from .db import get_session
 
 COOKIE = "session"
@@ -92,10 +93,23 @@ def signed_in_user(request: Request, session: Session = Depends(get_session)) ->
     token = request.cookies.get(COOKIE)
     record = session.get(m.UserSession, token_hash(token)) if token else None
     if record is None or as_utc(record.expires_at) < dt.datetime.now(dt.timezone.utc):
+        if not settings.require_sign_in:
+            return demo_user(session)
         raise HTTPException(status_code=401, detail="Please sign in.")
     user = session.get(m.User, record.user_id)
     if user is None:
         raise HTTPException(status_code=401, detail="Please sign in.")
+    return user
+
+
+def demo_user(session: Session) -> m.User:
+    """Who you are while sign-in is off: the program manager, preferring a real
+    account (one with a password) over the sample one."""
+    user = session.scalars(
+        select(m.User).where(m.User.role == "manager").order_by(m.User.password_hash.is_(None), m.User.id)
+    ).first()
+    if user is None:
+        raise HTTPException(status_code=401, detail="No manager account yet. Run app.create_user first.")
     return user
 
 

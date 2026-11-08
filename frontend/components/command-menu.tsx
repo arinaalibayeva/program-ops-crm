@@ -18,7 +18,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { USE_BACKEND, signOut } from "@/lib/api";
+import { REQUIRE_SIGN_IN, signOut } from "@/lib/api";
 import { useCohort, usePeopleIndex } from "@/lib/store";
 import { formatDate } from "@/lib/format";
 import { navLinks } from "@/lib/nav";
@@ -118,7 +118,7 @@ function CommandList({ close }: { close: () => void }) {
         run: go(`/admin/records/${r.typeId}/${r.id}`),
       })),
       { id: "reset", group: "Actions", label: "Reset demo data", icon: RotateCcw, run: reset },
-      ...(USE_BACKEND
+      ...(REQUIRE_SIGN_IN
         ? [{ id: "sign-out", group: "Actions", label: "Sign out", icon: LogOut, run: signOut }]
         : []),
     ];

@@ -10,13 +10,12 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/alembic upgrade head     # create the tables
 .venv/bin/python -m app.seed       # load the sample cohort
-.venv/bin/python -m app.create_user you@example.edu --name "Your Name" --role manager
 .venv/bin/uvicorn app.main:app --reload --port 8000
 ```
 
 API docs: http://localhost:8000/docs
 
-The account command prompts for a password. Use that account to sign in to the frontend.
+Sign-in is off by default: every request acts as the program manager (the sample one, or your own account if you made one). To require sign-in, create an account with `.venv/bin/python -m app.create_user you@example.edu --name "Your Name" --role manager` (it prompts for a password) and set `REQUIRE_SIGN_IN=true` in `.env`.
 
 ## Tests
 

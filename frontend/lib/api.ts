@@ -5,6 +5,9 @@
 /** Off: the app runs on sample data saved in this browser, with no backend. */
 export const USE_BACKEND = process.env.NEXT_PUBLIC_USE_BACKEND === "true";
 
+/** Off: the site opens without signing in. Turn on together with the backend's REQUIRE_SIGN_IN. */
+export const REQUIRE_SIGN_IN = USE_BACKEND && process.env.NEXT_PUBLIC_REQUIRE_SIGN_IN === "true";
+
 /** Thrown when the session is missing or expired. */
 export class SignInRequired extends Error {}
 
@@ -22,7 +25,8 @@ export async function api<T>(path: string, init: { method?: string; body?: unkno
     // undefined means "clear this field", which JSON can only say as null.
     body: hasBody ? JSON.stringify(init.body, (_key, value) => (value === undefined ? null : value)) : undefined,
   });
-  if (res.status === 401 && !path.startsWith("/auth/")) throw new SignInRequired("Please sign in.");
+  // With sign-in off there's no login page to go to, so a refusal shows its message instead.
+  if (res.status === 401 && REQUIRE_SIGN_IN && !path.startsWith("/auth/")) throw new SignInRequired("Please sign in.");
   if (!res.ok) {
     let message = `Something went wrong (${res.status}).`;
     try {

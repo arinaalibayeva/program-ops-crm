@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     allow_reset: bool = True
     # Send the sign-in cookie over HTTPS only. Turn on wherever the site is hosted.
     cookie_secure: bool = False
+    # Off: nobody signs in and every request acts as the program manager, so
+    # the hosted demo opens straight on the dashboard. Turn on to require it.
+    require_sign_in: bool = False
 
     def today(self) -> date:
         return self.demo_today or date.today()

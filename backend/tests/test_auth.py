@@ -1,4 +1,13 @@
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
+
 from app.auth import hash_password, verify_password
+from app.config import settings
+from app.db import Base, get_session
+from app.main import app
+from app.seed import load_sample, seed
 
 from .conftest import PASSWORD
 
@@ -46,3 +55,30 @@ def test_participants_cannot_use_admin_pages(anonymous):
 def test_reset_keeps_accounts(client):
     client.post("/api/reset")
     assert client.get("/api/me").json()["email"] == "admin@example.edu"
+
+
+def test_without_sign_in_you_are_the_manager(anonymous, monkeypatch):
+    monkeypatch.setattr(settings, "require_sign_in", False)
+    assert anonymous.get("/api/cohort").status_code == 200
+    assert anonymous.get("/api/me").json()["email"] == "admin@example.edu"
+
+
+def test_a_fresh_database_still_opens_without_sign_in(monkeypatch):
+    # No manager account was created: the sample manager is added and used.
+    engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(engine, expire_on_commit=False)
+    with factory() as session:
+        seed(session, load_sample())
+        session.commit()
+
+    def override():
+        with factory() as session:
+            yield session
+
+    monkeypatch.setattr(settings, "require_sign_in", False)
+    app.dependency_overrides[get_session] = override
+    try:
+        assert TestClient(app).get("/api/me").json()["id"] == "staff-demo"
+    finally:
+        app.dependency_overrides.clear()

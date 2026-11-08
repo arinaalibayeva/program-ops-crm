@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { PageHeader } from "@/components/page-header";
 import { Card } from "@/components/ui/card";
 import { InternsPanel } from "@/components/profile/interns-panel";
-import { USE_BACKEND, signOut } from "@/lib/api";
+import { REQUIRE_SIGN_IN, USE_BACKEND, signOut } from "@/lib/api";
 import { cohortWeek, formatDate, initials } from "@/lib/format";
 import { useCohort } from "@/lib/store";
 import { useProfile, type Profile } from "@/lib/profile";
@@ -203,9 +203,11 @@ export default function ProfilePage() {
                   >
                     <KeyRound /> Team access
                   </Link>
-                  <Button variant="outline" size="sm" onClick={signOut}>
-                    <LogOut /> Sign out
-                  </Button>
+                  {REQUIRE_SIGN_IN && (
+                    <Button variant="outline" size="sm" onClick={signOut}>
+                      <LogOut /> Sign out
+                    </Button>
+                  )}
                 </>
               )}
             </div>
