@@ -47,11 +47,8 @@ python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
 .venv/bin/alembic upgrade head
 .venv/bin/python -m app.seed
-.venv/bin/python -m app.create_user you@example.com --name "Your Name" --role manager
 .venv/bin/uvicorn app.main:app --reload --port 8000
 ```
-
-The last setup command asks for a password. You will use that email and password to sign in.
 
 **2. Start the frontend** (in a second terminal)
 
@@ -62,7 +59,9 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000 and sign in.
+Open http://localhost:3000. The app opens on the dashboard as the program manager, with no sign-in.
+
+Sign-in is built but turned off for this version. To turn it on, create a manager account with `.venv/bin/python -m app.create_user you@example.com --name "Your Name" --role manager` (it asks for a password), then set `REQUIRE_SIGN_IN=true` in `backend/.env` and `NEXT_PUBLIC_REQUIRE_SIGN_IN=true` in `frontend/.env.local`.
 
 To try the frontend without the backend, set `NEXT_PUBLIC_USE_BACKEND=false` in `frontend/.env.local`. The app then runs on the sample data, and changes are saved only in your browser.
 

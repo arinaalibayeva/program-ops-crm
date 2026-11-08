@@ -40,9 +40,11 @@ def clear(session: Session) -> None:
 def add_sample_staff(session: Session, data: CohortData) -> None:
     """The interns who look after the sample teams. Accounts outlast a reset, so
     they're only added once. With no password, nobody can sign in as them until
-    a manager sends them a link from Team access."""
+    a manager sends them a link from Team access. The sample manager is added
+    only when there's no manager yet, so the site works with sign-in off."""
+    has_manager = session.scalars(select(m.User).where(m.User.role == "manager")).first() is not None
     for person in data.staff:
-        if person.role != "manager" and session.get(m.User, person.id) is None:
+        if (person.role != "manager" or not has_manager) and session.get(m.User, person.id) is None:
             session.add(
                 m.User(id=person.id, name=person.name, email=person.email, role=person.role, job_title=person.job_title)
             )

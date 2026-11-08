@@ -1,9 +1,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { USE_BACKEND } from "@/lib/api";
+import { REQUIRE_SIGN_IN } from "@/lib/api";
 
-// The front door: sign in first, unless this browser is already signed in.
+// The front door: sign in first, unless sign-in is off or this browser is already signed in.
 export default async function Home() {
   const signedIn = (await cookies()).has("session");
-  redirect(!USE_BACKEND || signedIn ? "/admin" : "/login");
+  redirect(!REQUIRE_SIGN_IN || signedIn ? "/admin" : "/login");
 }
