@@ -1,18 +1,7 @@
 # Program Ops CRM
 
-A CRM for cohort-based programs: participants, teams, partners, event calendars, check-ins, requirements, notes and follow-ups.
+A CRM for cohort-based programs. Track participants, teams, partners, events, requirements, notes, and follow-ups in one place. The first sample program is Cornerstone Civic Projects at Minerva.
 
-Built with Next.js, TypeScript and FastAPI. Uses SQLite locally or Postgres.
+Built with Next.js, TypeScript, and FastAPI. Uses SQLite locally and supports Postgres when hosted.
 
-## Run locally
-
-Start the backend (see [backend/README.md](backend/README.md)), then:
-
-```bash
-cd frontend
-cp .env.example .env.local
-npm install
-npm run dev
-```
-
-Then open http://localhost:3000. Without the backend, set `NEXT_PUBLIC_USE_BACKEND=false` to run on sample data in the browser.
+See [backend/README.md](backend/README.md) for setup and [frontend/README.md](frontend/README.md) for frontend commands and checks.
