@@ -35,6 +35,54 @@ The repository includes a sample cohort of 20 teams working with community partn
 
 The requirement rules exist in both TypeScript and Python. Tests check that both give the same result on the sample data.
 
+## How it works
+
+![How the web app, server, and database connect](docs/diagrams/architecture.png)
+
+The platform has three parts. The web app is what managers and staff use day to day, and it also has a few public pages for participants. The server handles accounts, saves changes, and checks requirements. The database stores everything.
+
+Participants don't need an account. They only open links they are sent, such as an event check-in or a shared form, and their answers go straight to the server.
+
+When staff make a change, like recording attendance or marking something done, it shows on the page right away and then saves to the server. If the save fails, the page reloads what the server has, so nobody works from data that wasn't saved.
+
+Statuses like "On track," "At risk," and "Can't meet" are calculated in the browser, so the page updates as soon as something changes. The server has the same rules in Python, and tests check that both versions give the same results.
+
+## Data model
+
+The database is split into four areas. The diagrams use plain names, so a "Participant" here is the `enrollments` table in the code and a "Reminder" is a `nudge`.
+
+### Programs and people
+
+![Programs, cohorts, participants, teams, projects, and partners](docs/diagrams/schema-people.png)
+
+A program, such as a semester project course, runs one cohort per term. A person joins a cohort as a participant, so the same person can take part in more than one cohort and keep their history. Each program defines its own custom fields, like major or year, and each participant's answers are stored with them. Adding a field doesn't need a database change.
+
+Participants join teams, and each team works on a project proposed by a partner organization. Team membership has start and end dates, so if someone switches teams or leaves, the platform still knows where they were before. Each team and partner can be assigned a staff member who looks after them.
+
+### Events and requirements
+
+![Events, attendance, requirements, and follow-ups](docs/diagrams/schema-requirements.png)
+
+A cohort schedules events, such as workshops and meetings, and sets requirements, such as "attend 3 of 4 workshops" or "hand in a report by December 18." Attendance is recorded through the check-in link or added by staff.
+
+A requirement can apply to a participant or a team. Staff can mark it done, excuse someone with a reason, or send a reminder, and each of these is saved against that participant or team. Notes with follow-up dates work the same way and can also be about a partner.
+
+Statuses are never stored. The platform works them out from attendance, completed items, excusals, and records every time the data changes, so they are always up to date.
+
+### Custom records and warnings
+
+![Record types, records, shared forms, tracked numbers, and warning rules](docs/diagrams/schema-records.png)
+
+This is the part that makes the platform configurable. A program creates its own record types, such as partner meeting reports or issues, and chooses their fields. A field can link to a participant, team, or partner. Records can be added by staff or collected through a shared form that participants fill in without signing in.
+
+A tracked number is calculated from records, for example days since a team's last partner meeting. A warning rule flags the team when that number crosses a limit, like more than 21 days, and the warning shows up on the Today page.
+
+### Staff accounts
+
+![Staff accounts, sign-in sessions, invites, and to-dos](docs/diagrams/schema-staff.png)
+
+Only staff have accounts. A manager invites staff with a link that expires, and they set their own password when they open it. Passwords are stored as hashes, and an account locks for a while after too many failed sign-ins. Each staff member also has their own to-do list and notes on the Today page.
+
 ## Running it locally
 
 You need Node.js 20 or later and Python 3.11 or later.
